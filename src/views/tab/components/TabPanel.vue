@@ -5,7 +5,6 @@
       align="center"
       label="ID"
       width="65"
-      element-loading-text="请给我点时间！"
     >
       <template v-slot="scope">
         <span>{{ scope.row.id }}</span>
@@ -62,7 +61,7 @@ export default defineComponent({
   props: {
     type: {
       type: String,
-      default: 'CN'
+      default: 'cn'
     }
   },
   data() {

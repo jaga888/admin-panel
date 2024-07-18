@@ -7,7 +7,7 @@
 <script>
 import { defineComponent } from 'vue';
 import { ElConfigProvider } from 'element-plus';
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
+import En from 'element-plus/dist/locale/en.mjs';
 import { mapState } from 'pinia';
 import store from '@/store';
 
@@ -20,7 +20,7 @@ export default defineComponent({
   },
   data() {
     return {
-      locale: zhCn,
+      locale: En,
       zIndex: 3000
     };
   }

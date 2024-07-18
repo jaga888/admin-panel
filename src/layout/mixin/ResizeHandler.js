@@ -26,7 +26,7 @@ export default defineComponent({
     }
   },
   methods: {
-    // do not use $_ for mixins properties
+    // do not use $_ for mixins property
     // https://vuejs.org/v2/style-guide/index.html#Private-property-names-essential
     isMobile() {
       const rect = body.getBoundingClientRect();

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container documentation-container">
     <a class="document-btn" target="_blank"
-      href="https://vue3-element-admin-site.midfar.com/zh/guide/essentials/router-and-nav.html">国内文档</a>
+      href="https://vue3-element-admin-site.midfar.com/zh/guide/essentials/router-and-nav.html">Documentation</a>
     <a class="document-btn" target="_blank"
       href="https://github.com/midfar/vue3-element-admin">Github 仓库</a>
     <dropdown-menu class="document-btn" :items="articleList" title="系列文章" />

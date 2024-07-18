@@ -4,7 +4,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import ArticleDetail from './components/ArticleDetail';
+import ArticleDetail from '@/views/company/components/ArticleDetail';
 
 export default defineComponent({
   name: 'EditForm',

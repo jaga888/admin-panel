@@ -14,7 +14,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import TabPane from './components/TabPane';
+import TabPane from './components/TabPanel.vue';
 
 export default defineComponent({
   name: 'Tab',

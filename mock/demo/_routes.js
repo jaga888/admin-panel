@@ -324,30 +324,30 @@ export const asyncRoutes = [
   },
 
   {
-    path: '/example',
+    path: '/company',
     component: 'layout/Layout',
-    redirect: '/example/list',
+    redirect: '/company/list',
     name: 'Example',
     meta: {
       title: 'Example',
-      icon: 'example'
+      icon: 'company'
     },
     children: [
       {
         path: 'create',
-        component: 'views/example/create',
+        component: 'views/company/create',
         name: 'CreateArticle',
         meta: { title: 'Create Article', icon: 'edit' }
       },
       {
         path: 'edit/:id(\\d+)',
-        component: 'views/example/edit',
+        component: 'views/company/edit',
         name: 'EditArticle',
         meta: { hidden: true, title: 'Edit Article', noCache: true }
       },
       {
         path: 'list',
-        component: 'views/example/list',
+        component: 'views/company/list',
         name: 'ArticleList',
         meta: { title: 'Article List', icon: 'list' }
       }
@@ -513,7 +513,7 @@ export const asyncRoutes = [
     children: [
       {
         path: 'index',
-        component: 'views/i18n-demo/index',
+        component: 'views/i18n/index',
         name: 'I18n',
         meta: { title: 'I18n', icon: 'international' }
       }

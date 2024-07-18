@@ -207,7 +207,7 @@ export default defineComponent({
     // 语言类型
     langType: {
       type: String,
-      default: 'zh'
+      default: 'en'
     },
     // 语言包
     langExt: {

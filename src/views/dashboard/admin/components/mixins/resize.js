@@ -32,7 +32,7 @@ export default defineComponent({
     this.destroySidebarResizeEvent();
   },
   methods: {
-    // do not use $_ for mixins properties
+    // do not use $_ for mixins property
     // https://vuejs.org/v2/style-guide/index.html#Private-property-names-essential
     initResizeEvent() {
       window.addEventListener('resize', this.resizeHandler);

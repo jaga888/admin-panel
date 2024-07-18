@@ -8,7 +8,7 @@ const componentsRouter = {
   redirect: 'noRedirect',
   name: 'ComponentDemo',
   meta: {
-    title: '组件',
+    title: 'ComponentDemo',
     icon: 'component'
   },
   children: [
@@ -16,13 +16,13 @@ const componentsRouter = {
       path: 'tinymce',
       component: () => import('@/views/components-demo/tinymce.vue'),
       name: 'TinymceDemo',
-      meta: { title: '富文本编辑器' }
+      meta: { title: 'TinymceDemo' }
     },
     {
       path: 'avatar-upload',
       component: () => import('@/views/components-demo/avatar-upload.vue'),
       name: 'AvatarUploadDemo',
-      meta: { title: '头像上传' }
+      meta: { title: 'AvatarUploadDemo' }
     },
     {
       path: 'dropzone',
@@ -46,25 +46,25 @@ const componentsRouter = {
       path: 'mixin',
       component: () => import('@/views/components-demo/mixin.vue'),
       name: 'ComponentMixinDemo',
-      meta: { title: '小组件' }
+      meta: { title: 'ComponentMixinDemo' }
     },
     {
       path: 'back-to-top',
       component: () => import('@/views/components-demo/back-to-top.vue'),
       name: 'BackToTopDemo',
-      meta: { title: '返回顶部' }
+      meta: { title: 'BackToTopDemo' }
     },
     {
       path: 'drag-dialog',
       component: () => import('@/views/components-demo/drag-dialog.vue'),
       name: 'DragDialogDemo',
-      meta: { title: '拖拽 Dialog' }
+      meta: { title: 'DragDialogDemo' }
     },
     {
       path: 'drag-select',
       component: () => import('@/views/components-demo/drag-select.vue'),
       name: 'DragSelectDemo',
-      meta: { title: '拖拽 Select' }
+      meta: { title: 'DragSelectDemo' }
     }
   ]
 };
