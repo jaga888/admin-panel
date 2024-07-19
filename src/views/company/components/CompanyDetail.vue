@@ -13,44 +13,38 @@
               </el-button>
             </sticky>
             <div class="createPost-container">
-              <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container" label-position="top">
+              <el-form :rules="rules" class="form-container" label-position="top">
                 <div class="createPost-main-container">
                   <el-row>
                     <el-col :span="22">
-                      <!-- Company name -->
                       <h3>Company name</h3>
                       <el-form-item label="Legal Name" prop="legalName">
                         <el-input
                             v-model="postForm.legalName"
                             placeholder="The full Legal Name of the client company"
-                            value="The Community of Donje, LLC"
                         />
                       </el-form-item>
                       <el-form-item label="Name" prop="name">
                         <el-input
                             v-model="postForm.name"
                             placeholder="The name of the client"
-                            value="Donje's Digs"
                         />
                       </el-form-item>
                       <el-form-item label="Identifier" prop="identifier">
                         <el-input v-model="postForm.identifier"
                                   placeholder="A unique word, only lowercase letters, no spaces. It cannot be changed"
-                                  value=""
                         />
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col :span="22">
-                      <!-- Address Group -->
                       <div class="form-group">
                         <h3>Address</h3>
                         <el-form-item label="Address" prop="address">
                           <el-input
                               v-model="postForm.address"
                               placeholder="Enter Address..."
-                              value="100 Awesome Lane"
                           />
                         </el-form-item>
                         <el-row>
@@ -59,7 +53,6 @@
                               <el-input
                                   v-model="postForm.city"
                                   placeholder="Enter City..."
-                                  value="Newport News"
                               />
                             </el-form-item>
                           </el-col>
@@ -69,7 +62,6 @@
                                   v-model="postForm.state"
                                   maxlength="2"
                                   placeholder="Enter State (2 letters)"
-                                  value="VA"
                               />
                             </el-form-item>
                           </el-col>
@@ -79,7 +71,6 @@
                                   v-model="postForm.zip"
                                   placeholder="Enter Zip..."
                                   maxlength="5"
-                                  value="23601"
                               />
                             </el-form-item>
                           </el-col>
@@ -89,7 +80,6 @@
                   </el-row>
                   <el-row>
                     <el-col :span="22">
-                      <!-- Invoice Address Group -->
                       <div class="form-group">
                         <h3>Invoice Address</h3>
                         <el-form-item>
@@ -128,14 +118,12 @@
                   </el-row>
                   <el-row>
                     <el-col :span="22">
-                      <!-- Contact Group -->
                       <div class="form-group">
                         <h3>Contact</h3>
                         <el-form-item label="Name" prop="contactName">
                           <el-input
                               v-model="postForm.contactName"
                               placeholder="Enter Name..."
-                              value="Donje"
                           />
                         </el-form-item>
                         <el-form-item label="Phone" prop="contactPhone">
@@ -146,19 +134,17 @@
                               type="text"
                               v-model="postForm.contactEmail"
                               placeholder="Enter Email..."
-                              value="donje.putnam@senexlaw.com"
                           />
                         </el-form-item>
                       </div>
                     </el-col>
                   </el-row>
-                  <!-- Policies Group -->
                   <div class="form-group">
                     <h3 style="margin-left: 40px">Policies</h3>
                     <el-row :gutter="10">
                       <el-col :span="11">
                         <el-form-item>
-                          <el-checkbox checked v-model="postForm.nfprDelivery">NFPR – Delivery Checkbox</el-checkbox>
+                          <el-checkbox v-model="postForm.nfprDelivery">NFPR – Delivery Checkbox</el-checkbox>
                         </el-form-item>
                         <el-form-item>
                           <el-checkbox v-model="postForm.noaDelivery">NOA – Delivery Checkbox</el-checkbox>
@@ -175,7 +161,7 @@
                           <el-checkbox v-model="postForm.preApproveCourtDocket">Pre-approve Court Docket</el-checkbox>
                         </el-form-item>
                         <el-form-item>
-                          <el-checkbox checked v-model="postForm.caresActApproval">CARES Act Approval</el-checkbox>
+                          <el-checkbox v-model="postForm.caresActApproval">CARES Act Approval</el-checkbox>
                         </el-form-item>
                         <el-form-item>
                           <el-checkbox v-model="postForm.splitCaresActCharge">Split Cares Act Charge</el-checkbox>
@@ -222,7 +208,6 @@
                         </el-form-item>
                       </el-col>
                       <el-col :span="11">
-                        <!--              <h3> asd</h3>-->
                         <el-form-item>
                           <el-checkbox v-model="postForm.forceUnitAddressSelection">Force Unit Address Selection
                           </el-checkbox>
@@ -265,7 +250,7 @@
                           <el-checkbox v-model="postForm.preApproveNotices">Pre-approve Notices</el-checkbox>
                         </el-form-item>
                         <el-form-item>
-                          <el-checkbox checked v-model="postForm.clientCreatesClaims">Client Creates Claims
+                          <el-checkbox v-model="postForm.clientCreatesClaims">Client Creates Claims
                           </el-checkbox>
                         </el-form-item>
                         <el-form-item>
@@ -283,7 +268,6 @@
                         </el-form-item>
                       </el-col>
                     </el-row>
-                    <!-- Other Information Group -->
                     <div class="form-group">
                       <el-row>
                         <el-col :span="22">
@@ -295,7 +279,7 @@
                               <el-option label="Appfolio" value="appfolio"/>
                               <el-option label="Entrata" value="entrata"/>
                               <el-option label="MRI" value="mri"/>
-                              <el-option label="RealPage" value="realpage" selected/>
+                              <el-option label="RealPage" value="realpage"/>
                               <el-option label="Yardi" value="yardi"/>
                               <el-option label="None" value="none"/>
                               <el-option label="Other" value="other"/>
@@ -306,14 +290,12 @@
                             <el-input
                                 v-model="postForm.clientWebsite"
                                 placeholder="Enter Client Website"
-                                value="www."
                             />
                           </el-form-item>
                           <el-form-item label="UD Filing Threshold" prop="udFilingThreshold">
                             <el-input
                                 v-model="postForm.udFilingThreshold"
                                 placeholder="Enter UD Filing Threshold"
-                                value="500"
                             />
                           </el-form-item>
                         </el-col>
@@ -360,229 +342,181 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
-import Tinymce from '@/components/Tinymce';
-import Upload from '@/components/Upload/SingleImage3';
-import MDinput from '@/components/MDinput';
+<script setup>
+import { ref } from 'vue';
 import Sticky from '@/components/Sticky';
-import TabPanel from '@/views/tab/components/TabPanel.vue';
-import { validURL } from '@/utils/validate';
-import { fetchArticle } from '@/api/article';
-import { searchUser } from '@/api/remote-search';
-import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown';
 import SingleImageUpload from '@/components/Upload/SingleImage.vue';
-
-const defaultForm = {
-  status: 'draft',
-  id: undefined,
-  platforms: ['a-platform'],
-  comment_disabled: false,
-  importance: 0,
-  // Additional fields
-  legalName: 'The Community of Donje, LLC',
-  name: '',
-  identifier: '',
-  address: '',
-  city: '',
-  state: '',
-  zip: '',
-  sameAsPropertyAddress: false,
-  invoiceAddress1: '',
-  invoiceAddress2: '',
-  invoiceCity: '',
-  invoiceState: '',
-  invoiceZip: '',
-  invoiceEmail: '',
-  contactName: '',
-  contactPhone: '',
-  contactEmail: '',
-  nfprDelivery: false,
-  noaDelivery: false,
-  uploadCourtDocket: false,
-  zeroDollarAttyFee: false,
-  preApproveCourtDocket: false,
-  caresActApproval: false,
-  splitCaresActCharge: false,
-  caresAct: false,
-  singleFamilyProperty: false,
-  clientCreatesNfprs: false,
-  clientCreatesUds: false,
-  allowUdChecklist: false,
-  apiRecordTransfer: false,
-  postsNotices: false,
-  attorneyFeePercentageLimit: false,
-  diyClientCreatesClaims: false,
-  diyClientAmendsClaims: false,
-  forceUnitAddressSelection: false,
-  newArtcraftImportLogic: false,
-  uploadSeImportFiles: false,
-  automaticallyReadyWrits: false,
-  clientAmendsClaims: false,
-  doNotRequireUdMilitaryStatus: false,
-  preApproveNoticesOfNoncompliance: false,
-  uploadImportFiles: false,
-  eSignNotices: false,
-  preApproveSummons: false,
-  uploadUdImportFiles: false,
-  reduceAttorneyFee: false,
-  uploadNonImportFiles: false,
-  generateUnswornDeclaration: false,
-  alwaysSendAmendedNotice: false,
-  nonNotGeneratedInSenex: false,
-  ignoreUdWaitingPeriod: false,
-  allowMulti: false,
-  automaticallyReadyWritsAbove500: false,
-  addPossessionToPrintedDocket: false,
-  propertyManagementSoftware: '',
-  clientWebsite: '',
-  udFilingThreshold: ''
-};
-
-export default defineComponent({
-  name: 'ArticleDetail',
-  // eslint-disable-next-line vue/no-unused-components
-  components: { SingleImageUpload, Tinymce, MDinput, Upload, Sticky, CommentDropdown, PlatformDropdown, SourceUrlDropdown, TabPanel },
-  props: {
-    isEdit: {
-      type: Boolean,
-      default: false
-    }
+import { ElNotification } from 'element-plus';
+const props = defineProps({
+  isEdit: {
+    type: Boolean,
+    required: true
   },
-  data() {
-    const validateRequire = (rule, value, callback) => {
-      if (value === '') {
-        ElMessage({
-          message: rule.field + 'required',
-          type: 'error'
-        });
-        callback(new Error(rule.field + 'required'));
-      } else {
-        callback();
-      }
-    };
-    const validateSourceUri = (rule, value, callback) => {
-      if (value) {
-        if (validURL(value)) {
-          callback();
-        } else {
-          ElMessage({
-            message: 'invalid URL',
-            type: 'error'
-          });
-          callback(new Error('invalid URL'));
-        }
-      } else {
-        callback();
-      }
-    };
-    return {
-      postForm: Object.assign({}, defaultForm),
-      loading: false,
-      userListOptions: [],
-      rules: {
-        image_uri: [{ validator: validateRequire }],
-        title: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }],
-        source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
-      },
-      tempRoute: {},
-      tabMapOptions: [
-        { label: 'Info', key: 'cn' },
-        { label: 'File', key: 'file' }
-      ],
-      activeName: 'info',
-      createdTimes: 0
-    };
-  },
-  computed: {
-    contentShortLength() {
-      return this.postForm.content_short.length;
-    },
-    displayTime: {
-      get() {
-        return (+new Date(this.postForm.display_time));
-      },
-      set(val) {
-        this.postForm.display_time = new Date(val);
-      }
-    }
-  },
-  created() {
-    if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id;
-      this.fetchData(id);
-    }
-
-    this.tempRoute = Object.assign({}, this.$route);
-
-    if (window._XMLHttpRequest) {
-      var xhr = new window._XMLHttpRequest();
-      window.XMLHttpRequest.prototype.upload = xhr.upload;
-    }
-  },
-  methods: {
-    fetchData(id) {
-      fetchArticle(id).then(response => {
-        this.postForm = response.data;
-
-        this.setTagsViewTitle();
-        this.setPageTitle();
-      }).catch(err => {
-        console.log(err);
-      });
-    },
-    setTagsViewTitle() {
-      const title = 'Edit Article';
-      const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` });
-      this.$store.dispatch('tagsView/updateVisitedView', route);
-    },
-    setPageTitle() {
-      const title = 'Edit Article';
-      document.title = `${title} - ${this.postForm.id}`;
-    },
-    submitForm() {
-      this.$refs.postForm.validate(valid => {
-        if (valid) {
-          this.loading = true;
-          ElNotification({
-            title: 'Success',
-            message: 'Company successfully saved',
-            type: 'success',
-            duration: 2000
-          });
-          this.postForm.status = 'published';
-          this.loading = false;
-        } else {
-          console.log('error submit!');
-          return false;
-        }
-      });
-    },
-    draftForm() {
-      if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-        ElMessage({
-          message: 'Fill required fields',
-          type: 'warning'
-        });
-        return;
-      }
-      ElMessage({
-        message: 'Saved successfully',
-        type: 'success',
-        showClose: true,
-        duration: 1000
-      });
-      this.postForm.status = 'draft';
-    },
-    getRemoteUserList(query) {
-      searchUser(query).then(response => {
-        if (!response.data.items) return;
-        this.userListOptions = response.data.items.map(v => v.name);
-      });
-    }
+  existingData: {
+    type: Object,
+    default: () => ({})
   }
 });
+
+const postForm = ref(props.existingData);
+
+const submitForm = () => {
+  console.log('Form submitted', postForm.value);
+  ElNotification({
+    title: 'Success',
+    message: 'Company successfully saved',
+    type: 'success',
+    duration: 2000
+  });
+};
+
+const loading = ref(false);
+const activeName = ref('info');
+const dialogVisible = ref(false);
+const dialogImageUrl = ref('');
+// export default defineComponent({
+//   name: 'ArticleDetail',
+//   components: { SingleImageUpload, Sticky },
+//   props: {
+//     isEdit: {
+//       type: Boolean,
+//       default: false
+//     }
+//   },
+//   data() {
+//     const validateRequire = (rule, value, callback) => {
+//       if (value === '') {
+//         ElMessage({
+//           message: rule.field + 'required',
+//           type: 'error'
+//         });
+//         callback(new Error(rule.field + 'required'));
+//       } else {
+//         callback();
+//       }
+//     };
+//     const validateSourceUri = (rule, value, callback) => {
+//       if (value) {
+//         if (validURL(value)) {
+//           callback();
+//         } else {
+//           ElMessage({
+//             message: 'invalid URL',
+//             type: 'error'
+//           });
+//           callback(new Error('invalid URL'));
+//         }
+//       } else {
+//         callback();
+//       }
+//     };
+//     return {
+//       postForm: Object.assign({}, defaultForm),
+//       loading: false,
+//       userListOptions: [],
+//       rules: {
+//         image_uri: [{ validator: validateRequire }],
+//         title: [{ validator: validateRequire }],
+//         content: [{ validator: validateRequire }],
+//         source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
+//       },
+//       tempRoute: {},
+//       tabMapOptions: [
+//         { label: 'Info', key: 'cn' },
+//         { label: 'File', key: 'file' }
+//       ],
+//       activeName: 'info',
+//       createdTimes: 0
+//     };
+//   },
+//   computed: {
+//     contentShortLength() {
+//       return this.postForm.content_short.length;
+//     },
+//     displayTime: {
+//       get() {
+//         return (+new Date(this.postForm.display_time));
+//       },
+//       set(val) {
+//         this.postForm.display_time = new Date(val);
+//       }
+//     }
+//   },
+//   created() {
+//     if (this.isEdit) {
+//       const id = this.$route.params && this.$route.params.id;
+//       this.fetchData(id);
+//     }
+//
+//     this.tempRoute = Object.assign({}, this.$route);
+//
+//     if (window._XMLHttpRequest) {
+//       var xhr = new window._XMLHttpRequest();
+//       window.XMLHttpRequest.prototype.upload = xhr.upload;
+//     }
+//   },
+//   methods: {
+//     fetchData(id) {
+//       fetchArticle(id).then(response => {
+//         this.postForm = response.data;
+//
+//         this.setTagsViewTitle();
+//         this.setPageTitle();
+//       }).catch(err => {
+//         console.log(err);
+//       });
+//     },
+//     setTagsViewTitle() {
+//       const title = 'Edit Article';
+//       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` });
+//       this.$store.dispatch('tagsView/updateVisitedView', route);
+//     },
+//     setPageTitle() {
+//       const title = 'Edit Article';
+//       document.title = `${title} - ${this.postForm.id}`;
+//     },
+//     submitForm() {
+//       this.$refs.postForm.validate(valid => {
+//         if (valid) {
+//           this.loading = true;
+//           ElNotification({
+//             title: 'Success',
+//             message: 'Company successfully saved',
+//             type: 'success',
+//             duration: 2000
+//           });
+//           this.postForm.status = 'published';
+//           this.loading = false;
+//         } else {
+//           console.log('error submit!');
+//           return false;
+//         }
+//       });
+//     },
+//     draftForm() {
+//       if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
+//         ElMessage({
+//           message: 'Fill required fields',
+//           type: 'warning'
+//         });
+//         return;
+//       }
+//       ElMessage({
+//         message: 'Saved successfully',
+//         type: 'success',
+//         showClose: true,
+//         duration: 1000
+//       });
+//       this.postForm.status = 'draft';
+//     },
+//     getRemoteUserList(query) {
+//       searchUser(query).then(response => {
+//         if (!response.data.items) return;
+//         this.userListOptions = response.data.items.map(v => v.name);
+//       });
+//     }
+//   }
+// });
 </script>
 
 <style lang="scss" scoped>

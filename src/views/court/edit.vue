@@ -1,5 +1,5 @@
 <template>
-  <court-detail :is-edit="true" />
+  <court-detail :is-edit="true" :existingData="existingData"/>
 </template>
 
 <script>
@@ -8,7 +8,17 @@ import CourtDetail from './components/CourtDetail.vue';
 
 export default defineComponent({
   name: 'EditForm',
-  components: { CourtDetail }
+  components: { CourtDetail },
+  data() {
+    return {
+      existingData: {
+        name: 'Albemarle General District Court',
+        shortName: 'Albemarle',
+        city: 'Bedford',
+        address: '501 East Jefferson Street, Suite 138'
+      }
+    };
+  }
 });
 </script>
 

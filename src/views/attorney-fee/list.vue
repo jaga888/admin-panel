@@ -34,7 +34,7 @@
       <el-button class="filter-item" type="primary" :icon="iconSearch" @click="handleFilter">
         <span v-waves>Search</span>
       </el-button>
-      <router-link :to="'/attorney-fee/edit/'+0">
+      <router-link :to="'/attorney-fee/create/'">
         <el-button class="filter-item" style="margin-left: 15px;" type="primary" :icon="iconEdit">
           Create
         </el-button>

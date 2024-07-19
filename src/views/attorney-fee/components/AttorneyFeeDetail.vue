@@ -9,7 +9,7 @@
               </el-button>
             </sticky>
             <div class="createPost-container">
-              <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container" label-position="top">
+              <el-form  :rules="rules" class="form-container" label-position="top">
                 <div class="createPost-main-container">
                   <el-row>
                     <el-col :span="22">
@@ -20,9 +20,9 @@
                               placeholder="Select Scope Type"
                               requiered
                             >
-                              <el-option label="State" value="state"/>
-                              <el-option label="Company" value="company"/>
-                              <el-option label="Property" value="property" selected/>
+                              <el-option label="State" value="State"/>
+                              <el-option label="Company" value="Company"/>
+                              <el-option label="Property" value="Property"/>
                             </el-select>
                       </el-form-item>
                       <el-form-item label="Scope ID" prop="scope_id">
@@ -30,7 +30,6 @@
                             type="number"
                             v-model="postForm.scope_id"
                             placeholder="Enter scope ID"
-                            value="1"
                             requiered
                         />
                       </el-form-item>
@@ -38,7 +37,6 @@
                         <el-input
                             v-model="postForm.fd"
                             placeholder="Enter fd"
-                            value="150,30"
                             requiered
                         />
                       </el-form-item>
@@ -46,7 +44,6 @@
                         <el-input
                             v-model="postForm.ud"
                             placeholder="Enter ud"
-                            value="200,99"
                             requiered
                         />
                       </el-form-item>
@@ -54,7 +51,6 @@
                         <el-input
                             v-model="postForm.ud_external"
                             placeholder="Enter ud external"
-                            value="300,50"
                             requiered
                         />
                       </el-form-item>
@@ -77,164 +73,168 @@
           </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<script setup>
+import { ref } from 'vue';
 import Sticky from '@/components/Sticky';
-import { validURL } from '@/utils/validate';
-import { fetchArticle } from '@/api/article';
-import { searchUser } from '@/api/remote-search';
-import SingleImageUpload from '@/components/Upload/SingleImage.vue';
+// import { validURL } from '@/utils/validate';
+// import { fetchArticle } from '@/api/article';
+// import { searchUser } from '@/api/remote-search';
+// import SingleImageUpload from '@/components/Upload/SingleImage.vue';
+import { ElNotification } from 'element-plus';
 
-const defaultForm = {
-  firstName: '',
-  lastName: '',
-  role: '',
-  email: ''
-};
-export default defineComponent({
-  name: 'PropertyDetail',
-  components: { SingleImageUpload, Sticky },
-  props: {
-    isEdit: {
-      type: Boolean,
-      default: false
-    }
+const props = defineProps({
+  isEdit: {
+    type: Boolean,
+    required: true
   },
-  data() {
-    const validateRequire = (rule, value, callback) => {
-      if (value === '') {
-        ElMessage({
-          message: rule.field + 'required',
-          type: 'error'
-        });
-        callback(new Error(rule.field + 'required'));
-      } else {
-        callback();
-      }
-    };
-    const validateSourceUri = (rule, value, callback) => {
-      if (value) {
-        if (validURL(value)) {
-          callback();
-        } else {
-          ElMessage({
-            message: 'invalid URL',
-            type: 'error'
-          });
-          callback(new Error('invalid URL'));
-        }
-      } else {
-        callback();
-      }
-    };
-    return {
-      postForm: Object.assign({}, defaultForm),
-      loading: false,
-      userListOptions: [],
-      rules: {
-        image_uri: [{ validator: validateRequire }],
-        title: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }],
-        source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
-      },
-      tempRoute: {},
-      tabMapOptions: [
-        { label: 'Info', key: 'info' },
-        { label: 'Files', key: 'files' },
-        { label: 'Notes', key: 'notes' }
-      ],
-      activeName: 'info',
-      createdTimes: 0
-    };
-  },
-  computed: {
-    contentShortLength() {
-      return this.postForm.content_short.length;
-    },
-    displayTime: {
-      get() {
-        return (+new Date(this.postForm.display_time));
-      },
-      set(val) {
-        this.postForm.display_time = new Date(val);
-      }
-    }
-  },
-  created() {
-    if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id;
-      this.fetchData(id);
-    }
-
-    this.tempRoute = Object.assign({}, this.$route);
-
-    if (window._XMLHttpRequest) {
-      var xhr = new window._XMLHttpRequest();
-      window.XMLHttpRequest.prototype.upload = xhr.upload;
-    }
-  },
-  methods: {
-    fetchData(id) {
-      fetchArticle(id).then(response => {
-        this.postForm = response.data;
-
-        this.setTagsViewTitle();
-        this.setPageTitle();
-      }).catch(err => {
-        console.log(err);
-      });
-    },
-    setTagsViewTitle() {
-      const title = 'Edit Article';
-      const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` });
-      this.$store.dispatch('tagsView/updateVisitedView', route);
-    },
-    setPageTitle() {
-      const title = 'Edit Article';
-      document.title = `${title} - ${this.postForm.id}`;
-    },
-    submitForm() {
-      this.$refs.postForm.validate(valid => {
-        if (valid) {
-          this.loading = true;
-          ElNotification({
-            title: 'Success',
-            message: 'User successfully saved',
-            type: 'success',
-            duration: 2000
-          });
-          this.postForm.status = 'published';
-          this.loading = false;
-        } else {
-          console.log('error submit!');
-          return false;
-        }
-      });
-    },
-    draftForm() {
-      if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-        ElMessage({
-          message: 'Fill required fields',
-          type: 'warning'
-        });
-        return;
-      }
-      ElMessage({
-        message: 'Saved successfully',
-        type: 'success',
-        showClose: true,
-        duration: 1000
-      });
-      this.postForm.status = 'draft';
-    },
-    getRemoteUserList(query) {
-      searchUser(query).then(response => {
-        if (!response.data.items) return;
-        this.userListOptions = response.data.items.map(v => v.name);
-      });
-    }
+  existingData: {
+    type: Object,
+    default: () => ({})
   }
 });
+
+const postForm = ref(props.existingData);
+
+const submitForm = () => {
+  console.log('Form submitted', postForm.value);
+  ElNotification({
+    title: 'Success',
+    message: 'User successfully saved',
+    type: 'success',
+    duration: 2000
+  });
+};
+
+// export default defineComponent({
+//   name: 'PropertyDetail',
+//   components: { Sticky },
+//   props: {
+//     isEdit: {
+//       type: Boolean,
+//       default: false
+//     }
+//   },
+//   data() {
+//     const validateRequire = (rule, value, callback) => {
+//       if (value === '') {
+//         ElMessage({
+//           message: rule.field + 'required',
+//           type: 'error'
+//         });
+//         callback(new Error(rule.field + 'required'));
+//       } else {
+//         callback();
+//       }
+//     };,
+//
+//
+//     return {
+//       loading: false,
+//       userListOptions: [],
+//       rules: {
+//         image_uri: [{ validator: validateRequire }],
+//         title: [{ validator: validateRequire }],
+//         content: [{ validator: validateRequire }],
+//         source_uri: [{ validator: trigger: 'blur' }]
+//       },
+//       tempRoute: {},
+//       tabMapOptions: [
+//         { label: 'Info', key: 'info' },
+//         { label: 'Files', key: 'files' },
+//         { label: 'Notes', key: 'notes' }
+//       ],
+//       activeName: 'info',
+//       createdTimes: 0
+//     };
+//   },
+//   computed: {
+//     contentShortLength() {
+//       return this.postForm.content_short.length;
+//     },
+//     displayTime: {
+//       get() {
+//         return (+new Date(this.postForm.display_time));
+//       },
+//       set(val) {
+//         this.postForm.display_time = new Date(val);
+//       }
+//     }
+//   },
+//   created() {
+//     if (this.isEdit) {
+//       const id = this.$route.params && this.$route.params.id;
+//       this.fetchData(id);
+//     }
+//
+//     this.tempRoute = Object.assign({}, this.$route);
+//
+//     if (window._XMLHttpRequest) {
+//       var xhr = new window._XMLHttpRequest();
+//       window.XMLHttpRequest.prototype.upload = xhr.upload;
+//     }
+//   },
+//   methods: {
+//     fetchData(id) {
+//       fetchArticle(id).then(response => {
+//         this.postForm = response.data;
+//
+//         this.setTagsViewTitle();
+//         this.setPageTitle();
+//       }).catch(err => {
+//         console.log(err);
+//       });
+//     },
+//     setTagsViewTitle() {
+//       const title = 'Edit Article';
+//       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` });
+//       this.$store.dispatch('tagsView/updateVisitedView', route);
+//     },
+//     setPageTitle() {
+//       const title = 'Edit Article';
+//       document.title = `${title} - ${this.postForm.id}`;
+//     },
+//     submitForm() {
+//       this.$refs.postForm.validate(valid => {
+//         if (valid) {
+//           this.loading = true;
+//           ElNotification({
+//             title: 'Success',
+//             message: 'User successfully saved',
+//             type: 'success',
+//             duration: 2000
+//           });
+//           this.postForm.status = 'published';
+//           this.loading = false;
+//         } else {
+//           console.log('error submit!');
+//           return false;
+//         }
+//       });
+//     },
+//     draftForm() {
+//       if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
+//         ElMessage({
+//           message: 'Fill required fields',
+//           type: 'warning'
+//         });
+//         return;
+//       }
+//       ElMessage({
+//         message: 'Saved successfully',
+//         type: 'success',
+//         showClose: true,
+//         duration: 1000
+//       });
+//       this.postForm.status = 'draft';
+//     },
+//     getRemoteUserList(query) {
+//       searchUser(query).then(response => {
+//         if (!response.data.items) return;
+//         this.userListOptions = response.data.items.map(v => v.name);
+//       });
+//     }
+//   }
+// });
 </script>
 
 <style lang="scss" scoped>

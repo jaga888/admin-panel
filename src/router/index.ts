@@ -6,7 +6,8 @@ import {
   House as IconHouse,
   User as IconUser,
   Collection as IconCourt,
-  Coin as IconFees
+  Coin as IconFees,
+  ReadingLamp as IconUnit
 } from '@element-plus/icons-vue';
 
 /* Layout */
@@ -232,6 +233,36 @@ export const asyncRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/attorney-fee/list.vue'),
         name: 'AttorneyFeesList',
         meta: { title: 'Attorney fees list', icon: 'list' }
+      }
+    ]
+  },
+  {
+    path: '/unit',
+    component: Layout,
+    redirect: '/unit/list',
+    name: 'Units',
+    meta: {
+      title: 'Unit',
+      icon: markRaw(IconUnit)
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/unit/create.vue'),
+        name: 'CreateUnit',
+        meta: { title: 'Create unit', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/unit/edit.vue'),
+        name: 'EditUnit',
+        meta: { hidden: true, title: 'Edit Unit', noCache: true, activeMenu: '/unit/list' }
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/unit/list.vue'),
+        name: 'UnitList',
+        meta: { title: 'Units list', icon: 'list' }
       }
     ]
   },

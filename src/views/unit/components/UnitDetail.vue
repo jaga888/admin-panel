@@ -3,7 +3,7 @@
     <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
       <el-tab-pane label="Info" name="info">
         <keep-alive>
-          <div v-if="activeName === 'info'">
+          <div v-if="activeName == 'info'">
             <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
               <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
                 Save
@@ -17,28 +17,44 @@
                 <div class="createPost-main-container">
                   <el-row>
                     <el-col :span="22">
-                      <h3>Court</h3>
-                      <el-form-item label="Name" prop="name">
+                      <h3>Unit name</h3>
+                      <el-form-item label="Identifier" prop="identifier">
                         <el-input
-                            v-model="postForm.name"
-                            placeholder="Name"
-                            requiered
+                            v-model="postForm.identifier"
+                            placeholder="The identifier of unit."
                         />
                       </el-form-item>
-                      <el-form-item label="Short Name" prop="shortName">
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="22">
+                      <h3>Property</h3>
+                      <el-form-item label="Property name" prop="property">
                         <el-input
-                            v-model="postForm.shortName"
-                            placeholder="Short Name"
-                            requiered
+                            v-model="postForm.property_name"
+                            placeholder="Property name."
                         />
                       </el-form-item>
-                      <el-form-item label="City">
-                        <el-select
-                            v-model="postForm.city"
-                            placeholder="Select City"
-                            requiered
-                        >
-                          <el-option label="Albemarle" value="Albemarle"/>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="22">
+                      <div class="form-group">
+                        <h3>Location</h3>
+                        <el-form-item label="Address" prop="address">
+                          <el-input
+                              v-model="postForm.address"
+                              placeholder="Enter Address..."
+                          />
+                        </el-form-item>
+                        <el-row>
+                          <el-col :span="12">
+                            <el-form-item label="City" prop="city">
+                              <el-select
+                              v-model="postForm.city"
+                              placeholder="Select City"
+                            >
+                              <el-option label="Albemarle" value="Albemarle"/>
                               <el-option label="Amelia" value="mri"/>
                               <el-option label="Bedford" value="realpage"/>
                               <el-option label="Botetourt" value="yardi"/>
@@ -95,20 +111,72 @@
                               <el-option label="Westmoreland" value="Westmoreland"/>
                               <el-option label="Williamsburg" value="Williamsburg"/>
                               <el-option label="York" value="York"/>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item label="Address" prop="address">
-                        <el-input
-                            v-model="postForm.address"
-                            placeholder="Address"
-                            requiered
-                        />
-                      </el-form-item>
+                            </el-select>
+                            </el-form-item>
+                          </el-col>
+                          <el-col :span="6">
+                            <el-form-item label="State" prop="state">
+                              <el-input
+                                  v-model="postForm.state"
+                                  maxlength="2"
+                                  placeholder="Enter State (2 letters)"
+                              />
+                            </el-form-item>
+                          </el-col>
+                          <el-col :span="6">
+                            <el-form-item label="Zip" prop="zip">
+                              <el-input
+                                  v-model="postForm.zip"
+                                  placeholder="Enter Zip..."
+                                  maxlength="5"
+                              />
+                            </el-form-item>
+                          </el-col>
+                        </el-row>
+                      </div>
                     </el-col>
                   </el-row>
+                    <div class="form-group">
+                      <el-row>
+                        <el-col :span="22">
+                          <h3>Status</h3>
+                          <p>This Unit is Active.<br> To remove it from use, while retaining all historical data, you
+                            may
+                            deactivate
+                            it</p>
+                          <el-button type="danger">Deactivate</el-button>
+                        </el-col>
+                      </el-row>
+                    </div>
                 </div>
               </el-form>
             </div>
+          </div>
+        </keep-alive>
+      </el-tab-pane>
+      <el-tab-pane  label="Files" name="files">
+        <keep-alive>
+          <div v-if="activeName === 'files'">
+            <h3 style="display:flex; justify-content: center;">File Upload</h3>
+            <single-image-upload
+                action="/upload"
+                list-type="picture-card"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+            >
+              <i class="el-icon-plus"></i>
+            </single-image-upload>
+            <el-dialog v-model:visible="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt=""/>
+            </el-dialog>
+          </div>
+        </keep-alive>
+      </el-tab-pane>
+      <el-tab-pane  label="Notes" name="notes">
+        <keep-alive>
+          <div v-if="activeName === 'notes'">
+            <h3 style="display:flex; justify-content: center;">Notes</h3>
+            <note-edit ref="editor" :height="400"></note-edit>
           </div>
         </keep-alive>
       </el-tab-pane>
@@ -118,10 +186,17 @@
 
 <script setup>
 import { ref } from 'vue';
+import Tinymce from '@/components/Tinymce';
+import Upload from '@/components/Upload/SingleImage3';
+import MDinput from '@/components/MDinput';
 import Sticky from '@/components/Sticky';
-// import { validURL } from '@/utils/validate';
-// import { fetchArticle } from '@/api/article';
-// import { searchUser } from '@/api/remote-search';
+import TabPanel from '@/views/tab/components/TabPanel.vue';
+import { validURL } from '@/utils/validate';
+import { fetchArticle } from '@/api/article';
+import { searchUser } from '@/api/remote-search';
+import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown';
+import SingleImageUpload from '@/components/Upload/SingleImage.vue';
+import NoteEdit from '@/views/property/components/Note/Create.vue';
 import { ElNotification } from 'element-plus';
 
 const props = defineProps({
@@ -141,7 +216,7 @@ const submitForm = () => {
   console.log('Form submitted', postForm.value);
   ElNotification({
     title: 'Success',
-    message: 'User successfully saved',
+    message: 'Property successfully saved',
     type: 'success',
     duration: 2000
   });
@@ -152,14 +227,75 @@ const activeName = ref('info');
 const dialogVisible = ref(false);
 const dialogImageUrl = ref('');
 // const defaultForm = {
-//   firstName: '',
-//   lastName: '',
-//   role: '',
-//   email: ''
+//   status: 'draft',
+//   id: undefined,
+//   platforms: ['a-platform'],
+//   comment_disabled: false,
+//   importance: 0,
+//   // Additional fields
+//   legalName: 'The Community of Donje, LLC',
+//   name: '',
+//   identifier: '',
+//   address: '',
+//   city: '',
+//   state: '',
+//   zip: '',
+//   sameAsPropertyAddress: false,
+//   invoiceAddress1: '',
+//   invoiceAddress2: '',
+//   invoiceCity: '',
+//   invoiceState: '',
+//   invoiceZip: '',
+//   invoiceEmail: '',
+//   contactName: '',
+//   contactPhone: '',
+//   contactEmail: '',
+//   nfprDelivery: false,
+//   noaDelivery: false,
+//   uploadCourtDocket: false,
+//   zeroDollarAttyFee: false,
+//   preApproveCourtDocket: false,
+//   caresActApproval: false,
+//   splitCaresActCharge: false,
+//   caresAct: false,
+//   singleFamilyProperty: false,
+//   clientCreatesNfprs: false,
+//   clientCreatesUds: false,
+//   allowUdChecklist: false,
+//   apiRecordTransfer: false,
+//   postsNotices: false,
+//   attorneyFeePercentageLimit: false,
+//   diyClientCreatesClaims: false,
+//   diyClientAmendsClaims: false,
+//   forceUnitAddressSelection: false,
+//   newArtcraftImportLogic: false,
+//   uploadSeImportFiles: false,
+//   automaticallyReadyWrits: false,
+//   clientAmendsClaims: false,
+//   doNotRequireUdMilitaryStatus: false,
+//   preApproveNoticesOfNoncompliance: false,
+//   uploadImportFiles: false,
+//   eSignNotices: false,
+//   preApproveSummons: false,
+//   uploadUdImportFiles: false,
+//   reduceAttorneyFee: false,
+//   uploadNonImportFiles: false,
+//   generateUnswornDeclaration: false,
+//   alwaysSendAmendedNotice: false,
+//   nonNotGeneratedInSenex: false,
+//   ignoreUdWaitingPeriod: false,
+//   allowMulti: false,
+//   automaticallyReadyWritsAbove500: false,
+//   addPossessionToPrintedDocket: false,
+//   propertyManagementSoftware: '',
+//   clientWebsite: '',
+//   udFilingThreshold: ''
 // };
+//
 // export default defineComponent({
 //   name: 'PropertyDetail',
-//   components: { Sticky },
+//   // eslint-disable-next-line vue/no-unused-components
+//   components: { NoteEdit, SingleImageUpload, Tinymce, MDinput, Upload, Sticky, CommentDropdown, PlatformDropdown, SourceUrlDropdown, TabPanel },
 //   props: {
 //     isEdit: {
 //       type: Boolean,
@@ -251,12 +387,12 @@ const dialogImageUrl = ref('');
 //       });
 //     },
 //     setTagsViewTitle() {
-//       const title = 'Edit Court';
+//       const title = 'Edit Article';
 //       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` });
 //       this.$store.dispatch('tagsView/updateVisitedView', route);
 //     },
 //     setPageTitle() {
-//       const title = 'Edit Court';
+//       const title = 'Edit Article';
 //       document.title = `${title} - ${this.postForm.id}`;
 //     },
 //     submitForm() {
@@ -265,7 +401,7 @@ const dialogImageUrl = ref('');
 //           this.loading = true;
 //           ElNotification({
 //             title: 'Success',
-//             message: 'Court successfully saved',
+//             message: 'Property successfully saved',
 //             type: 'success',
 //             duration: 2000
 //           });
@@ -315,7 +451,7 @@ const dialogImageUrl = ref('');
 
 .form-container {
   width: 100%;
-  max-width: 800px; /* Добавьте максимальную ширину для формы */
+  max-width: 800px;
 }
 
 .form-group {

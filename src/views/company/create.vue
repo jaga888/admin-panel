@@ -4,7 +4,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import ArticleDetail from '@/views/company/components/ArticleDetail';
+import ArticleDetail from '@/views/company/components/CompanyDetail.vue';
 
 export default defineComponent({
   name: 'CreateArticle',
