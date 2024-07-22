@@ -147,32 +147,32 @@ export const asyncRoutes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: '/user',
+    path: '/unit',
     component: Layout,
-    redirect: '/user/list',
-    name: 'Users',
+    redirect: '/unit/list',
+    name: 'Units',
     meta: {
-      title: 'Users',
-      icon: markRaw(IconUser)
+      title: 'Unit',
+      icon: markRaw(IconUnit)
     },
     children: [
       {
         path: 'create',
-        component: () => import('@/views/user/create.vue'),
-        name: 'CreateUser',
-        meta: { title: 'Create user', icon: 'edit' }
+        component: () => import('@/views/unit/create.vue'),
+        name: 'CreateUnit',
+        meta: { title: 'Create unit', icon: 'edit' }
       },
       {
         path: 'edit/:id(\\d+)',
-        component: () => import('@/views/user/edit.vue'),
-        name: 'EditUser',
-        meta: { hidden: true, title: 'Edit user', noCache: true, activeMenu: '/user/list' }
+        component: () => import('@/views/unit/edit.vue'),
+        name: 'EditUnit',
+        meta: { hidden: true, title: 'Edit Unit', noCache: true, activeMenu: '/unit/list' }
       },
       {
         path: 'list',
-        component: () => import('@/views/user/list.vue'),
-        name: 'Userslist',
-        meta: { title: 'Users list', icon: 'list' }
+        component: () => import('@/views/unit/list.vue'),
+        name: 'UnitList',
+        meta: { title: 'Units list', icon: 'list' }
       }
     ]
   },
@@ -237,32 +237,32 @@ export const asyncRoutes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: '/unit',
+    path: '/user',
     component: Layout,
-    redirect: '/unit/list',
-    name: 'Units',
+    redirect: '/user/list',
+    name: 'Users',
     meta: {
-      title: 'Unit',
-      icon: markRaw(IconUnit)
+      title: 'Users',
+      icon: markRaw(IconUser)
     },
     children: [
       {
         path: 'create',
-        component: () => import('@/views/unit/create.vue'),
-        name: 'CreateUnit',
-        meta: { title: 'Create unit', icon: 'edit' }
+        component: () => import('@/views/user/create.vue'),
+        name: 'CreateUser',
+        meta: { title: 'Create user', icon: 'edit' }
       },
       {
         path: 'edit/:id(\\d+)',
-        component: () => import('@/views/unit/edit.vue'),
-        name: 'EditUnit',
-        meta: { hidden: true, title: 'Edit Unit', noCache: true, activeMenu: '/unit/list' }
+        component: () => import('@/views/user/edit.vue'),
+        name: 'EditUser',
+        meta: { hidden: true, title: 'Edit user', noCache: true, activeMenu: '/user/list' }
       },
       {
         path: 'list',
-        component: () => import('@/views/unit/list.vue'),
-        name: 'UnitList',
-        meta: { title: 'Units list', icon: 'list' }
+        component: () => import('@/views/user/list.vue'),
+        name: 'Userslist',
+        meta: { title: 'Users list', icon: 'list' }
       }
     ]
   },

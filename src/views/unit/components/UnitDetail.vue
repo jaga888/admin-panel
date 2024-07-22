@@ -154,7 +154,7 @@
           </div>
         </keep-alive>
       </el-tab-pane>
-      <el-tab-pane  label="Files" name="files">
+      <el-tab-pane  label="Imports" name="files">
         <keep-alive>
           <div v-if="activeName === 'files'">
             <h3 style="display:flex; justify-content: center;">File Upload</h3>
@@ -169,14 +169,6 @@
             <el-dialog v-model:visible="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt=""/>
             </el-dialog>
-          </div>
-        </keep-alive>
-      </el-tab-pane>
-      <el-tab-pane  label="Notes" name="notes">
-        <keep-alive>
-          <div v-if="activeName === 'notes'">
-            <h3 style="display:flex; justify-content: center;">Notes</h3>
-            <note-edit ref="editor" :height="400"></note-edit>
           </div>
         </keep-alive>
       </el-tab-pane>
