@@ -69,18 +69,21 @@
           <span>{{ scope.row.city }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="415px" align="center" label="Address">
+      <el-table-column width="410px" align="center" label="Address">
         <template v-slot="scope">
           <span>{{ scope.row.address }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="155" align="center" label="Actions">
+      <el-table-column width="160" align="center" label="Actions">
         <template v-slot="scope">
-          <router-link :to="'/court/edit/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">
+          <router-link :to="'/jurisdiction/court/edit/'+scope.row.id">
+            <el-button type="primary" size="small">
               Edit
             </el-button>
           </router-link>
+          <el-button style="margin-left: 15px" size="small" type="danger">
+            Delete
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

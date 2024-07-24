@@ -55,6 +55,9 @@
               Edit
             </el-button>
           </router-link>
+          <el-button style="margin-left: 15px" size="small" type="danger">
+            Delete
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

@@ -66,7 +66,11 @@
       </el-table-column>
       <el-table-column width="380px" align="center" label="Company Name">
         <template v-slot="scope">
-          <span>{{ scope.row.company_name }}</span>
+          <router-link :to="'/company/edit/'+scope.row.id">
+            <el-button type="text"  size="default" icon="el-icon-edit">
+              {{scope.row.company_name}}
+            </el-button>
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column width="120px" align="center" label="State">
@@ -74,20 +78,23 @@
           <span>{{ scope.row.state }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="155px" align="center" label="Status">
+      <el-table-column width="150px" align="center" label="Status">
         <template v-slot="scope">
           <el-tag :type="getStatusColor(scope.row.status)" class="tag-item">
             {{ scope.row.status }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column width="155" align="center" label="Actions">
+      <el-table-column width="160" align="center" label="Actions">
         <template v-slot="scope">
           <router-link :to="'/property/edit/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">
+            <el-button type="primary" size="small" >
               Edit
             </el-button>
           </router-link>
+          <el-button style="margin-left: 15px" size="small" type="danger">
+            Delete
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

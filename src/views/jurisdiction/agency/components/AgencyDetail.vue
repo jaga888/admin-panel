@@ -1,83 +1,53 @@
 <template>
   <div class="tab-container">
-            <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
-              <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
-                Save
-              </el-button>
-              <el-button v-loading="loading" type="warning" @click="draftForm">
-                Reset
-              </el-button>
-            </sticky>
-            <div class="createPost-container">
-              <el-form  :rules="rules" class="form-container" label-position="top">
-                <div class="createPost-main-container">
-                  <el-row>
-                    <el-col :span="22">
-                      <h3>Attorney Fee</h3>
-                      <el-form-item label="Scope Type">
-                        <el-select
-                              v-model="postForm.scope_type"
-                              placeholder="Select Scope Type"
-                              requiered
-                            >
-                              <el-option label="State" value="State"/>
-                              <el-option label="Company" value="Company"/>
-                              <el-option label="Property" value="Property"/>
-                            </el-select>
-                      </el-form-item>
-                      <el-form-item label="Scope ID" prop="scope_id">
-                        <el-input
-                            type="number"
-                            v-model="postForm.scope_id"
-                            placeholder="Enter scope ID"
-                            requiered
-                        />
-                      </el-form-item>
-                      <el-form-item label="Notice of Default" prop="fd">
-                        <el-input
-                            v-model="postForm.fd"
-                            placeholder="Enter fd"
-                            requiered
-                        />
-                      </el-form-item>
-                      <el-form-item label="Unlawful Detainers" prop="ud">
-                        <el-input
-                            v-model="postForm.ud"
-                            placeholder="Enter ud"
-                            requiered
-                        />
-                      </el-form-item>
-                      <el-form-item label="UD external" prop="ud external">
-                        <el-input
-                            v-model="postForm.ud_external"
-                            placeholder="Enter ud external"
-                            requiered
-                        />
-                      </el-form-item>
-                      <el-form-item label="Writ of eviction (writ of possession)">
-                        <el-input
-                            v-model="postForm.writOfEviction"
-                            placeholder="Enter ud external"
-                            requiered
-                        />
-                      </el-form-item>
-                      <el-form-item label="Attorney Name">
-                        <el-select
-                              v-model="postForm.attorney_name"
-                              placeholder="Select Attorney"
-                            >
-                              <el-option label="" value=""/>
-                              <el-option label="John" value="john"/>
-                              <el-option label="Michael" value="michael"/>
-                              <el-option label="Alex" value="alex" selected/>
-                            </el-select>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                </div>
-                </el-form>
-                </div>
-          </div>
+    <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
+      <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
+        Save
+      </el-button>
+      <el-button v-loading="loading" type="warning" @click="draftForm">
+        Reset
+      </el-button>
+    </sticky>
+    <div class="createPost-container">
+      <el-form :rules="rules" class="form-container" label-position="top">
+        <div class="createPost-main-container">
+          <el-row>
+            <el-col :span="22">
+              <h3>Agency</h3>
+              <el-form-item label="Name" prop="name">
+                <el-input
+                    v-model="postForm.name"
+                    placeholder="Name"
+                    requiered
+                />
+              </el-form-item>
+              <el-form-item label="Short Name" prop="shortName">
+                <el-input
+                    v-model="postForm.shortName"
+                    placeholder="Short Name"
+                    requiered
+                />
+              </el-form-item>
+              <el-form-item label="Full Name" prop="fullName">
+                <el-input
+                    v-model="postForm.fullName"
+                    placeholder="Full Name"
+                    requiered
+                />
+              </el-form-item>
+              <el-form-item label="Order" prop="order">
+                <el-input
+                    v-model="postForm.order"
+                    placeholder="Order"
+                    requiered
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -86,7 +56,6 @@ import Sticky from '@/components/Sticky';
 // import { validURL } from '@/utils/validate';
 // import { fetchArticle } from '@/api/article';
 // import { searchUser } from '@/api/remote-search';
-// import SingleImageUpload from '@/components/Upload/SingleImage.vue';
 import { ElNotification } from 'element-plus';
 
 const props = defineProps({
@@ -112,6 +81,16 @@ const submitForm = () => {
   });
 };
 
+const loading = ref(false);
+const activeName = ref('info');
+const dialogVisible = ref(false);
+const dialogImageUrl = ref('');
+// const defaultForm = {
+//   firstName: '',
+//   lastName: '',
+//   role: '',
+//   email: ''
+// };
 // export default defineComponent({
 //   name: 'PropertyDetail',
 //   components: { Sticky },
@@ -132,17 +111,31 @@ const submitForm = () => {
 //       } else {
 //         callback();
 //       }
-//     };,
-//
-//
+//     };
+//     const validateSourceUri = (rule, value, callback) => {
+//       if (value) {
+//         if (validURL(value)) {
+//           callback();
+//         } else {
+//           ElMessage({
+//             message: 'invalid URL',
+//             type: 'error'
+//           });
+//           callback(new Error('invalid URL'));
+//         }
+//       } else {
+//         callback();
+//       }
+//     };
 //     return {
+//       postForm: Object.assign({}, defaultForm),
 //       loading: false,
 //       userListOptions: [],
 //       rules: {
 //         image_uri: [{ validator: validateRequire }],
 //         title: [{ validator: validateRequire }],
 //         content: [{ validator: validateRequire }],
-//         source_uri: [{ validator: trigger: 'blur' }]
+//         source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
 //       },
 //       tempRoute: {},
 //       tabMapOptions: [
@@ -192,12 +185,12 @@ const submitForm = () => {
 //       });
 //     },
 //     setTagsViewTitle() {
-//       const title = 'Edit Article';
+//       const title = 'Edit Court';
 //       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` });
 //       this.$store.dispatch('tagsView/updateVisitedView', route);
 //     },
 //     setPageTitle() {
-//       const title = 'Edit Article';
+//       const title = 'Edit Court';
 //       document.title = `${title} - ${this.postForm.id}`;
 //     },
 //     submitForm() {
@@ -206,7 +199,7 @@ const submitForm = () => {
 //           this.loading = true;
 //           ElNotification({
 //             title: 'Success',
-//             message: 'User successfully saved',
+//             message: 'Court successfully saved',
 //             type: 'success',
 //             duration: 2000
 //           });

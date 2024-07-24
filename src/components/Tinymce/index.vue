@@ -1,9 +1,6 @@
 <template>
   <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
     <textarea :id="tinymceId" class="tinymce-textarea" />
-    <div class="editor-custom-btn-container">
-      <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
-    </div>
   </div>
 </template>
 
@@ -13,7 +10,6 @@ import { defineComponent } from 'vue';
  * docs:
  * https://vue3-element-admin-site.midfar.com/feature/component/rich-editor.html#tinymce
  */
-import editorImage from './components/EditorImage';
 import plugins from './plugins';
 import toolbar from './toolbar';
 import load from './dynamicLoadScript';
@@ -23,7 +19,6 @@ const tinymceCDN = 'https://unpkg.com/tinymce-all-in-one@4.9.3/tinymce.min.js';
 
 export default defineComponent({
   name: 'Tinymce',
-  components: { editorImage },
   props: {
     id: {
       type: String,
@@ -44,7 +39,8 @@ export default defineComponent({
     },
     menubar: {
       type: String,
-      default: 'file edit insert view format table'
+      default: ''
+      // default: 'file edit insert view format table'
     },
     height: {
       type: [Number, String],

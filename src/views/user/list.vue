@@ -64,7 +64,7 @@
           <span>{{ scope.row.last_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="415px" align="center" label="Email">
+      <el-table-column width="410px" align="center" label="Email">
         <template v-slot="scope">
           <span>{{ scope.row.email }}</span>
         </template>
@@ -76,13 +76,16 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column width="155" align="center" label="Actions">
+      <el-table-column width="160" align="center" label="Actions">
         <template v-slot="scope">
           <router-link :to="'/user/edit/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">
+            <el-button type="primary" size="small">
               Edit
             </el-button>
           </router-link>
+          <el-button style="margin-left: 15px" size="small" type="danger">
+            Delete
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
