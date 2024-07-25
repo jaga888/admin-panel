@@ -15,69 +15,7 @@
             <el-col :span="22">
               <h3>Serviceable Area</h3>
               <el-form-item label="Name">
-                <el-select
-                    v-model="postForm.city"
-                    placeholder="Select City"
-                    requiered
-                >
-                  <el-option label="Albemarle" value="Albemarle"/>
-                      <el-option label="Amelia" value="mri"/>
-                      <el-option label="Bedford" value="realpage"/>
-                      <el-option label="Botetourt" value="yardi"/>
-                      <el-option label="Caroline" value="Caroline"/>
-                      <el-option label="Charles City" value="Charles City"/>
-                      <el-option label="Chesapeake" value="Chesapeake"/>
-                      <el-option label="Chesterfield" value="Chesterfield"/>
-                      <el-option label="Coloniai Heights" value="Coloniai Heights"/>
-                      <el-option label="Culpeper" value="Culpeper"/>
-                      <el-option label="Cumberland" value="Cumberland"/>
-                      <el-option label="Dinwiddie" value="Dinwiddie"/>
-                      <el-option label="Essex" value="Essex"/>
-                      <el-option label="Fairfax County" value="Fairfax"/>
-                      <el-option label="Fauquier" value="Fauquier"/>
-                      <el-option label="Franklin" value="Franklin"/>
-                      <el-option label="Franklin City" value="Franklin City"/>
-                      <el-option label="Frederickburg" value="Frederickburg"/>
-                      <el-option label="Gloucester" value="Gloucester"/>
-                      <el-option label="Goochland" value="Goochland"/>
-                      <el-option label="Hampton" value="Hampton"/>
-                      <el-option label="Hanover" value="Hanover"/>
-                      <el-option label="Henrico" value="Henrico"/>
-                      <el-option label="Hopewell" value="Hopewell"/>
-                      <el-option label="Isle of Wight" value="unknown"/>
-                      <el-option label="King and Queen" value="King and Queen"/>
-                      <el-option label="King George" value="King George"/>
-                      <el-option label="King William" value="King William"/>
-                      <el-option label="Louisa" value="Louisa"/>
-                      <el-option label="Lynchburg" value="Lynchburg"/>
-                      <el-option label="Mathews" value="Mathews"/>
-                      <el-option label="Middlesex" value="Middlesex"/>
-                      <el-option label="New Kent" value="New Kent"/>
-                      <el-option label="Newport News" value="Newport News"/>
-                      <el-option label="Norfolk" value="Norfolk"/>
-                      <el-option label="Petersburg" value="Petersburg"/>
-                      <el-option label="Portsmouth" value="Portsmouth"/>
-                      <el-option label="Powhatan" value="Powhatan"/>
-                      <el-option label="Prince Edward" value="Prince Edward"/>
-                      <el-option label="Prince George" value="Prince George"/>
-                      <el-option label="Prince William" value="Prince William"/>
-                      <el-option label="Richmond" value="Richmond"/>
-                      <el-option label="Roanoke City" value="Roanoke"/>
-                      <el-option label="Rockingham" value="Rockingham"/>
-                      <el-option label="Salem" value="Salem"/>
-                      <el-option label="Southampton" value="Southampton"/>
-                      <el-option label="Spotsylvania" value="Spotsylvania"/>
-                      <el-option label="Stafford" value="Stafford"/>
-                      <el-option label="Suffolk" value="Suffolk"/>
-                      <el-option label="Surry" value="Surry"/>
-                      <el-option label="Sussex" value="Sussex"/>
-                      <el-option label="Virginia Beach" value="Virginia"/>
-                      <el-option label="Warren" value="Warren"/>
-                      <el-option label="Waynesboro" value="Waynesboro"/>
-                      <el-option label="Westmoreland" value="Westmoreland"/>
-                      <el-option label="Williamsburg" value="Williamsburg"/>
-                      <el-option label="York" value="York"/>
-                </el-select>
+                <el-input v-model="postForm.city"></el-input>
               </el-form-item>
               <h3>Agency</h3>
               <el-form-item>

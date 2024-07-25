@@ -42,13 +42,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="600px" align="center" label="Legal Name">
+      <el-table-column width="585px" align="center" label="Legal Name">
         <template v-slot="scope">
           <span>{{ scope.row.legal_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Actions" width="145">
+      <el-table-column align="center" label="Actions" width="160">
         <template v-slot="scope">
           <router-link :to="'/company/edit/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
