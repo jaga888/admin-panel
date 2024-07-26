@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-          v-model="listQuery.name"
+          v-model="listQuery.invoices"
           placeholder="Name"
           style="width: 200px; margin-right: 15px"
           class="filter-item"
@@ -10,25 +10,15 @@
           @input="handleFilter"
       />
       <el-autocomplete
-          v-model="listQuery.shortName"
-          :fetch-suggestions="fetchShortName"
+          v-model="listQuery.report"
+          :fetch-suggestions="fetchReport"
           :trigger-on-focus="false"
-          placeholder="Short Name"
+          placeholder="Report"
           style="width: 200px; margin-right: 15px"
           class="filter-item"
           clearable
           @select="handleFilter"
       />
-      <el-select
-          v-model="listQuery.city"
-           placeholder="Select City"
-           style="width: 140px; margin-right: 15px"
-           class="filter-item"
-           clearable
-           @change="handleFilter"
-      >
-        <el-option v-for="item in cityOptions" :key="item" :label="item" :value="item"/>
-      </el-select>
       <el-select
           v-model="listQuery.sort"
           style="width: 140px; margin-right: 15px"
@@ -42,7 +32,7 @@
       <el-button class="filter-item" type="primary" :icon="iconSearch" @click="handleFilter">
         <span v-waves>Search</span>
       </el-button>
-      <router-link :to="'/jurisdiction/court/edit/'+0">
+      <router-link :to="'/billing/create'">
         <el-button class="filter-item" style="margin-left: 15px;" type="primary" :icon="iconEdit">
           Create
         </el-button>
@@ -54,29 +44,24 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="420px" align="center" label="Name">
+      <el-table-column width="420px" align="center" label="Invoices">
         <template v-slot="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.invoices }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="420px" align="center" label="Short Name">
+      <el-table-column width="420px" align="center" label="Summary">
         <template v-slot="scope">
-          <span>{{ scope.row.short_name }}</span>
+          <span>{{ scope.row.summary }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="200px" align="center" label="City">
+      <el-table-column width="200px" align="center" label="Report">
           <template v-slot="scope">
-          <span>{{ scope.row.city }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="410px" align="center" label="Address">
-        <template v-slot="scope">
-          <span>{{ scope.row.address }}</span>
+          <span>{{ scope.row.report }}</span>
         </template>
       </el-table-column>
       <el-table-column width="160" align="center" label="Actions">
         <template v-slot="scope">
-          <router-link :to="'/jurisdiction/court/edit/'+scope.row.id">
+          <router-link :to="'/billing/edit/'+scope.row.id">
             <el-button type="primary" size="small">
               Edit
             </el-button>
@@ -114,18 +99,16 @@ export default defineComponent({
       listQuery: {
         page: 1,
         limit: 10,
-        name: '',
-        shortName: '',
-        city: '',
-        address: ''
+        invoices: '',
+        summary: '',
+        report: ''
       },
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       cityOptions: [],
       temp: {
-        name: '',
-        shortName: '',
-        type: '',
-        city: ''
+        invoices: '',
+        summary: '',
+        report: ''
       },
       downloadLoading: false,
       pvData: [],
@@ -133,45 +116,39 @@ export default defineComponent({
       data: [
         {
           id: 1,
-          name: 'Albemarle General District Court',
-          short_name: 'Alamance',
-          address: '1 Court Square',
-          city: 'Graham'
+          invoices: '',
+          summary: '',
+          report: ''
         },
         {
           id: 2,
-          name: 'Onslow County Clerk of Court',
-          short_name: 'Onslow',
-          address: '625 Court Street',
-          city: 'Jacksonville'
+          invoices: '',
+          summary: '',
+          report: ''
         },
         {
           id: 3,
-          name: 'Westmoreland General District Courtarle',
-          short_name: 'Westmoreland',
-          address: '175 Polk Street, P.O. Box 688',
-          city: 'Montross'
+          invoices: '',
+          summary: '',
+          report: ''
         },
         {
           id: 4,
-          name: 'Franklin County General District Court',
-          short_name: 'Franklin',
-          address: 'P.O. Box 569, 275 South Main Street, Suite 111',
-          city: 'Rocky Mount'
+          invoices: '',
+          summary: '',
+          report: ''
         },
         {
           id: 5,
-          name: 'Franklin County Clerk of Court',
-          short_name: 'Franklin',
-          address: '102 South Main Street',
-          city: 'Louisburg'
+          invoices: '',
+          summary: '',
+          report: ''
         },
         {
           id: 6,
-          name: 'Amelia County General District Court – Civil Division',
-          short_name: 'Amelia',
-          address: 'P.O. Box 24, 16441 Court Street',
-          city: 'Amelia'
+          invoices: '',
+          summary: '',
+          report: ''
         }
       ]
     };
@@ -185,10 +162,9 @@ export default defineComponent({
       this.listLoading = true;
 
       let filteredData = this.data.filter(item => {
-        const matchesName = this.listQuery.name.toLowerCase() ? item.name.toLowerCase().includes(this.listQuery.name.toLowerCase()) : true;
-        const matchesShortName = this.listQuery.shortName.toLowerCase() ? item.short_name.toLowerCase().includes(this.listQuery.shortName.toLowerCase()) : true;
-        const matchesCity = this.listQuery.city ? item.city === this.listQuery.city : true;
-        return matchesName && matchesShortName && matchesCity;
+        const matchesInvoices = this.listQuery.invoices.toLowerCase() ? item.invoices.toLowerCase().includes(this.listQuery.invoices.toLowerCase()) : true;
+        const matchesReport = this.listQuery.report.toLowerCase() ? item.report.toLowerCase().includes(this.listQuery.report.toLowerCase()) : true;
+        return matchesInvoices && matchesReport;
       });
 
       if (this.listQuery.sort) {
@@ -209,21 +185,11 @@ export default defineComponent({
       this.listQuery.page = 1;
       this.getList();
     },
-    setCityOptions() {
-      const data = [
-        { city: 'Graham' },
-        { city: 'Jacksonville' },
-        { city: 'Montross' },
-        { city: 'Louisburg' }
-      ];
-      const cities = data.map(item => item.city);
-      this.cityOptions = Array.from(new Set(cities));
-    },
-    fetchShortName(queryString, cb) {
+    fetchReport(queryString, cb) {
       const results = queryString
-        ? this.list.filter(item => item.short_name.toLowerCase().includes(queryString.toLowerCase()))
+        ? this.list.filter(item => item.report.toLowerCase().includes(queryString.toLowerCase()))
         : this.list;
-      cb(results.map(item => ({ value: item.short_name })));
+      cb(results.map(item => ({ value: item.report })));
     }
   }
 });

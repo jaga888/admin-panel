@@ -2,33 +2,23 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-          v-model="listQuery.name"
-          placeholder="Name"
+          v-model="listQuery.court"
+          placeholder="Court"
           style="width: 200px; margin-right: 15px"
           class="filter-item"
           clearable
           @input="handleFilter"
       />
       <el-autocomplete
-          v-model="listQuery.shortName"
-          :fetch-suggestions="fetchShortName"
+          v-model="listQuery.room"
+          :fetch-suggestions="fetchRoom"
           :trigger-on-focus="false"
-          placeholder="Short Name"
+          placeholder="Room"
           style="width: 200px; margin-right: 15px"
           class="filter-item"
           clearable
           @select="handleFilter"
       />
-      <el-select
-          v-model="listQuery.city"
-           placeholder="Select City"
-           style="width: 140px; margin-right: 15px"
-           class="filter-item"
-           clearable
-           @change="handleFilter"
-      >
-        <el-option v-for="item in cityOptions" :key="item" :label="item" :value="item"/>
-      </el-select>
       <el-select
           v-model="listQuery.sort"
           style="width: 140px; margin-right: 15px"
@@ -42,7 +32,7 @@
       <el-button class="filter-item" type="primary" :icon="iconSearch" @click="handleFilter">
         <span v-waves>Search</span>
       </el-button>
-      <router-link :to="'/jurisdiction/court/edit/'+0">
+      <router-link :to="'/jurisdiction/courtroom/create'">
         <el-button class="filter-item" style="margin-left: 15px;" type="primary" :icon="iconEdit">
           Create
         </el-button>
@@ -54,29 +44,19 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="420px" align="center" label="Name">
+      <el-table-column width="420px" align="center" label="Court">
         <template v-slot="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.court }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="420px" align="center" label="Short Name">
+      <el-table-column width="420px" align="center" label="Room">
         <template v-slot="scope">
-          <span>{{ scope.row.short_name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="200px" align="center" label="City">
-          <template v-slot="scope">
-          <span>{{ scope.row.city }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="410px" align="center" label="Address">
-        <template v-slot="scope">
-          <span>{{ scope.row.address }}</span>
+          <span>{{ scope.row.room }}</span>
         </template>
       </el-table-column>
       <el-table-column width="160" align="center" label="Actions">
         <template v-slot="scope">
-          <router-link :to="'/jurisdiction/court/edit/'+scope.row.id">
+          <router-link :to="'/jurisdiction/courtroom/edit/'+scope.row.id">
             <el-button type="primary" size="small">
               Edit
             </el-button>
@@ -100,7 +80,7 @@ import waves from '@/directive/waves';
 import Pagination from '@/components/Pagination';
 
 export default defineComponent({
-  name: 'CourtsList',
+  name: 'CourtroomsList',
   components: { Pagination },
   directives: { waves },
   data() {
@@ -114,18 +94,13 @@ export default defineComponent({
       listQuery: {
         page: 1,
         limit: 10,
-        name: '',
-        shortName: '',
-        city: '',
-        address: ''
+        court: '',
+        room: ''
       },
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      cityOptions: [],
       temp: {
-        name: '',
-        shortName: '',
-        type: '',
-        city: ''
+        court: '',
+        room: ''
       },
       downloadLoading: false,
       pvData: [],
@@ -133,62 +108,43 @@ export default defineComponent({
       data: [
         {
           id: 1,
-          name: 'Albemarle General District Court',
-          short_name: 'Alamance',
-          address: '1 Court Square',
-          city: 'Graham'
+          court: 'Albemarle General District Court',
+          room: 'Room A'
         },
         {
           id: 2,
-          name: 'Onslow County Clerk of Court',
-          short_name: 'Onslow',
-          address: '625 Court Street',
-          city: 'Jacksonville'
+          court: 'Onslow County Clerk of Court',
+          room: 'Room C'
         },
         {
           id: 3,
-          name: 'Westmoreland General District Courtarle',
-          short_name: 'Westmoreland',
-          address: '175 Polk Street, P.O. Box 688',
-          city: 'Montross'
+          court: 'Westmoreland General District Courtarle',
+          room: 'Room B'
         },
         {
           id: 4,
-          name: 'Franklin County General District Court',
-          short_name: 'Franklin',
-          address: 'P.O. Box 569, 275 South Main Street, Suite 111',
-          city: 'Rocky Mount'
-        },
-        {
-          id: 5,
-          name: 'Franklin County Clerk of Court',
-          short_name: 'Franklin',
-          address: '102 South Main Street',
-          city: 'Louisburg'
+          court: 'Franklin County General District Court',
+          room: 'Room D'
         },
         {
           id: 6,
-          name: 'Amelia County General District Court – Civil Division',
-          short_name: 'Amelia',
-          address: 'P.O. Box 24, 16441 Court Street',
-          city: 'Amelia'
+          court: 'Onslow County Clerk of Court',
+          room: 'Room A'
         }
       ]
     };
   },
   created() {
     this.getList();
-    this.setCityOptions();
   },
   methods: {
     getList() {
       this.listLoading = true;
 
       let filteredData = this.data.filter(item => {
-        const matchesName = this.listQuery.name.toLowerCase() ? item.name.toLowerCase().includes(this.listQuery.name.toLowerCase()) : true;
-        const matchesShortName = this.listQuery.shortName.toLowerCase() ? item.short_name.toLowerCase().includes(this.listQuery.shortName.toLowerCase()) : true;
-        const matchesCity = this.listQuery.city ? item.city === this.listQuery.city : true;
-        return matchesName && matchesShortName && matchesCity;
+        const matchesCourt = this.listQuery.court.toLowerCase() ? item.court.toLowerCase().includes(this.listQuery.court.toLowerCase()) : true;
+        const matchesRoom = this.listQuery.room.toLowerCase() ? item.room.toLowerCase().includes(this.listQuery.room.toLowerCase()) : true;
+        return matchesCourt && matchesRoom;
       });
 
       if (this.listQuery.sort) {
@@ -209,21 +165,11 @@ export default defineComponent({
       this.listQuery.page = 1;
       this.getList();
     },
-    setCityOptions() {
-      const data = [
-        { city: 'Graham' },
-        { city: 'Jacksonville' },
-        { city: 'Montross' },
-        { city: 'Louisburg' }
-      ];
-      const cities = data.map(item => item.city);
-      this.cityOptions = Array.from(new Set(cities));
-    },
-    fetchShortName(queryString, cb) {
+    fetchRoom(queryString, cb) {
       const results = queryString
-        ? this.list.filter(item => item.short_name.toLowerCase().includes(queryString.toLowerCase()))
+        ? this.list.filter(item => item.room.toLowerCase().includes(queryString.toLowerCase()))
         : this.list;
-      cb(results.map(item => ({ value: item.short_name })));
+      cb(results.map(item => ({ value: item.room })));
     }
   }
 });

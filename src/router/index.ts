@@ -8,7 +8,13 @@ import {
   Collection as IconCourt,
   Coin as IconFees,
   EditPen as IconDocument,
-  ReadingLamp as IconUnit
+  ReadingLamp as IconUnit,
+  CircleCheck as IconPolicy,
+  Location as IconJurisdiction,
+  Switch as IconAgencyRelation,
+  Suitcase as IconAgency,
+  MapLocation as IconServiceableArea,
+  Ticket as IconBilling
 } from '@element-plus/icons-vue';
 
 /* Layout */
@@ -268,7 +274,7 @@ export const asyncRoutes: RouteRecordRaw[] = [
     name: 'Jurisdiction',
     meta: {
       title: 'Jurisdiction',
-      icon: markRaw(IconDocument)
+      icon: markRaw(IconJurisdiction)
     },
     children: [
       {
@@ -277,7 +283,7 @@ export const asyncRoutes: RouteRecordRaw[] = [
         redirect: '/jurisdiction/agency/list',
         meta: {
           title: 'Agencies',
-          icon: markRaw(IconCourt)
+          icon: markRaw(IconAgency)
         },
         children: [
           {
@@ -335,7 +341,7 @@ export const asyncRoutes: RouteRecordRaw[] = [
         redirect: '/jurisdiction/serviceable-area/list',
         meta: {
           title: 'Serviceable area',
-          icon: markRaw(IconCourt)
+          icon: markRaw(IconServiceableArea)
         },
         children: [
           {
@@ -357,6 +363,124 @@ export const asyncRoutes: RouteRecordRaw[] = [
             meta: { title: 'Areas list', icon: 'list' }
           }
         ]
+      },
+      {
+        path: '/jurisdiction/agency-relation',
+        name: 'AgencyRelationsList',
+        redirect: '/jurisdiction/agency-relation/list',
+        meta: {
+          title: 'Agency relations',
+          icon: markRaw(IconAgencyRelation)
+        },
+        children: [
+          {
+            path: '/jurisdiction/agency-relation/create',
+            component: () => import('@/views/jurisdiction/agency-relation/create.vue'),
+            name: 'CreateAgencyRelation',
+            meta: { title: 'Create Agency Relation', icon: 'edit' }
+          },
+          {
+            path: '/jurisdiction/agency-relation/edit/:id(\\d+)',
+            component: () => import('@/views/jurisdiction/agency-relation/edit.vue'),
+            name: 'EditAgencyRelation',
+            meta: { hidden: true, title: 'Edit Agency Relation', noCache: true, activeMenu: '/jurisdiction/agency-relation/edit' }
+          },
+          {
+            path: '/jurisdiction/agency-relation/list',
+            component: () => import('@/views/jurisdiction/agency-relation/list.vue'),
+            name: 'AgencyRelationslist',
+            meta: { title: 'Agency Relations list', icon: 'list' }
+          }
+        ]
+      },
+      {
+        path: '/jurisdiction/courtroom',
+        name: 'CourtroomsList',
+        redirect: '/jurisdiction/courtroom/list',
+        meta: {
+          title: 'Courtrooms',
+          icon: markRaw(IconCourt)
+        },
+        children: [
+          {
+            path: '/jurisdiction/courtroom/create',
+            component: () => import('@/views/jurisdiction/courtroom/create.vue'),
+            name: 'CreateCourtroom',
+            meta: { title: 'Create courtroom', icon: 'edit' }
+          },
+          {
+            path: '/jurisdiction/courtroom/edit/:id(\\d+)',
+            component: () => import('@/views/jurisdiction/courtroom/edit.vue'),
+            name: 'EditCourtroom',
+            meta: { hidden: true, title: 'Edit courtroom', noCache: true, activeMenu: '/jurisdiction/courtroom/edit' }
+          },
+          {
+            path: 'list',
+            component: () => import('@/views/jurisdiction/courtroom/list.vue'),
+            name: 'Courtroomslist',
+            meta: { title: 'Courtrooms list', icon: 'list' }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/policy',
+    component: Layout,
+    redirect: '/policy/list',
+    name: 'Policies',
+    meta: {
+      title: 'Policies',
+      icon: markRaw(IconPolicy)
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/policy/create.vue'),
+        name: 'CreatePolicy',
+        meta: { title: 'Create policy', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/policy/edit.vue'),
+        name: 'EditPolicy',
+        meta: { hidden: true, title: 'Edit policy', noCache: true, activeMenu: '/policy/list' }
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/policy/list.vue'),
+        name: 'Policieslist',
+        meta: { title: 'Policies list', icon: 'list' }
+      }
+    ]
+  },
+  {
+    path: '/billing',
+    component: Layout,
+    name: 'Billing',
+    redirect: '/billing/list',
+    meta: {
+      title: 'Billing',
+      icon: markRaw(IconBilling)
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/billing/create.vue'),
+        name: 'CreateBilling',
+        meta: { title: 'Create billing', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/billing/edit.vue'),
+        name: 'EditBilling',
+        meta: { hidden: true, title: 'Edit billing', noCache: true, activeMenu: '/billing/edit' }
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/billing/list.vue'),
+        name: 'Billinglist',
+        meta: { title: 'Billing list', icon: 'list' }
       }
     ]
   },

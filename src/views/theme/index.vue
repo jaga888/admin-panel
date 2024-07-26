@@ -105,7 +105,7 @@ export default defineComponent({
   watch: {
     theme() {
       console.log('watch theme', this.theme);
-      // toggleClass(document.body, 'custom-theme');
+      toggleClass(document.body, 'custom-theme');
       const htmlTag = document.querySelector('html');
       if (this.theme) {
         htmlTag.classList.add('dark');
