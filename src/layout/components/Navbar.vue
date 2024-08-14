@@ -1,8 +1,5 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"
-      @toggleClick="toggleSidebar" />
-
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
@@ -13,24 +10,7 @@
         <el-tooltip content="Global size" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
-
       </template>
-
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar">
-          <el-icon class="el-icon-caret-bottom" size="small">
-            <CaretBottom />
-          </el-icon>
-        </div>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item @click="logout">
-              <span style="display:block;">Logout</span>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
     </div>
   </div>
 </template>
@@ -39,7 +19,6 @@
 import { mapState } from 'pinia';
 import store from '@/store';
 import Breadcrumb from '@/components/Breadcrumb';
-import Hamburger from '@/components/Hamburger';
 import ErrorLog from '@/components/ErrorLog';
 import Screenfull from '@/components/Screenfull';
 import SizeSelect from '@/components/SizeSelect';
@@ -50,7 +29,6 @@ import { CaretBottom } from '@element-plus/icons-vue';
 export default defineComponent({
   components: {
     Breadcrumb,
-    Hamburger,
     ErrorLog,
     Screenfull,
     SizeSelect,

@@ -68,7 +68,7 @@ export default defineComponent({
       type: String,
       default: ''
     },
-    isTopRoute: { // 是否为顶层路由
+    isTopRoute: {
       type: Boolean,
       default: false
     }
@@ -151,5 +151,59 @@ export default defineComponent({
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
+}
+
+.root-sidebar-item {
+  display: flex;
+}
+
+.text {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.nest-menu {
+  display: flex;
+  flex-direction: column;
+  .left-sub-menu {
+    .el-sub-menu__title {
+      padding: 0 16px;
+    }
+  }
+}
+
+.submenu-title-noDropdown {
+  display: flex;
+
+}
+
+.el-menu--horizontal {
+  display: flex;
+  flex-wrap: nowrap;
+  border: none;
+  .el-menu-item {
+    padding: 0 16px;
+    line-height: 64px;
+  }
+}
+
+.left-sub-menu .el-menu-item {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  .el-menu-item__content {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.nest-menu .el-sub-menu>.el-sub-menu__title,
+.el-sub-menu .el-menu-item {
+  min-height: var(--top-bar-height) !important;
+  background-color: #1e5b83 !important;
+
+  &:hover {
+    background-color: #1e5b83 !important;
+  }
 }
 </style>
