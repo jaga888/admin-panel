@@ -51,7 +51,7 @@ export default defineStore({
             reject('Verification failed, please Login again.');
           }
 
-          const { roles, name, avatar, introduction } = data;
+          const { roles, first_name, last_name } = data;
 
           // roles must be a non-empty array
           if (!roles || roles.length <= 0) {
@@ -59,9 +59,8 @@ export default defineStore({
           }
 
           this.roles = roles;
-          this.name = name;
-          this.avatar = avatar;
-          this.introduction = introduction;
+          this.name = first_name + ' ' + last_name;
+
           resolve(data);
         }).catch(error => {
           reject(error);

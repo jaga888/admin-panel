@@ -10,16 +10,22 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    url: '/vue-element-admin/user/info',
+    url: '/admin/info',
     method: 'get',
-    params: { token }
   });
 }
 
 export function logout(token) {
   return request({
-    url: '/vue-element-admin/user/logout',
+    url: '/admin/logout',
     method: 'post',
-    params: { token }
+  });
+}
+
+export function fetchList(query) {
+  return request({
+    url: '/admin/users',
+    method: 'get',
+    params: query
   });
 }

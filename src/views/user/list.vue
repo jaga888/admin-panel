@@ -100,6 +100,7 @@ import { defineComponent, markRaw } from 'vue';
 import { Search, Edit, Download } from '@element-plus/icons-vue';
 import waves from '@/directive/waves';
 import Pagination from '@/components/Pagination';
+import {fetchList} from "@/api/user.js";
 
 export default defineComponent({
   name: 'CompaniesList',
@@ -193,24 +194,32 @@ export default defineComponent({
     getList() {
       this.listLoading = true;
 
-      let filteredData = this.data.filter(item => {
-        const matchesFirstName = this.listQuery.firstName.toLowerCase() ? item.first_name.toLowerCase().includes(this.listQuery.firstName.toLowerCase()) : true;
-        const matchesLastName = this.listQuery.lastName.toLowerCase() ? item.last_name.toLowerCase().includes(this.listQuery.lastName.toLowerCase()) : true;
-        const matchesRole = this.listQuery.role ? item.role === this.listQuery.role : true;
-        return matchesFirstName && matchesLastName && matchesRole;
+      fetchList(this.listQuery).then(response => {
+        debugger;
+        // let filteredData = response.data.filter(item => {
+        //   const matchesFirstName = this.listQuery.firstName.toLowerCase() ? item.first_name.toLowerCase().includes(this.listQuery.firstName.toLowerCase()) : true;
+        //   const matchesLastName = this.listQuery.lastName.toLowerCase() ? item.last_name.toLowerCase().includes(this.listQuery.lastName.toLowerCase()) : true;
+        //   const matchesRole = this.listQuery.role ? item.role === this.listQuery.role : true;
+        //   return matchesFirstName && matchesLastName && matchesRole;
+        // });
+        //
+        // if (this.listQuery.sort) {
+        //   const order = this.listQuery.sort.startsWith('+') ? 1 : -1;
+        //   const key = this.listQuery.sort.substring(1);
+        //   filteredData = filteredData.sort((a, b) => (a[key] > b[key] ? order : -order));
+        // }
+
+        this.total = response.data.length;
+
+        const start = (this.listQuery.page - 1) * this.listQuery.limit;
+        const end = start + this.listQuery.limit;
+        this.list = response.data.slice(start, end);
+
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 1.5 * 1000);
       });
-
-      if (this.listQuery.sort) {
-        const order = this.listQuery.sort.startsWith('+') ? 1 : -1;
-        const key = this.listQuery.sort.substring(1);
-        filteredData = filteredData.sort((a, b) => (a[key] > b[key] ? order : -order));
-      }
-
-      this.total = filteredData.length;
-
-      const start = (this.listQuery.page - 1) * this.listQuery.limit;
-      const end = start + this.listQuery.limit;
-      this.list = filteredData.slice(start, end);
 
       this.listLoading = false;
     },

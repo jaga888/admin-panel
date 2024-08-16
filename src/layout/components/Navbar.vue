@@ -50,7 +50,8 @@ export default defineComponent({
     },
     async logout() {
       await store.user().logout();
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+
+      window.location.href = '/login';
     }
   }
 });
