@@ -59,7 +59,6 @@ router.beforeEach(async (to, from, next) => {
           next({ ...to, replace: true });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-          debugger;
           // remove token and go to login page to re-login
           await userStore().resetToken();
           ElMessage.error(error.message || 'Has Error');

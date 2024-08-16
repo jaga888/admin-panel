@@ -2,30 +2,20 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-          v-model="listQuery.firstName"
-          placeholder="First Name"
+          v-model="listQuery.filter.full_name"
+          placeholder="Full Name"
           style="width: 200px; margin-right: 15px"
           class="filter-item"
           clearable
           @input="handleFilter"
       />
-      <el-autocomplete
-          v-model="listQuery.lastName"
-          :fetch-suggestions="fetchLastName"
-          :trigger-on-focus="false"
-          placeholder="Last Name"
-          style="width: 200px; margin-right: 15px"
-          class="filter-item"
-          clearable
-          @select="handleFilter"
-      />
       <el-select
           v-model="listQuery.role"
-           placeholder="Select Role"
-           style="width: 140px; margin-right: 15px"
-           class="filter-item"
-           clearable
-           @change="handleFilter"
+          placeholder="Select Role"
+          style="width: 140px; margin-right: 15px"
+          class="filter-item"
+          clearable
+          @change="handleFilter"
       >
         <el-option v-for="item in roleOptions" :key="item" :label="item" :value="item"/>
       </el-select>
@@ -96,16 +86,16 @@
 </template>
 
 <script>
-import { defineComponent, markRaw } from 'vue';
-import { Search, Edit, Download } from '@element-plus/icons-vue';
+import {defineComponent, markRaw} from 'vue';
+import {Search, Edit, Download} from '@element-plus/icons-vue';
 import waves from '@/directive/waves';
 import Pagination from '@/components/Pagination';
 import {fetchList} from "@/api/user.js";
 
 export default defineComponent({
   name: 'CompaniesList',
-  components: { Pagination },
-  directives: { waves },
+  components: {Pagination},
+  directives: {waves},
   data() {
     return {
       iconSearch: markRaw(Search),
@@ -115,13 +105,24 @@ export default defineComponent({
       total: 0,
       listLoading: false,
       listQuery: {
+        filter: {
+          full_name: ''
+        },
+        sort: 'first_name',
         page: 1,
-        limit: 10,
-        firstName: '',
-        lastName: '',
+        perPage: 10,
         role: ''
       },
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
+      sortOptions: [
+        {
+          label: 'First Name Ascending',
+          key: 'first_name'
+        },
+        {
+          label: 'First Name Descending',
+          key: '-first_name'
+        }
+      ],
       roleOptions: [],
       statusOptions: ['active', 'not active'],
       temp: {
@@ -133,57 +134,6 @@ export default defineComponent({
       downloadLoading: false,
       pvData: [],
       createdTimes: 0,
-      data: [
-        {
-          id: 1,
-          first_name: 'Matt',
-          last_name: 'Abbitt',
-          email: 'mabbitt@abbitt.com',
-          role: 'attorney'
-        },
-        {
-          id: 2,
-          first_name: 'Abbitt',
-          last_name: 'Admin',
-          email: 'admin@abbitt.com',
-          role: 'super-admin'
-        },
-        {
-          id: 3,
-          first_name: 'Cheryl',
-          last_name: 'Pryne',
-          email: 'youngsmill@abbitt.com',
-          role: 'admin'
-        },
-        {
-          id: 4,
-          first_name: 'Annette',
-          last_name: 'Sauer',
-          email: 'wendwood@abbitt.com',
-          role: 'user'
-        },
-        {
-          id: 5,
-          first_name: 'Vicki',
-          last_name: 'Aimable',
-          email: 'vaimable@agpmanager.com',
-          role: 'admin'
-        },
-        {
-          id: 6,
-          first_name: 'Thomas',
-          last_name: 'Burt',
-          email: 'thomas.burt@senexlaw.com',
-          role: 'attorney'
-        },
-        {
-          id: 7,
-          first_name: 'Nichole',
-          last_name: 'Drungo',
-          email: 'nichole.drungo@senexlaw.com',
-          role: 'attorney'
-        }
-      ]
     };
   },
   created() {
@@ -195,25 +145,8 @@ export default defineComponent({
       this.listLoading = true;
 
       fetchList(this.listQuery).then(response => {
-        debugger;
-        // let filteredData = response.data.filter(item => {
-        //   const matchesFirstName = this.listQuery.firstName.toLowerCase() ? item.first_name.toLowerCase().includes(this.listQuery.firstName.toLowerCase()) : true;
-        //   const matchesLastName = this.listQuery.lastName.toLowerCase() ? item.last_name.toLowerCase().includes(this.listQuery.lastName.toLowerCase()) : true;
-        //   const matchesRole = this.listQuery.role ? item.role === this.listQuery.role : true;
-        //   return matchesFirstName && matchesLastName && matchesRole;
-        // });
-        //
-        // if (this.listQuery.sort) {
-        //   const order = this.listQuery.sort.startsWith('+') ? 1 : -1;
-        //   const key = this.listQuery.sort.substring(1);
-        //   filteredData = filteredData.sort((a, b) => (a[key] > b[key] ? order : -order));
-        // }
-
-        this.total = response.data.length;
-
-        const start = (this.listQuery.page - 1) * this.listQuery.limit;
-        const end = start + this.listQuery.limit;
-        this.list = response.data.slice(start, end);
+        this.total = response.meta.total;
+        this.list = response.data;
 
         // Just to simulate the time of the request
         setTimeout(() => {
@@ -235,25 +168,25 @@ export default defineComponent({
     },
     setRoleOptions() {
       const data = [
-        { role: 'admin' },
-        { role: 'super-admin' },
-        { role: 'user' },
-        { role: 'attorney' }
+        {role: 'admin'},
+        {role: 'super-admin'},
+        {role: 'user'},
+        {role: 'attorney'}
       ];
       const roles = data.map(item => item.role);
       this.roleOptions = Array.from(new Set(roles));
     },
     fetchPropertyNames(queryString, cb) {
       const results = queryString
-        ? this.list.filter(item => item.property_name.toLowerCase().includes(queryString.toLowerCase()))
-        : this.list;
-      cb(results.map(item => ({ value: item.property_name })));
+          ? this.list.filter(item => item.property_name.toLowerCase().includes(queryString.toLowerCase()))
+          : this.list;
+      cb(results.map(item => ({value: item.property_name})));
     },
     fetchLastName(queryString, cb) {
       const results = queryString
-        ? this.list.filter(item => item.last_name.toLowerCase().includes(queryString.toLowerCase()))
-        : this.list;
-      cb(results.map(item => ({ value: item.last_name })));
+          ? this.list.filter(item => item.last_name.toLowerCase().includes(queryString.toLowerCase()))
+          : this.list;
+      cb(results.map(item => ({value: item.last_name})));
     }
   }
 });
