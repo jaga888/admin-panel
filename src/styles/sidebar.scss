@@ -124,7 +124,7 @@
 
       &>.el-sub-menu__title {
         padding: 0 !important;
-
+        margin-left: 10px;
         .svg-icon {
           margin-top: 20px;
         }
@@ -230,3 +230,7 @@
       }
     }
   }
+
+.el-sub-menu__title{
+  margin-left: 5px;
+}

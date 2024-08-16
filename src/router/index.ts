@@ -85,6 +85,76 @@ export const asyncRoutes: RouteRecordRaw[] = [
     redirect: '/company/list'
   },
   {
+    path: '/processing',
+    name: 'Processing',
+    meta: {
+      title: 'Processing'
+      // icon: markRaw(IconAdministration)
+    },
+    children: [
+      {
+        path: '/company',
+        meta: {
+          title: 'Notices of Non-Compliance',
+          icon: markRaw(IconCompany)
+        }
+      },
+      {
+        path: '/company',
+        meta: {
+          title: 'Unlawfull Detainers',
+          icon: markRaw(IconCompany)
+        }
+      },
+      {
+        path: '/company',
+        meta: {
+          title: 'Court of Eviction',
+          icon: markRaw(IconCompany)
+        }
+      },
+      {
+        path: '/company',
+        meta: {
+          title: 'Writs of Eviction',
+          icon: markRaw(IconCompany)
+        }
+      },
+      {
+        path: '/company',
+        meta: {
+          title: 'Notices of Satisfactions',
+          icon: markRaw(IconCompany)
+        }
+      },
+      {
+        path: '/company',
+        meta: {
+          title: 'SCRAs',
+          icon: markRaw(IconCompany)
+        }
+      }
+    ] },
+  {
+    path: '/accounting',
+    name: 'Accounting',
+    meta: {
+      title: 'Accounting'
+      // icon: markRaw(IconAdministration)
+    },
+    children: [
+      {
+        path: '/company',
+        meta: {
+          title: 'Client Billing',
+          icon: markRaw(IconCompany)
+        }
+      },
+      {
+        path: '/company'
+      }
+    ] },
+  {
     path: '/reporting',
     name: 'Reporting',
     meta: {
@@ -164,76 +234,6 @@ export const asyncRoutes: RouteRecordRaw[] = [
       }
     ] },
   {
-    path: '/accounting',
-    name: 'Accounting',
-    meta: {
-      title: 'Accounting'
-      // icon: markRaw(IconAdministration)
-    },
-    children: [
-      {
-        path: '/company',
-        meta: {
-          title: 'Client Billing',
-          icon: markRaw(IconCompany)
-        }
-      },
-      {
-        path: '/company'
-      }
-    ] },
-  {
-    path: '/processing',
-    name: 'Processing',
-    meta: {
-      title: 'Processing'
-      // icon: markRaw(IconAdministration)
-    },
-    children: [
-      {
-        path: '/company',
-        meta: {
-          title: 'Notices of Non-Compliance',
-          icon: markRaw(IconCompany)
-        }
-      },
-      {
-        path: '/company',
-        meta: {
-          title: 'Unlawfull Detainers',
-          icon: markRaw(IconCompany)
-        }
-      },
-      {
-        path: '/company',
-        meta: {
-          title: 'Court of Eviction',
-          icon: markRaw(IconCompany)
-        }
-      },
-      {
-        path: '/company',
-        meta: {
-          title: 'Writs of Eviction',
-          icon: markRaw(IconCompany)
-        }
-      },
-      {
-        path: '/company',
-        meta: {
-          title: 'Notices of Satisfactions',
-          icon: markRaw(IconCompany)
-        }
-      },
-      {
-        path: '/company',
-        meta: {
-          title: 'SCRAs',
-          icon: markRaw(IconCompany)
-        }
-      }
-    ] },
-  {
     path: '/administration',
     component: Layout,
     redirect: '/administration/company',
@@ -244,172 +244,172 @@ export const asyncRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: '/company',
-        redirect: '/company/list',
+        path: '/company/list',
+        component: () => import('@/views/company/list.vue'),
         name: 'Company',
         meta: {
           title: 'Companies',
           icon: markRaw(IconCompany)
-        },
-        children: [
-          {
-            path: 'create',
-            component: () => import('@/views/company/create.vue'),
-            name: 'Create components',
-            meta: { title: 'Create company', icon: 'edit' }
-          },
-          {
-            path: 'edit/:id(\\d+)',
-            component: () => import('@/views/company/edit.vue'),
-            name: 'Edit components',
-            meta: { hidden: true, title: 'Edit company', noCache: true, activeMenu: '/company/list' }
-          },
-          {
-            path: 'list',
-            component: () => import('@/views/company/list.vue'),
-            name: 'Companies list',
-            meta: { title: 'Companies list', icon: 'list' }
-          }
-        ]
+        }
       },
       {
-        path: '/property',
-        redirect: '/property/list',
+        path: '/company/create',
+        component: () => import('@/views/company/create.vue'),
+        name: 'CompanyCreate',
+        meta: {
+          hidden: true,
+          title: 'Company create'
+        }
+      },
+      {
+        path: '/company/edit/:id',
+        component: () => import('@/views/company/edit.vue'),
+        name: 'CompanyEdit',
+        meta: {
+          hidden: true,
+          title: 'Company edit'
+        },
+        props: true
+      },
+      {
+        path: '/property/list',
         name: 'Property',
+        component: () => import('@/views/property/list.vue'),
         meta: {
           title: 'Properties',
           icon: markRaw(IconHouse)
-        },
-        children: [
-          {
-            path: 'create',
-            component: () => import('@/views/property/create.vue'),
-            name: 'CreateProperty',
-            meta: { title: 'Create Property', icon: 'edit' }
-          },
-          {
-            path: 'edit/:id(\\d+)',
-            component: () => import('@/views/property/edit.vue'),
-            name: 'EditProperty',
-            meta: { hidden: true, title: 'Edit property', noCache: true, activeMenu: '/property/list' }
-          },
-          {
-            path: 'list',
-            component: () => import('@/views/property/list.vue'),
-            name: 'Propertylist',
-            meta: { title: 'Properties list', icon: 'list' }
-          }
-        ]
+        }
       },
       {
-        path: '/unit',
-        redirect: '/unit/list',
+        path: '/property/create',
+        component: () => import('@/views/property/create.vue'),
+        name: 'PropertyCreate',
+        meta: {
+          hidden: true,
+          title: 'Property create'
+        }
+      },
+      {
+        path: '/property/edit/:id',
+        component: () => import('@/views/property/edit.vue'),
+        name: 'PropertyEdit',
+        meta: {
+          hidden: true,
+          title: 'Property edit'
+        },
+        props: true
+      },
+      {
+        path: '/unit/list',
+        component: () => import('@/views/unit/list.vue'),
         name: 'Units',
         meta: {
           title: 'Unit',
           icon: markRaw(IconUnit)
-        },
-        children: [
-          {
-            path: 'create',
-            component: () => import('@/views/unit/create.vue'),
-            name: 'CreateUnit',
-            meta: { title: 'Create unit', icon: 'edit' }
-          },
-          {
-            path: 'edit/:id(\\d+)',
-            component: () => import('@/views/unit/edit.vue'),
-            name: 'EditUnit',
-            meta: { hidden: true, title: 'Edit Unit', noCache: true, activeMenu: '/unit/list' }
-          },
-          {
-            path: 'list',
-            component: () => import('@/views/unit/list.vue'),
-            name: 'UnitList',
-            meta: { title: 'Units list', icon: 'list' }
-          }
-        ]
+        }
       },
       {
-        path: '/attorney-fee',
-        redirect: '/attorney-fee/list',
+        path: '/unit/create',
+        component: () => import('@/views/unit/create.vue'),
+        name: 'UnitCreate',
+        meta: {
+          hidden: true,
+          title: 'Unit create'
+        }
+      },
+      {
+        path: '/unit/edit/:id',
+        component: () => import('@/views/unit/edit.vue'),
+        name: 'UnitEdit',
+        meta: {
+          hidden: true,
+          title: 'Unit edit'
+        },
+        props: true
+      },
+      {
+        path: '/attorney-fee/list',
+        component: () => import('@/views/attorney-fee/list.vue'),
         name: 'AttorneyFees',
         meta: {
           title: 'Attorney fees',
           icon: markRaw(IconFees)
-        },
-        children: [
-          {
-            path: 'create',
-            component: () => import('@/views/attorney-fee/create.vue'),
-            name: 'CreateAttorneyFee',
-            meta: { title: 'Create attorney fee', icon: 'edit' }
-          },
-          {
-            path: 'edit/:id(\\d+)',
-            component: () => import('@/views/attorney-fee/edit.vue'),
-            name: 'EditAttorneyFee',
-            meta: { hidden: true, title: 'Edit Attorney Fee', noCache: true, activeMenu: '/attorney-fee/list' }
-          },
-          {
-            path: 'list',
-            component: () => import('@/views/attorney-fee/list.vue'),
-            name: 'AttorneyFeesList',
-            meta: { title: 'Attorney fees list', icon: 'list' }
-          }
-        ]
+        }
       },
       {
-        path: '/user',
-        redirect: '/user/list',
+        path: '/attorney-fee/create',
+        component: () => import('@/views/attorney-fee/create.vue'),
+        name: 'Attorney-feeCreate',
+        meta: {
+          hidden: true,
+          title: 'Attorney-fee create'
+        }
+      },
+      {
+        path: '/attorney-fee/edit/:id',
+        component: () => import('@/views/attorney-fee/edit.vue'),
+        name: 'Attorney-feeEdit',
+        meta: {
+          hidden: true,
+          title: 'Attorney-fee edit'
+        },
+        props: true
+      },
+      {
+        path: '/user/list',
+        component: () => import('@/views/user/list.vue'),
         name: 'Users',
         meta: {
           title: 'Users',
           icon: markRaw(IconUser)
-        },
-        children: [
-          {
-            path: 'create',
-            component: () => import('@/views/user/create.vue'),
-            name: 'CreateUser',
-            meta: { title: 'Create user', icon: 'edit' }
-          },
-          {
-            path: 'edit/:id(\\d+)',
-            component: () => import('@/views/user/edit.vue'),
-            name: 'EditUser',
-            meta: { hidden: true, title: 'Edit user', noCache: true, activeMenu: '/user/list' }
-          },
-          {
-            path: 'list',
-            component: () => import('@/views/user/list.vue'),
-            name: 'Userslist',
-            meta: { title: 'Users list', icon: 'list' }
-          }
-        ]
+        }
       },
       {
-        path: '/documents-text',
-        redirect: '/documents/list',
+        path: '/user/create',
+        component: () => import('@/views/user/create.vue'),
+        name: 'UserCreate',
+        meta: {
+          hidden: true,
+          title: 'User create'
+        }
+      },
+      {
+        path: '/user/edit/:id',
+        component: () => import('@/views/user/edit.vue'),
+        name: 'UserEdit',
+        meta: {
+          hidden: true,
+          title: 'User edit'
+        },
+        props: true
+      },
+      {
+        path: '/documents-text/list',
+        component: () => import('@/views/documents-text/list.vue'),
         name: 'Documents-text',
         meta: {
           title: 'Documents text',
           icon: markRaw(IconDocument)
+        }
+      },
+      {
+        path: '/documents-text/create',
+        component: () => import('@/views/documents-text/create.vue'),
+        name: 'Documents-textCreate',
+        meta: {
+          hidden: true,
+          title: 'Documents-text create'
+        }
+      },
+      {
+        path: '/documents-text/edit/:id',
+        component: () => import('@/views/documents-text/edit.vue'),
+        name: 'Documents-textEdit',
+        meta: {
+          hidden: true,
+          title: 'Documents-text edit'
         },
-        children: [
-          {
-            path: 'edit/:id(\\d+)',
-            component: () => import('@/views/documents-text/edit.vue'),
-            name: 'EditDocument',
-            meta: { hidden: true, title: 'Edit document', noCache: true, activeMenu: '/documents-text/list' }
-          },
-          {
-            path: 'list',
-            component: () => import('@/views/documents-text/list.vue'),
-            name: 'Documentslist',
-            meta: { title: 'Documents list', icon: 'list' }
-          }
-        ]
+        props: true
       },
       {
         path: '/jurisdiction',
@@ -421,209 +421,202 @@ export const asyncRoutes: RouteRecordRaw[] = [
         },
         children: [
           {
-            path: '/jurisdiction/agency',
+            path: '/jurisdiction/agency/list',
+            component: () => import('@/views/jurisdiction/agency/list.vue'),
             name: 'AgenciesList',
-            redirect: '/jurisdiction/agency/list',
             meta: {
               title: 'Agencies',
               icon: markRaw(IconAgency)
-            },
-            children: [
-              {
-                path: '/jurisdiction/agency/create',
-                component: () => import('@/views/jurisdiction/agency/create.vue'),
-                name: 'CreateAgency',
-                meta: { title: 'Create agency', icon: 'edit' }
-              },
-              {
-                path: '/jurisdiction/agency/edit/:id(\\d+)',
-                component: () => import('@/views/jurisdiction/agency/edit.vue'),
-                name: 'EditAgency',
-                meta: { hidden: true, title: 'Edit agency', noCache: true, activeMenu: '/jurisdiction/agency/edit' }
-              },
-              {
-                path: 'list',
-                component: () => import('@/views/jurisdiction/agency/list.vue'),
-                name: 'Agencieslist',
-                meta: { title: 'Agencies list', icon: 'list' }
-              }
-            ]
+            }
           },
           {
-            path: '/jurisdiction/court',
+            path: '/jurisdiction/agency/create',
+            component: () => import('@/views/jurisdiction/agency/create.vue'),
+            name: 'AgencyCreate',
+            meta: {
+              hidden: true,
+              title: 'Agency create'
+            }
+          },
+          {
+            path: '/jurisdiction/agency/edit/:id',
+            component: () => import('@/views/jurisdiction/agency/edit.vue'),
+            name: 'AgencyEdit',
+            meta: {
+              hidden: true,
+              title: 'Agency edit'
+            },
+            props: true
+          },
+          {
+            path: '/jurisdiction/court/list',
             name: 'CourtsList',
-            redirect: '/jurisdiction/court/list',
+            component: () => import('@/views/jurisdiction/court/list.vue'),
             meta: {
               title: 'Courts',
               icon: markRaw(IconCourt)
-            },
-            children: [
-              {
-                path: '/jurisdiction/court/create',
-                component: () => import('@/views/jurisdiction/court/create.vue'),
-                name: 'CreateCourt',
-                meta: { title: 'Create court', icon: 'edit' }
-              },
-              {
-                path: '/jurisdiction/court/edit/:id(\\d+)',
-                component: () => import('@/views/jurisdiction/court/edit.vue'),
-                name: 'EditCourt',
-                meta: { hidden: true, title: 'Edit court', noCache: true, activeMenu: '/jurisdiction/court/edit' }
-              },
-              {
-                path: 'list',
-                component: () => import('@/views/jurisdiction/court/list.vue'),
-                name: 'Courtslist',
-                meta: { title: 'Courts list', icon: 'list' }
-              }
-            ]
+            }
           },
           {
-            path: '/jurisdiction/serviceable-area',
+            path: '/jurisdiction/court/create',
+            component: () => import('@/views/jurisdiction/court/create.vue'),
+            name: 'CourtCreate',
+            meta: {
+              hidden: true,
+              title: 'Court create'
+            }
+          },
+          {
+            path: '/jurisdiction/court/edit/:id',
+            component: () => import('@/views/jurisdiction/court/edit.vue'),
+            name: 'CourtEdit',
+            meta: {
+              hidden: true,
+              title: 'Court edit'
+            },
+            props: true
+          },
+          {
+            path: '/jurisdiction/serviceable-area/list',
+            component: () => import('@/views/jurisdiction/serviceable-area/list.vue'),
             name: 'ServiceableAreasList',
-            redirect: '/jurisdiction/serviceable-area/list',
             meta: {
               title: 'Serviceable area',
               icon: markRaw(IconServiceableArea)
-            },
-            children: [
-              {
-                path: '/jurisdiction/serviceable-area/create',
-                component: () => import('@/views/jurisdiction/serviceable-area/create.vue'),
-                name: 'CreateServiceableArea',
-                meta: { title: 'Create Area', icon: 'edit' }
-              },
-              {
-                path: '/jurisdiction/serviceable-area/edit/:id(\\d+)',
-                component: () => import('@/views/jurisdiction/serviceable-area/edit.vue'),
-                name: 'EditServiceableArea',
-                meta: { hidden: true, title: 'Edit Area', noCache: true, activeMenu: '/jurisdiction/serviceable-area/edit' }
-              },
-              {
-                path: 'list',
-                component: () => import('@/views/jurisdiction/serviceable-area/list.vue'),
-                name: 'ServiceableAreaslist',
-                meta: { title: 'Areas list', icon: 'list' }
-              }
-            ]
+            }
           },
           {
-            path: '/jurisdiction/agency-relation',
+            path: '/jurisdiction/serviceable-area/create',
+            component: () => import('@/views/jurisdiction/serviceable-area/create.vue'),
+            name: 'Serviceable-areaCreate',
+            meta: {
+              hidden: true,
+              title: 'Serviceable-area create'
+            }
+          },
+          {
+            path: '/jurisdiction/serviceable-area/edit/:id',
+            component: () => import('@/views/jurisdiction/serviceable-area/edit.vue'),
+            name: 'Serviceable-areaEdit',
+            meta: {
+              hidden: true,
+              title: 'Serviceable-area create'
+            },
+            props: true
+          },
+          {
+            path: '/jurisdiction/agency-relation/list',
             name: 'AgencyRelationsList',
-            redirect: '/jurisdiction/agency-relation/list',
+            component: () => import('@/views/jurisdiction/agency-relation/list.vue'),
             meta: {
               title: 'Agency relations',
               icon: markRaw(IconAgencyRelation)
-            },
-            children: [
-              {
-                path: '/jurisdiction/agency-relation/create',
-                component: () => import('@/views/jurisdiction/agency-relation/create.vue'),
-                name: 'CreateAgencyRelation',
-                meta: { title: 'Create Agency Relation', icon: 'edit' }
-              },
-              {
-                path: '/jurisdiction/agency-relation/edit/:id(\\d+)',
-                component: () => import('@/views/jurisdiction/agency-relation/edit.vue'),
-                name: 'EditAgencyRelation',
-                meta: { hidden: true, title: 'Edit Agency Relation', noCache: true, activeMenu: '/jurisdiction/agency-relation/edit' }
-              },
-              {
-                path: '/jurisdiction/agency-relation/list',
-                component: () => import('@/views/jurisdiction/agency-relation/list.vue'),
-                name: 'AgencyRelationslist',
-                meta: { title: 'Agency Relations list', icon: 'list' }
-              }
-            ]
+            }
           },
           {
-            path: '/jurisdiction/courtroom',
+            path: '/jurisdiction/agency-relation/create',
+            component: () => import('@/views/jurisdiction/agency-relation/create.vue'),
+            name: 'Agency-relationCreate',
+            meta: {
+              hidden: true,
+              title: 'Agency-relation create'
+            }
+          },
+          {
+            path: '/jurisdiction/agency-relation/edit/:id',
+            component: () => import('@/views/jurisdiction/agency-relation/edit.vue'),
+            name: 'Agency-relationEdit',
+            meta: {
+              hidden: true,
+              title: 'Agency-relation edit'
+            },
+            props: true
+          },
+          {
+            path: '/jurisdiction/courtroom/list',
             name: 'CourtroomsList',
-            redirect: '/jurisdiction/courtroom/list',
+            component: () => import('@/views/jurisdiction/courtroom/list.vue'),
             meta: {
               title: 'Courtrooms',
               icon: markRaw(IconCourt)
+            }
+          },
+          {
+            path: '/jurisdiction/courtroom/create',
+            component: () => import('@/views/jurisdiction/courtroom/create.vue'),
+            name: 'CourtroomCreate',
+            meta: {
+              hidden: true,
+              title: 'Courtroom create'
+            }
+          },
+          {
+            path: '/jurisdiction/courtroom/edit/:id',
+            component: () => import('@/views/jurisdiction/courtroom/edit.vue'),
+            name: 'CourtroomEdit',
+            meta: {
+              hidden: true,
+              title: 'Courtroom edit'
             },
-            children: [
-              {
-                path: '/jurisdiction/courtroom/create',
-                component: () => import('@/views/jurisdiction/courtroom/create.vue'),
-                name: 'CreateCourtroom',
-                meta: { title: 'Create courtroom', icon: 'edit' }
-              },
-              {
-                path: '/jurisdiction/courtroom/edit/:id(\\d+)',
-                component: () => import('@/views/jurisdiction/courtroom/edit.vue'),
-                name: 'EditCourtroom',
-                meta: { hidden: true, title: 'Edit courtroom', noCache: true, activeMenu: '/jurisdiction/courtroom/edit' }
-              },
-              {
-                path: 'list',
-                component: () => import('@/views/jurisdiction/courtroom/list.vue'),
-                name: 'Courtroomslist',
-                meta: { title: 'Courtrooms list', icon: 'list' }
-              }
-            ]
+            props: true
           }
         ]
       },
       {
         path: '/policy',
-        redirect: '/policy/list',
         name: 'Policies',
+        component: () => import('@/views/policy/list.vue'),
         meta: {
           title: 'Policies',
           icon: markRaw(IconPolicy)
-        },
-        children: [
-          {
-            path: 'create',
-            component: () => import('@/views/policy/create.vue'),
-            name: 'CreatePolicy',
-            meta: { title: 'Create policy', icon: 'edit' }
-          },
-          {
-            path: 'edit/:id(\\d+)',
-            component: () => import('@/views/policy/edit.vue'),
-            name: 'EditPolicy',
-            meta: { hidden: true, title: 'Edit policy', noCache: true, activeMenu: '/policy/list' }
-          },
-          {
-            path: 'list',
-            component: () => import('@/views/policy/list.vue'),
-            name: 'Policieslist',
-            meta: { title: 'Policies list', icon: 'list' }
-          }
-        ]
+        }
       },
       {
-        path: '/billing',
+        path: '/policy/create',
+        component: () => import('@/views/policy/create.vue'),
+        name: 'PolicyCreate',
+        meta: {
+          hidden: true,
+          title: 'Policy create'
+        }
+      },
+      {
+        path: '/policy/edit/:id',
+        component: () => import('@/views/policy/edit.vue'),
+        name: 'PolicyEdit',
+        meta: {
+          hidden: true,
+          title: 'Policy edit'
+        },
+        props: true
+      },
+      {
+        path: '/billing/list',
         name: 'Billing',
-        redirect: '/billing/list',
+        component: () => import('@/views/billing/list.vue'),
         meta: {
           title: 'Billing',
           icon: markRaw(IconBilling)
+        }
+      },
+      {
+        path: '/billing/create',
+        component: () => import('@/views/billing/create.vue'),
+        name: 'BillingCreate',
+        meta: {
+          hidden: true,
+          title: 'Billing create'
+        }
+      },
+      {
+        path: '/billing/edit/:id',
+        component: () => import('@/views/billing/edit.vue'),
+        name: 'BillingEdit',
+        meta: {
+          hidden: true,
+          title: 'Billing edit'
         },
-        children: [
-          {
-            path: 'create',
-            component: () => import('@/views/billing/create.vue'),
-            name: 'CreateBilling',
-            meta: { title: 'Create billing', icon: 'edit' }
-          },
-          {
-            path: 'edit/:id(\\d+)',
-            component: () => import('@/views/billing/edit.vue'),
-            name: 'EditBilling',
-            meta: { hidden: true, title: 'Edit billing', noCache: true, activeMenu: '/billing/edit' }
-          },
-          {
-            path: 'list',
-            component: () => import('@/views/billing/list.vue'),
-            name: 'Billinglist',
-            meta: { title: 'Billing list', icon: 'list' }
-          }
-        ]
+        props: true
       }
     ] },
   { path: '/:pathMatch(.*)*', redirect: '/404', meta: { hidden: true }}
