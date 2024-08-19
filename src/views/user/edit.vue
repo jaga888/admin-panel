@@ -1,5 +1,5 @@
 <template>
-  <user-detail :is-edit="true" :existingData="existingData" />
+  <user-detail :is-edit="true"/>
 </template>
 
 <script>
@@ -8,16 +8,6 @@ import UserDetail from './components/UserDetail.vue';
 
 export default defineComponent({
   name: 'EditForm',
-  components: { UserDetail },
-  data() {
-    return {
-      existingData: {
-        firstName: 'Nichole',
-        lastName: 'Drungo',
-        role: 'Admin',
-        email: 'donje.putnam@senexlaw.com'
-      }
-    };
-  }
+  components: { UserDetail }
 });
 </script>
