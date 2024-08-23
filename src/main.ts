@@ -13,6 +13,7 @@ import { checkEnableLogs } from './utils/error-log'; // error log
 const app = createApp(App);
 setupStore(app);
 app.use(router);
+app.use(ElNotification);
 app.component('svg-icon', SvgIcon);
 app.directive('permission', vPermission);
 checkEnableLogs(app);

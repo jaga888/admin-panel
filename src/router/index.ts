@@ -93,42 +93,42 @@ export const asyncRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Notices of Non-Compliance',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Unlawfull Detainers',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Court of Eviction',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Writs of Eviction',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Notices of Satisfactions',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'SCRAs',
           icon: markRaw(IconCompany)
@@ -144,14 +144,14 @@ export const asyncRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Client Billing',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company'
+        path: process.env.VUE_APP_CLIENT_URL
       }
     ] },
   {
@@ -163,70 +163,70 @@ export const asyncRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Unprocessed Non-Compliance Report',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Unprocessed SE Report',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Unprocessed Possession Report',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Pending Actual Outcome',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Notice Status Report',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'UD Status Report',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Possession Status Report',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Judgment & Possession Report',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Processing Totals Report',
           icon: markRaw(IconCompany)
         }
       },
       {
-        path: '/company',
+        path: process.env.VUE_APP_CLIENT_URL,
         meta: {
           title: 'Processing Calendar',
           icon: markRaw(IconCompany)

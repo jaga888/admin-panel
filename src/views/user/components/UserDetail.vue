@@ -5,43 +5,69 @@
         <keep-alive>
           <div v-if="activeName === 'info'">
             <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
-              <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
-                Save
+              <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click.prevent="submitForm">
+                {{ isEdit ? 'Save' : 'Create' }}
               </el-button>
-              <el-button v-loading="loading" type="warning" @click="resetForm">
+              <el-button v-if="isEdit" v-loading="loading" type="warning" @click="resetForm">
                 Reset
               </el-button>
             </sticky>
             <div class="createPost-container">
               <el-form class="form-container" label-position="top">
                 <div class="createPost-main-container">
-                  <el-row>
-                    <el-col :span="22">
+                  <el-row :gutter="20" align="middle">
+                    <el-col :span="4">
                       <h3>User Name</h3>
+                    </el-col>
+                    <el-col :span="11">
+                      <el-checkbox
+                        border=border
+                        size="small"
+                        v-model="postForm.is_attorney"
+                      >
+                        Attorney
+                      </el-checkbox>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="26">
                       <el-form-item label="First Name" prop="firstName">
                         <el-input
-                          v-model="postForm.firstName"
+                          v-model="postForm.first_name"
                           placeholder="First Name"
                           required
                         />
                       </el-form-item>
                       <el-form-item label="Last Name" prop="lastName">
                         <el-input
-                          v-model="postForm.lastName"
-                          placeholder="Second Name"
+                          v-model="postForm.last_name"
+                          placeholder="Last Name"
                           required
                         />
                       </el-form-item>
-                      <el-form-item label="Role" prop="role">
-                        <el-select
-                          v-model="postForm.role"
-                          placeholder="Select Role"
-                          required
-                        >
-                          <el-option label="Admin" value="admin"/>
-                          <el-option label="Super-Admin" value="super-admin"/>
-                          <el-option label="User" value="User" selected/>
-                          <el-option label="Attorney" value="attorney"/>
+                      <el-form-item label="Roles">
+                        <el-checkbox-group v-model="postForm.roles">
+                          <el-checkbox
+                            border=border
+                            size="large"
+                            v-for="(role, index) in roleOptions"
+                            :key="index"
+                            :value="role.id"
+                          >
+                            {{ role.name }}
+                          </el-checkbox>
+                        </el-checkbox-group>
+                      </el-form-item>
+                      <el-form-item v-if="isSuperAdmin" label="Firm">
+                        <el-select v-model="postForm.firm_id" placeholder="Select a firm">
+                          <el-option
+                            v-for="(firm, index) in firmOptions"
+                            :key="index"
+                            :label="firm.name"
+                            :value="firm.id"
+                          >
+                            {{ firm.name }}
+                          </el-option>
                         </el-select>
                       </el-form-item>
                     </el-col>
@@ -90,104 +116,134 @@
 </template>
 
 <script setup>
-import { defineComponent, ref, reactive, watch, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import Sticky from '@/components/Sticky';
 import SingleImageUpload from '@/components/Upload/SingleImage.vue';
 import { ElNotification } from 'element-plus';
+import { fetchFirms } from '@/api/firm.js';
+import { fetchRoles } from '@/api/role.js';
+import { getUser, updateUser, createUser } from '@/api/user.js';
+import { useRoute } from 'vue-router';
+import store from '@/store';
 
-const props = defineProps({
-  isEdit: {
-    type: Boolean,
-    required: true
-  },
-  existingData: {
-    type: Object,
-    default: () => ({})
+const route = useRoute();
+const userId = route.params.id || null;
+
+const postForm = ref({
+  first_name: '',
+  last_name: '',
+  email: '',
+  roles: [],
+  firm: [],
+  is_attorney: false
+});
+
+const isSuperAdmin = ref(false);
+const roles = store.user().roles;
+
+onMounted(async () => {
+  try {
+    console.log('current user roles', roles);
+    isSuperAdmin.value = roles.some(role => role.name === 'super-admin');
+  } catch (error) {
+    console.error('Failed to check user role:', error);
   }
 });
 
-const postForm = ref(props.existingData);
+const isEdit = ref(!!userId);
 
-const submitForm = () => {
-  console.log('Form submitted', postForm.value);
-  ElNotification({
-    title: 'Success',
-    message: 'User successfully saved',
-    type: 'success',
-    duration: 2000
-  });
+const fetchUserData = async () => {
+  if (isEdit.value) {
+    const { data } = await getUser(userId);
+    postForm.value = {
+      first_name: data.first_name,
+      last_name: data.last_name,
+      email: data.email,
+      roles: data.roles,
+      firm_id: data.firm_id,
+      is_attorney: data.is_attorney
+    };
+  }
 };
 
+const setFirmOptions = async () => {
+  const response = await fetchFirms();
+  firmOptions.value = response.firms;
+  console.log('Firms:', firmOptions.value);
+};
+
+const setRoleOptions = async () => {
+  const response = await fetchRoles();
+  roleOptions.value = response.data;
+  console.log('allowed roles', roleOptions.value);
+  if (!isSuperAdmin.value) {
+    console.log('You are not super-admin');
+    roleOptions.value = roleOptions.value.filter(role => role.name !== 'super-admin');
+  }
+};
+
+const roleOptions = ref([]);
+const firmOptions = ref([]);
 const loading = ref(false);
 const activeName = ref('info');
 const dialogVisible = ref(false);
 const dialogImageUrl = ref('');
-// export default defineComponent({
-//   name: 'UserDetail',
-//   components: { SingleImageUpload, Sticky },
-//   props: {
-//     isEdit: {
-//       type: Boolean,
-//       required: true
-//     },
-//     existingData: {
-//       type: Object,
-//       default: () => ({})
-//     }
-//   },
-//   setup(props) {
-//     const postForm = reactive({
-//       // firstName: props.existingData.firstName,
-//       // lastName: props.existingData.lastName,
-//       // role: props.existingData.role,
-//       // email: props.existingData.email
-//     });
-//
-//     // const initializeForm = () => {
-//     //   console.log(props.existingData);
-//     //   if (props.isEdit && props.existingData) {
-//     //     postForm.firstName = props.existingData.firstName;
-//     //     postForm.lastName = props.existingData.lastName;
-//     //     postForm.role = props.existingData.role;
-//     //     postForm.email = props.existingData.email;
-//     //   } else {
-//     //     postForm.firstName = '';
-//     //     postForm.lastName = '';
-//     //     postForm.role = '';
-//     //     postForm.email = '';
-//     //   }
-//     // };
-//
-//     // watch(() => props.isEdit, initializeForm, { immediate: true });
-//     // watch(() => props.existingData, initializeForm, { immediate: true });
-//     //
-//     // onMounted(initializeForm);
-//
-//     const submitForm = () => {
-//       console.log('Form submitted', postForm);
-//       ElNotification({
-//         title: 'Success',
-//         message: 'User successfully saved',
-//         type: 'success',
-//         duration: 2000
-//       });
-//     };
-//
-//     // const resetForm = () => {
-//     //   initializeForm();
-//     // };
-//
-//     return {
-//       postForm: Object.assign({}, defaultForm),
-//       submitForm,
-//       // resetForm,
-//       loading: false,
-//       activeName: 'info',
-//       dialogVisible: false,
-//       dialogImageUrl: ''
-//     };
-//   }
-// });
+
+onMounted(() => {
+  setRoleOptions();
+  setFirmOptions();
+  if (isEdit.value) {
+    fetchUserData();
+  }
+});
+
+const submitForm = async () => {
+  loading.value = true;
+  try {
+    if (isEdit.value) {
+      await updateUser(userId, postForm.value);
+      ElNotification({
+        title: 'Success',
+        message: `User ${postForm.value.first_name} updated successfully`,
+        type: 'success',
+        duration: 2000
+      });
+    } else {
+      await createUser(postForm.value);
+      ElNotification({
+        title: 'Success',
+        message: `User  created successfully`,
+        type: 'success',
+        duration: 2000
+      });
+    }
+  } catch (error) {
+    console.error('Failed to submit user:', error);
+    ElNotification({
+      title: 'Error',
+      message: 'Failed to submit user',
+      type: 'error',
+      duration: 2000
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+const resetForm = () => {
+  if (isEdit.value) {
+    fetchUserData();
+  } else {
+    postForm.value = {
+      first_name: '',
+      last_name: '',
+      email: '',
+      roles: [],
+      is_attorney: '',
+      firm: []
+    };
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -246,5 +302,9 @@ h3 {
 
 .sub-navbar .el-button {
   margin-right: 10px;
+}
+
+h3 {
+  margin-top: 10px;
 }
 </style>

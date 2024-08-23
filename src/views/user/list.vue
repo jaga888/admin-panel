@@ -82,36 +82,36 @@
 </template>
 
 <script setup lang="ts">
-import {markRaw, ref} from 'vue';
-import {Edit} from '@element-plus/icons-vue';
+import { markRaw, ref } from 'vue';
+import { Edit } from '@element-plus/icons-vue';
 import Pagination from '@/components/Pagination';
-import {fetchList} from "@/api/user.js";
-import {fetchRoles} from "@/api/role.js";
+import { fetchList } from '@/api/user.js';
+import { fetchRoles } from '@/api/role.js';
 
 const listQuery = ref({
   filter: {
     full_name: '',
-    role: '',
+    role: ''
   },
   sort: 'first_name',
   page: 1,
-  perPage: 10,
+  perPage: 10
 });
 
 const users = ref([
   {
     first_name: '',
     last_name: '',
-    email: '',
+    email: ''
   }
 ]);
 
 const usersLoading = ref<boolean>(true);
 const total = ref<number>(0);
-const roleOptions = ref<Array>([{
+const roleOptions = ref< Array >([{
   name: ''
 }]);
-const sortOptions = ref<Array>([
+const sortOptions = ref< Array >([
   {
     label: 'First Name Ascending',
     key: 'first_name'
@@ -137,23 +137,23 @@ const getUsers = async () => {
   });
 
   usersLoading.value = false;
-}
+};
 
 const handleFilter = () => {
   listQuery.value.page = 1;
   getUsers();
-}
+};
 
 const getStatusColor = (status: string) => {
   return status === 'firm-manager' ? 'success' : 'info';
-}
+};
 
 const setRoleOptions = () => {
   fetchRoles().then(response => {
     roleOptions.value = response.data;
-    console.log(roleOptions.value)
+    console.log(roleOptions.value);
   });
-}
+};
 
 getUsers();
 setRoleOptions();

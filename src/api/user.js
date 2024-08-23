@@ -8,17 +8,17 @@ export function login(data) {
   });
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
     url: '/admin/info',
-    method: 'get',
+    method: 'get'
   });
 }
 
-export function logout(token) {
+export function logout() {
   return request({
     url: '/admin/logout',
-    method: 'post',
+    method: 'post'
   });
 }
 
@@ -27,5 +27,31 @@ export function fetchList(query) {
     url: '/admin/users',
     method: 'get',
     params: query
+  });
+}
+
+export function getUser(id) {
+  return request({
+    url: `/admin/users/${id}`,
+    method: 'get'
+  });
+}
+
+export function updateUser(id, data) {
+  return request({
+    url: `/admin/users/${id}`,
+    method: 'put',
+    data: {
+      ...data,
+      id: id
+    }
+  });
+}
+
+export function createUser(data) {
+  return request({
+    url: '/admin/users',
+    method: 'post',
+    data
   });
 }
