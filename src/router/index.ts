@@ -156,6 +156,7 @@ export const asyncRoutes: RouteRecordRaw[] = [
     ] },
   {
     path: '/reporting',
+    component: Layout,
     name: 'Reporting',
     meta: {
       title: 'Reporting'
@@ -231,6 +232,16 @@ export const asyncRoutes: RouteRecordRaw[] = [
           title: 'Processing Calendar',
           icon: markRaw(IconCompany)
         }
+      },
+      {
+        path: '/reports/process-server-tracking/list',
+        component: () => import('@/views/reports/process-server-tracking/list.vue'),
+        name: 'Process Server Tracking',
+        meta: {
+          title: 'Process Server Tracking',
+          icon: markRaw(IconCompany),
+          roles: ['super-admin', 'firm-manager']
+        }
       }
     ] },
   {
@@ -240,7 +251,6 @@ export const asyncRoutes: RouteRecordRaw[] = [
     name: 'Administration',
     meta: {
       title: 'Management'
-      // icon: markRaw(IconAdministration)
     },
     children: [
       {
@@ -249,7 +259,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         name: 'Company',
         meta: {
           title: 'Companies',
-          icon: markRaw(IconCompany)
+          icon: markRaw(IconCompany),
+          roles: ['super-admin', 'firm-manager']
         }
       },
       {
@@ -277,7 +288,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/property/list.vue'),
         meta: {
           title: 'Properties',
-          icon: markRaw(IconHouse)
+          icon: markRaw(IconHouse),
+          roles: ['super-admin', 'firm-manager']
         }
       },
       {
@@ -286,7 +298,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         name: 'PropertyCreate',
         meta: {
           hidden: true,
-          title: 'Property create'
+          title: 'Property create',
+
         }
       },
       {
@@ -305,7 +318,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         name: 'Units',
         meta: {
           title: 'Unit',
-          icon: markRaw(IconUnit)
+          icon: markRaw(IconUnit),
+          roles: ['super-admin', 'firm-manager']
         }
       },
       {
@@ -323,7 +337,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         name: 'UnitEdit',
         meta: {
           hidden: true,
-          title: 'Unit edit'
+          title: 'Unit edit',
+          roles: ['super-admin', 'firm-manager']
         },
         props: true
       },
@@ -333,7 +348,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         name: 'AttorneyFees',
         meta: {
           title: 'Attorney fees',
-          icon: markRaw(IconFees)
+          icon: markRaw(IconFees),
+          roles: ['super-admin', 'firm-manager']
         }
       },
       {
@@ -389,7 +405,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         name: 'Documents-text',
         meta: {
           title: 'Documents text',
-          icon: markRaw(IconDocument)
+          icon: markRaw(IconDocument),
+          roles: ['super-admin', 'firm-manager']
         }
       },
       {
@@ -417,7 +434,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         name: 'Jurisdiction',
         meta: {
           title: 'Jurisdiction',
-          icon: markRaw(IconJurisdiction)
+          icon: markRaw(IconJurisdiction),
+          roles: ['super-admin', 'firm-manager']
         },
         children: [
           {
@@ -568,7 +586,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/policy/list.vue'),
         meta: {
           title: 'Policies',
-          icon: markRaw(IconPolicy)
+          icon: markRaw(IconPolicy),
+          roles: ['super-admin', 'firm-manager']
         }
       },
       {
@@ -596,7 +615,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/billing/list.vue'),
         meta: {
           title: 'Billing',
-          icon: markRaw(IconBilling)
+          icon: markRaw(IconBilling),
+
         }
       },
       {

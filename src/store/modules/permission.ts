@@ -15,7 +15,7 @@ interface IPermissionState {
 function hasPermission(roles:string[], route:RouteRecordRaw):boolean {
   if (route.meta && route.meta.roles) {
     const rolesArr = route.meta.roles as string[];
-    return roles.some(role => rolesArr.includes(role));
+    return roles.some(role => rolesArr.includes(role.name));
   } else {
     return true;
   }

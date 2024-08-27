@@ -4,23 +4,23 @@
       <el-tab-pane label="Info" name="info">
         <keep-alive>
           <div v-if="activeName == 'info'">
-            <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
+            <sticky :z-index="10" :class-name="'sub-navbar '">
               <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
                 Save
               </el-button>
-              <el-button v-loading="loading" type="warning" @click="draftForm">
+              <el-button v-loading="loading" type="warning" @click="resetForm">
                 Reset
               </el-button>
             </sticky>
             <div class="createPost-container">
-              <el-form :rules="rules" class="form-container" label-position="top">
+              <el-form class="form-container" label-position="top">
                 <div class="createPost-main-container">
                   <el-row>
                     <el-col :span="22">
                       <h3>Company name</h3>
-                      <el-form-item label="Legal Name" prop="legalName">
+                      <el-form-item label="Legal Name" prop="legal_name">
                         <el-input
-                            v-model="postForm.legalName"
+                            v-model="postForm.legal_name"
                             placeholder="The full Legal Name of the client company"
                         />
                       </el-form-item>
@@ -82,36 +82,32 @@
                     <el-col :span="22">
                       <div class="form-group">
                         <h3>Invoice Address</h3>
-                        <el-form-item>
-                          <el-checkbox checked v-model="postForm.sameAsPropertyAddress">Same as Property Address
-                          </el-checkbox>
-                        </el-form-item>
                         <el-form-item label="Address Line 1" prop="invoiceAddress1">
-                          <el-input v-model="postForm.invoiceAddress1" placeholder="Enter Address Line 1..."/>
+                          <el-input v-model="postForm.invoice_address" placeholder="Enter Address Line 1..."/>
                         </el-form-item>
                         <el-form-item label="Address Line 2" prop="invoiceAddress2">
-                          <el-input v-model="postForm.invoiceAddress2" placeholder="Enter Address Line 2..."/>
+                          <el-input v-model="postForm.invoice_address2" placeholder="Enter Address Line 2..."/>
                         </el-form-item>
                         <el-row>
                           <el-col :span="12">
-                            <el-form-item label="City" prop="invoiceCity">
-                              <el-input v-model="postForm.invoiceCity" placeholder="Enter City..."/>
+                            <el-form-item label="City" prop="invoice_state">
+                              <el-input v-model="postForm.invoice_city" placeholder="Enter City..."/>
                             </el-form-item>
                           </el-col>
                           <el-col :span="6">
-                            <el-form-item label="State" prop="invoiceState">
-                              <el-input v-model="postForm.invoiceState" maxlength="2"
+                            <el-form-item label="State" prop="invoice_state">
+                              <el-input v-model="postForm.invoice_state" maxlength="2"
                                         placeholder="Enter State (2 letters)"/>
                             </el-form-item>
                           </el-col>
                           <el-col :span="6">
-                            <el-form-item label="Zip" prop="invoiceZip">
-                              <el-input v-model="postForm.invoiceZip" placeholder="Enter Zip..."/>
+                            <el-form-item label="Zip" prop="invoice_zip">
+                              <el-input v-model="postForm.invoice_zip" placeholder="Enter Zip..."/>
                             </el-form-item>
                           </el-col>
                         </el-row>
-                        <el-form-item label="Email" prop="invoiceEmail">
-                          <el-input v-model="postForm.invoiceEmail" placeholder="Enter Email"/>
+                        <el-form-item label="Email" prop="invoice_email">
+                          <el-input v-model="postForm.invoice_email" placeholder="Enter Email"/>
                         </el-form-item>
                       </div>
                     </el-col>
@@ -120,19 +116,19 @@
                     <el-col :span="22">
                       <div class="form-group">
                         <h3>Contact</h3>
-                        <el-form-item label="Name" prop="contactName">
+                        <el-form-item label="Name" prop="contact_name">
                           <el-input
-                              v-model="postForm.contactName"
+                              v-model="postForm.contact_name"
                               placeholder="Enter Name..."
                           />
                         </el-form-item>
-                        <el-form-item label="Phone" prop="contactPhone">
-                          <el-input v-model="postForm.contactPhone" placeholder="Enter Phone..."/>
+                        <el-form-item label="Phone" prop="contact_phone">
+                          <el-input v-model="postForm.contact_phone" placeholder="Enter Phone..."/>
                         </el-form-item>
-                        <el-form-item label="Email" prop="contactEmail">
+                        <el-form-item label="Email" prop="contact_email">
                           <el-input
                               type="text"
-                              v-model="postForm.contactEmail"
+                              v-model="postForm.contact_email"
                               placeholder="Enter Email..."
                           />
                         </el-form-item>
@@ -144,127 +140,21 @@
                     <el-row :gutter="10">
                       <el-col :span="11">
                         <el-form-item>
-                          <el-checkbox v-model="postForm.nfprDelivery">NFPR – Delivery Checkbox</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.noaDelivery">NOA – Delivery Checkbox</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.uploadCourtDocket">Upload Court Docket Import Files
+                          <el-checkbox v-model="postForm.policy_ids"
+                                       v-for="(policy, index) in policyOptions"
+                                       :key="index"
+                                       :checked="policyOptions.includes(policy.id)"
+                                       :value="policy.id"
+                          >
+                            {{
+                            policy.name
+                                ? policy.name
+                                : policy.identifier
+                                    .replaceAll("_", " ")
+                                    .toLowerCase()
+                                    .replace(/(?<= )[^\s]|^./g, a => a.toUpperCase())
+                          }}
                           </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.zeroDollarAttyFee">Zero Dollar Atty Fee For Summons
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.preApproveCourtDocket">Pre-approve Court Docket</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.caresActApproval">CARES Act Approval</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.splitCaresActCharge">Split Cares Act Charge</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.caresAct">CARES Act</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.singleFamilyProperty">Single Family Property</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.clientCreatesNfprs">Client Creates NFPRs & Senex Processes
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.clientCreatesUds">Client Creates UDs & Senex Processes
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.allowUdChecklist">Allow UD Checklist</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.apiRecordTransfer">API Record Transfer (Entrata Sync)
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.postsNotices">Posts Notices</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.attorneyFeePercentageLimit">Attorney Fee Percentage Limit
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.diyClientCreatesClaims">DIY: Client Creates Claims & Client
-                            Processes
-                            NFPRs
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.diyClientAmendsClaims">DIY: Client Amends Claims & Senex
-                            Processes
-                            NOAs
-                          </el-checkbox>
-                        </el-form-item>
-                      </el-col>
-                      <el-col :span="11">
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.forceUnitAddressSelection">Force Unit Address Selection
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.newArtcraftImportLogic">New Artcraft import logic used
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.uploadSeImportFiles">Upload SE Import Files</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.automaticallyReadyWrits">Automatically Ready Writs with
-                            Possession
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.clientAmendsClaims">Client Amends Claims</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.doNotRequireUdMilitaryStatus">Do Not Require UD Military Status
-                            Verification
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.preApproveNoticesOfNoncompliance">Pre-approve Notices of
-                            Noncompliance
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.uploadImportFiles">Upload Import Files</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.eSignNotices">eSign Notices</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.preApproveSummons">Pre-approve Summons</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.preApproveNotices">Pre-approve Notices</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.clientCreatesClaims">Client Creates Claims
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.allowMilitaryAllotment">Allow Military Allotment</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.preApproveMilitaryAffidavit">Pre-approve Military Affidavit
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.allAddressesInZip">All Addresses in Zip</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.uploadFiles">Upload Files</el-checkbox>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -294,7 +184,7 @@
                           </el-form-item>
                           <el-form-item label="UD Filing Threshold" prop="udFilingThreshold">
                             <el-input
-                                v-model="postForm.udFilingThreshold"
+                                v-model="postForm.ud_filing_threshold"
                                 placeholder="Enter UD Filing Threshold"
                             />
                           </el-form-item>
@@ -320,7 +210,7 @@
           </div>
         </keep-alive>
       </el-tab-pane>
-      <el-tab-pane  label="File" name="file">
+      <el-tab-pane label="File" name="file">
         <keep-alive>
           <div v-if="activeName === 'file'">
             <h3 style="display:flex; justify-content: center;">File Upload</h3>
@@ -342,181 +232,139 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script setup lang="ts">
+import {ref, onMounted} from 'vue';
 import Sticky from '@/components/Sticky';
 import SingleImageUpload from '@/components/Upload/SingleImage.vue';
-import { ElNotification } from 'element-plus';
-const props = defineProps({
-  isEdit: {
-    type: Boolean,
-    required: true
-  },
-  existingData: {
-    type: Object,
-    default: () => ({})
+import {ElNotification} from 'element-plus';
+import {getCompany, updateCompany, createCompany} from '@/api/company.js';
+import {fetchList} from '@/api/policy.js';
+import {useRoute} from 'vue-router';
+
+const route = useRoute();
+const companyId = route.params.id || null;
+
+const postForm = ref({
+  id: undefined,
+  name: "",
+  legal_name: "",
+  active: false,
+  address: "",
+  city: "",
+  contact_email: "",
+  contact_name: "",
+  contact_phone: "",
+  invoice_address: "",
+  invoice_address2: "",
+  invoice_city: "",
+  invoice_email: "",
+  invoice_state: "",
+  invoice_zip: "",
+  pm_software_id: 0,
+  policy_ids: [],
+  short_name: "",
+  state: "",
+  ud_filing_threshold: 0,
+  url: "",
+  zip: "",
+});
+
+const isSuperAdmin = ref<boolean>(false);
+
+const isEdit = ref<boolean>(!!companyId);
+
+const fetchCompanyData = async () => {
+  if (isEdit.value) {
+    const {data} = await getCompany(companyId);
+    postForm.value = data;
+  }
+};
+
+const loading = ref<boolean>(false);
+const activeName = ref<string>('info');
+const dialogVisible = ref<boolean>(false);
+const dialogImageUrl = ref('');
+
+const setPolicyOptions = async () => {
+  const response = await fetchList();
+
+  policyOptions.value = response.data;
+  console.log('allowed policies', policyOptions.value);
+};
+
+onMounted(() => {
+  setPolicyOptions();
+
+  if (isEdit.value) {
+    fetchCompanyData();
   }
 });
 
-const postForm = ref(props.existingData);
-
-const submitForm = () => {
-  console.log('Form submitted', postForm.value);
-  ElNotification({
-    title: 'Success',
-    message: 'Company successfully saved',
-    type: 'success',
-    duration: 2000
-  });
+const submitForm = async () => {
+  loading.value = true;
+  try {
+    if (isEdit.value) {
+      await updateCompany(companyId, postForm.value);
+      ElNotification({
+        title: 'Success',
+        message: `Company ${postForm.value.name} updated successfully`,
+        type: 'success',
+        duration: 2000
+      });
+    } else {
+      await createCompany(postForm.value);
+      ElNotification({
+        title: 'Success',
+        message: `Company created successfully`,
+        type: 'success',
+        duration: 2000
+      });
+    }
+  } catch (error) {
+    console.error('Failed to submit company:', error);
+    ElNotification({
+      title: 'Error',
+      message: 'Failed to submit company',
+      type: 'error',
+      duration: 2000
+    });
+  } finally {
+    loading.value = false;
+  }
 };
 
-const loading = ref(false);
-const activeName = ref('info');
-const dialogVisible = ref(false);
-const dialogImageUrl = ref('');
-// export default defineComponent({
-//   name: 'ArticleDetail',
-//   components: { SingleImageUpload, Sticky },
-//   props: {
-//     isEdit: {
-//       type: Boolean,
-//       default: false
-//     }
-//   },
-//   data() {
-//     const validateRequire = (rule, value, callback) => {
-//       if (value === '') {
-//         ElMessage({
-//           message: rule.field + 'required',
-//           type: 'error'
-//         });
-//         callback(new Error(rule.field + 'required'));
-//       } else {
-//         callback();
-//       }
-//     };
-//     const validateSourceUri = (rule, value, callback) => {
-//       if (value) {
-//         if (validURL(value)) {
-//           callback();
-//         } else {
-//           ElMessage({
-//             message: 'invalid URL',
-//             type: 'error'
-//           });
-//           callback(new Error('invalid URL'));
-//         }
-//       } else {
-//         callback();
-//       }
-//     };
-//     return {
-//       postForm: Object.assign({}, defaultForm),
-//       loading: false,
-//       userListOptions: [],
-//       rules: {
-//         image_uri: [{ validator: validateRequire }],
-//         title: [{ validator: validateRequire }],
-//         content: [{ validator: validateRequire }],
-//         source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
-//       },
-//       tempRoute: {},
-//       tabMapOptions: [
-//         { label: 'Info', key: 'cn' },
-//         { label: 'File', key: 'file' }
-//       ],
-//       activeName: 'info',
-//       createdTimes: 0
-//     };
-//   },
-//   computed: {
-//     contentShortLength() {
-//       return this.postForm.content_short.length;
-//     },
-//     displayTime: {
-//       get() {
-//         return (+new Date(this.postForm.display_time));
-//       },
-//       set(val) {
-//         this.postForm.display_time = new Date(val);
-//       }
-//     }
-//   },
-//   created() {
-//     if (this.isEdit) {
-//       const id = this.$route.params && this.$route.params.id;
-//       this.fetchData(id);
-//     }
-//
-//     this.tempRoute = Object.assign({}, this.$route);
-//
-//     if (window._XMLHttpRequest) {
-//       var xhr = new window._XMLHttpRequest();
-//       window.XMLHttpRequest.prototype.upload = xhr.upload;
-//     }
-//   },
-//   methods: {
-//     fetchData(id) {
-//       fetchArticle(id).then(response => {
-//         this.postForm = response.data;
-//
-//         this.setTagsViewTitle();
-//         this.setPageTitle();
-//       }).catch(err => {
-//         console.log(err);
-//       });
-//     },
-//     setTagsViewTitle() {
-//       const title = 'Edit Article';
-//       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` });
-//       this.$store.dispatch('tagsView/updateVisitedView', route);
-//     },
-//     setPageTitle() {
-//       const title = 'Edit Article';
-//       document.title = `${title} - ${this.postForm.id}`;
-//     },
-//     submitForm() {
-//       this.$refs.postForm.validate(valid => {
-//         if (valid) {
-//           this.loading = true;
-//           ElNotification({
-//             title: 'Success',
-//             message: 'Company successfully saved',
-//             type: 'success',
-//             duration: 2000
-//           });
-//           this.postForm.status = 'published';
-//           this.loading = false;
-//         } else {
-//           console.log('error submit!');
-//           return false;
-//         }
-//       });
-//     },
-//     draftForm() {
-//       if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-//         ElMessage({
-//           message: 'Fill required fields',
-//           type: 'warning'
-//         });
-//         return;
-//       }
-//       ElMessage({
-//         message: 'Saved successfully',
-//         type: 'success',
-//         showClose: true,
-//         duration: 1000
-//       });
-//       this.postForm.status = 'draft';
-//     },
-//     getRemoteUserList(query) {
-//       searchUser(query).then(response => {
-//         if (!response.data.items) return;
-//         this.userListOptions = response.data.items.map(v => v.name);
-//       });
-//     }
-//   }
-// });
+const policyOptions = ref<Array>([]);
+
+const resetForm = () => {
+  if (isEdit.value) {
+    fetchCompanyData();
+  } else {
+    postForm.value = {
+      id: undefined,
+      name: "",
+      legal_name: "",
+      active: false,
+      address: "",
+      city: "",
+      contact_email: "",
+      contact_name: "",
+      contact_phone: "",
+      invoice_address: "",
+      invoice_address2: "",
+      invoice_city: "",
+      invoice_email: "",
+      invoice_state: "",
+      invoice_zip: "",
+      pm_software_id: 0,
+      policy_ids: [],
+      short_name: "",
+      state: "",
+      ud_filing_threshold: 0,
+      url: "",
+      zip: "",
+    };
+  }
+};
 </script>
 
 <style lang="scss" scoped>

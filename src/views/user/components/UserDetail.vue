@@ -115,7 +115,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import Sticky from '@/components/Sticky';
 import SingleImageUpload from '@/components/Upload/SingleImage.vue';
@@ -138,7 +138,7 @@ const postForm = ref({
   is_attorney: false
 });
 
-const isSuperAdmin = ref(false);
+const isSuperAdmin = ref<boolean>(false);
 const roles = store.user().roles;
 
 onMounted(async () => {
@@ -150,19 +150,12 @@ onMounted(async () => {
   }
 });
 
-const isEdit = ref(!!userId);
+const isEdit = ref<boolean>(!!userId);
 
 const fetchUserData = async () => {
   if (isEdit.value) {
     const { data } = await getUser(userId);
-    postForm.value = {
-      first_name: data.first_name,
-      last_name: data.last_name,
-      email: data.email,
-      roles: data.roles,
-      firm_id: data.firm_id,
-      is_attorney: data.is_attorney
-    };
+    postForm.value = data;
   }
 };
 
@@ -182,11 +175,11 @@ const setRoleOptions = async () => {
   }
 };
 
-const roleOptions = ref([]);
-const firmOptions = ref([]);
-const loading = ref(false);
-const activeName = ref('info');
-const dialogVisible = ref(false);
+const roleOptions = ref<Array>([]);
+const firmOptions = ref<Array>([]);
+const loading = ref<boolean>(false);
+const activeName = ref<string>('info');
+const dialogVisible = ref<boolean>(false);
 const dialogImageUrl = ref('');
 
 onMounted(() => {
