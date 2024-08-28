@@ -15,6 +15,13 @@ export function getCompany(id) {
   });
 }
 
+export function fetchTree() {
+  return request({
+    url: `/admin/companies/tree`,
+    method: 'get'
+  });
+}
+
 export function updateCompany(id, data) {
   return request({
     url: `/admin/companies/${id}`,

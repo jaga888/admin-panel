@@ -9,8 +9,8 @@
         <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" :is-top-route="true" />
         <el-dropdown class="avatar-dropdown" trigger="click" placement="bottom-end">
           <div class="avatar-wrapper" >
-            <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" alt="">
-            <el-icon class="el-icon-caret-bottom" size="small">
+          <span class="user-name">{{ fullName }}</span>
+            <el-icon class="el-icon-caret-bottom" size="large" style="margin-top: 10px;">
               <CaretBottom />
             </el-icon>
           </div>
@@ -60,9 +60,7 @@ export default defineComponent({
     ...mapState(store.settings, {
       secondMenuPopup: 'secondMenuPopup'
     }),
-    ...mapState(store.user, [
-      'avatar'
-    ]),
+    ...mapState(store.user, ['name']),
     activeMenu() {
       const route = this.$route;
       const { meta, path } = route;
@@ -80,6 +78,9 @@ export default defineComponent({
         return true;
       }
       return !this.sidebar.opened;
+    },
+    fullName() {
+      return `${this.name}`;
     }
   },
   methods: {
@@ -93,11 +94,11 @@ export default defineComponent({
 </script>
 <style>
 .logo {
-  margin: 5px 10px 5px 10px;
+  margin: 5px 10px 5px 5px;
 }
 .avatar-dropdown {
   position: absolute;
-  top: 0;
+  top: 10px;
   right: 0;
   margin-right: 20px;
 }
@@ -106,10 +107,9 @@ export default defineComponent({
   align-items: center;
   cursor: pointer;
 }
-.user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+.user-name {
+  font-size: 16px;
+  color: #fff;
   margin-right: 8px;
   margin-top: 10px;
 }

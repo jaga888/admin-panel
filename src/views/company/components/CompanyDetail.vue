@@ -16,7 +16,7 @@
               <el-form class="form-container" label-position="top">
                 <div class="createPost-main-container">
                   <el-row>
-                    <el-col :span="22">
+                    <el-col :span="24">
                       <h3>Company name</h3>
                       <el-form-item label="Legal Name" prop="legal_name">
                         <el-input
@@ -38,7 +38,7 @@
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :span="22">
+                    <el-col :span="24">
                       <div class="form-group">
                         <h3>Address</h3>
                         <el-form-item label="Address" prop="address">
@@ -79,7 +79,7 @@
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :span="22">
+                    <el-col :span="24">
                       <div class="form-group">
                         <h3>Invoice Address</h3>
                         <el-form-item label="Address Line 1" prop="invoiceAddress1">
@@ -113,7 +113,7 @@
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :span="22">
+                    <el-col :span="24">
                       <div class="form-group">
                         <h3>Contact</h3>
                         <el-form-item label="Name" prop="contact_name">
@@ -138,29 +138,34 @@
                   <div class="form-group">
                     <h3 style="margin-left: 40px">Policies</h3>
                     <el-row :gutter="10">
-                      <el-col :span="11">
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.policy_ids"
-                                       v-for="(policy, index) in policyOptions"
-                                       :key="index"
-                                       :checked="policyOptions.includes(policy.id)"
-                                       :value="policy.id"
-                          >
-                            {{
-                            policy.name
-                                ? policy.name
-                                : policy.identifier
-                                    .replaceAll("_", " ")
-                                    .toLowerCase()
-                                    .replace(/(?<= )[^\s]|^./g, a => a.toUpperCase())
-                          }}
-                          </el-checkbox>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
+                    <el-col :span="12">
+                      <el-form-item>
+                        <el-checkbox v-model="postForm.policy_ids"
+                                     v-for="(policy, index) in policyOptions.slice(0, Math.ceil(policyOptions.length / 2))"
+                                     :key="index"
+                                     :checked="policyOptions.includes(policy.id)"
+                                     :value="policy.id"
+                        >
+                          {{ formatPolicyName(policy) }}
+                        </el-checkbox>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item>
+                        <el-checkbox v-model="postForm.policy_ids"
+                                     v-for="(policy, index) in policyOptions.slice(Math.ceil(policyOptions.length / 2))"
+                                     :key="index"
+                                     :checked="policyOptions.includes(policy.id)"
+                                     :value="policy.id"
+                        >
+                          {{ formatPolicyName(policy) }}
+                        </el-checkbox>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
                     <div class="form-group">
                       <el-row>
-                        <el-col :span="22">
+                        <el-col :span="24">
                           <h3>Other Information</h3>
                           <el-form-item label="Property Management Software" prop="propertyManagementSoftware">
                             <el-select v-model="postForm.propertyManagementSoftware"
@@ -193,7 +198,7 @@
                     </div>
                     <div class="form-group">
                       <el-row>
-                        <el-col :span="22">
+                        <el-col :span="24">
                           <h3>Status</h3>
                           <p>This Client is Active.<br> To remove it from use, while retaining all historical data, you
                             may
@@ -233,40 +238,40 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
+import { ref, onMounted } from 'vue';
 import Sticky from '@/components/Sticky';
 import SingleImageUpload from '@/components/Upload/SingleImage.vue';
-import {ElNotification} from 'element-plus';
-import {getCompany, updateCompany, createCompany} from '@/api/company.js';
-import {fetchList} from '@/api/policy.js';
-import {useRoute} from 'vue-router';
+import { ElNotification } from 'element-plus';
+import { getCompany, updateCompany, createCompany } from '@/api/company.js';
+import { fetchList } from '@/api/policy.js';
+import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const companyId = route.params.id || null;
 
 const postForm = ref({
   id: undefined,
-  name: "",
-  legal_name: "",
+  name: '',
+  legal_name: '',
   active: false,
-  address: "",
-  city: "",
-  contact_email: "",
-  contact_name: "",
-  contact_phone: "",
-  invoice_address: "",
-  invoice_address2: "",
-  invoice_city: "",
-  invoice_email: "",
-  invoice_state: "",
-  invoice_zip: "",
+  address: '',
+  city: '',
+  contact_email: '',
+  contact_name: '',
+  contact_phone: '',
+  invoice_address: '',
+  invoice_address2: '',
+  invoice_city: '',
+  invoice_email: '',
+  invoice_state: '',
+  invoice_zip: '',
   pm_software_id: 0,
   policy_ids: [],
-  short_name: "",
-  state: "",
+  short_name: '',
+  state: '',
   ud_filing_threshold: 0,
-  url: "",
-  zip: "",
+  url: '',
+  zip: ''
 });
 
 const isSuperAdmin = ref<boolean>(false);
@@ -275,7 +280,7 @@ const isEdit = ref<boolean>(!!companyId);
 
 const fetchCompanyData = async () => {
   if (isEdit.value) {
-    const {data} = await getCompany(companyId);
+    const { data } = await getCompany(companyId);
     postForm.value = data;
   }
 };
@@ -299,6 +304,15 @@ onMounted(() => {
     fetchCompanyData();
   }
 });
+
+const formatPolicyName = (policy) => {
+  return policy.name
+    ? policy.name
+    : policy.identifier
+      .replaceAll('_', ' ')
+      .toLowerCase()
+      .replace(/(?<= )\S|^./g, a => a.toUpperCase());
+};
 
 const submitForm = async () => {
   loading.value = true;
@@ -341,27 +355,27 @@ const resetForm = () => {
   } else {
     postForm.value = {
       id: undefined,
-      name: "",
-      legal_name: "",
+      name: '',
+      legal_name: '',
       active: false,
-      address: "",
-      city: "",
-      contact_email: "",
-      contact_name: "",
-      contact_phone: "",
-      invoice_address: "",
-      invoice_address2: "",
-      invoice_city: "",
-      invoice_email: "",
-      invoice_state: "",
-      invoice_zip: "",
+      address: '',
+      city: '',
+      contact_email: '',
+      contact_name: '',
+      contact_phone: '',
+      invoice_address: '',
+      invoice_address2: '',
+      invoice_city: '',
+      invoice_email: '',
+      invoice_state: '',
+      invoice_zip: '',
       pm_software_id: 0,
       policy_ids: [],
-      short_name: "",
-      state: "",
+      short_name: '',
+      state: '',
       ud_filing_threshold: 0,
-      url: "",
-      zip: "",
+      url: '',
+      zip: ''
     };
   }
 };
@@ -392,6 +406,14 @@ const resetForm = () => {
 
 .el-form-item {
   display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+:deep(.el-form-item__content) {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   flex-direction: column;
   margin-bottom: 10px;
 }

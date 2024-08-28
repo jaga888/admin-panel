@@ -1,6 +1,6 @@
 <template>
   <div class="tab-container">
-    <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
+    <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card" @tab-click="handleClick">
       <el-tab-pane label="Info" name="info">
         <keep-alive>
           <div v-if="activeName === 'info'">
@@ -21,9 +21,9 @@
                     </el-col>
                     <el-col :span="11">
                       <el-checkbox
-                        border=border
-                        size="small"
-                        v-model="postForm.is_attorney"
+                          border=border
+                          size="small"
+                          v-model="postForm.is_attorney"
                       >
                         Attorney
                       </el-checkbox>
@@ -33,26 +33,26 @@
                     <el-col :span="26">
                       <el-form-item label="First Name" prop="firstName">
                         <el-input
-                          v-model="postForm.first_name"
-                          placeholder="First Name"
-                          required
+                            v-model="postForm.first_name"
+                            placeholder="First Name"
+                            required
                         />
                       </el-form-item>
                       <el-form-item label="Last Name" prop="lastName">
                         <el-input
-                          v-model="postForm.last_name"
-                          placeholder="Last Name"
-                          required
+                            v-model="postForm.last_name"
+                            placeholder="Last Name"
+                            required
                         />
                       </el-form-item>
                       <el-form-item label="Roles">
                         <el-checkbox-group v-model="postForm.roles">
                           <el-checkbox
-                            border=border
-                            size="large"
-                            v-for="(role, index) in roleOptions"
-                            :key="index"
-                            :value="role.id"
+                              border=border
+                              size="large"
+                              v-for="(role, index) in roleOptions"
+                              :key="index"
+                              :value="role.id"
                           >
                             {{ role.name }}
                           </el-checkbox>
@@ -61,10 +61,10 @@
                       <el-form-item v-if="isSuperAdmin" label="Firm">
                         <el-select v-model="postForm.firm_id" placeholder="Select a firm">
                           <el-option
-                            v-for="(firm, index) in firmOptions"
-                            :key="index"
-                            :label="firm.name"
-                            :value="firm.id"
+                              v-for="(firm, index) in firmOptions"
+                              :key="index"
+                              :label="firm.name"
+                              :value="firm.id"
                           >
                             {{ firm.name }}
                           </el-option>
@@ -78,10 +78,10 @@
                         <h3>Email</h3>
                         <el-form-item label="Email" prop="email">
                           <el-input
-                            type="text"
-                            v-model="postForm.email"
-                            placeholder="Enter Email..."
-                            required
+                              type="text"
+                              v-model="postForm.email"
+                              placeholder="Enter Email..."
+                              required
                           />
                         </el-form-item>
                       </div>
@@ -93,21 +93,17 @@
           </div>
         </keep-alive>
       </el-tab-pane>
-      <el-tab-pane label="Signature" name="signature">
+      <el-tab-pane label="Company" name="company">
         <keep-alive>
-          <div v-if="activeName === 'signature'">
-            <h3 style="display:flex; justify-content: center;">File Upload</h3>
-            <single-image-upload
-              action="/upload"
-              list-type="picture-card"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-            >
-              <i class="el-icon-plus"></i>
-            </single-image-upload>
-            <el-dialog v-model:visible="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt=""/>
-            </el-dialog>
+          <div v-if="activeName === 'company'">
+            <el-tree
+              ref="treeRef"
+              :data="companies"
+              :props="defaultProps"
+              show-checkbox
+              :default-checked-keys="checkedPropertyKeys"
+              @check-change="handleCheckChange"
+            />
           </div>
         </keep-alive>
       </el-tab-pane>
@@ -118,16 +114,27 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import Sticky from '@/components/Sticky';
-import SingleImageUpload from '@/components/Upload/SingleImage.vue';
 import { ElNotification } from 'element-plus';
 import { fetchFirms } from '@/api/firm.js';
 import { fetchRoles } from '@/api/role.js';
+import { fetchTree } from '@/api/company';
 import { getUser, updateUser, createUser } from '@/api/user.js';
 import { useRoute } from 'vue-router';
 import store from '@/store';
+import { ElTree } from 'element-plus';
+import type { TabsPaneContext } from 'element-plus';
 
+const treeRef = ref<InstanceType<typeof ElTree>>();
 const route = useRoute();
 const userId = route.params.id || null;
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+  console.log(tab, event);
+  console.log('asd', treeRef.value);
+};
+
+const defaultProps = {
+  label: 'name'
+};
 
 const postForm = ref({
   first_name: '',
@@ -135,7 +142,8 @@ const postForm = ref({
   email: '',
   roles: [],
   firm: [],
-  is_attorney: false
+  is_attorney: false,
+  properties_id_list: ''
 });
 
 const isSuperAdmin = ref<boolean>(false);
@@ -148,14 +156,31 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to check user role:', error);
   }
+  try {
+    const { data } = await fetchTree();
+    companies.value = data;
+    console.log('companies', companies.value);
+  } catch (error) {
+    console.error('Failed to load companies:', error);
+  }
 });
 
 const isEdit = ref<boolean>(!!userId);
 
 const fetchUserData = async () => {
   if (isEdit.value) {
-    const { data } = await getUser(userId);
-    postForm.value = data;
+    try {
+      const { data } = await getUser(userId);
+      postForm.value = data;
+      console.log('user data', postForm.value);
+      if (postForm.value.property_id_list) {
+        checkedPropertyKeys.value = postForm.value.property_id_list.split(',').map(Number);
+        treeRef.value = postForm.value.property_id_list.split(',').map(Number);
+        console.log("user's property", checkedPropertyKeys.value);
+      }
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+    }
   }
 };
 
@@ -175,12 +200,13 @@ const setRoleOptions = async () => {
   }
 };
 
+const properties = ref([]);
+const checkedPropertyKeys = ref<Array<number>>([]);
+const companies = ref([]);
 const roleOptions = ref<Array>([]);
 const firmOptions = ref<Array>([]);
 const loading = ref<boolean>(false);
 const activeName = ref<string>('info');
-const dialogVisible = ref<boolean>(false);
-const dialogImageUrl = ref('');
 
 onMounted(() => {
   setRoleOptions();
@@ -190,8 +216,15 @@ onMounted(() => {
   }
 });
 
+const handleCheckChange = (data, checked, indeterminate) => {
+  checkedPropertyKeys.value = postForm;
+};
+
 const submitForm = async () => {
   loading.value = true;
+  postForm.value.property_id_list = checkedPropertyKeys.value.length > 0
+    ? checkedPropertyKeys.value.join(',')
+    : '';
   try {
     if (isEdit.value) {
       await updateUser(userId, postForm.value);
@@ -233,8 +266,10 @@ const resetForm = () => {
       email: '',
       roles: [],
       is_attorney: '',
-      firm: []
+      firm: [],
+      properties_id_list: ''
     };
+    checkedKeys.value = [];
   }
 };
 </script>
