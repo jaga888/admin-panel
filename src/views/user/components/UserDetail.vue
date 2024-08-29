@@ -103,6 +103,7 @@
               show-checkbox
               :default-checked-keys="checkedPropertyKeys"
               @check-change="handleCheckChange"
+              node-key="id"
             />
           </div>
         </keep-alive>
@@ -125,15 +126,24 @@ import { ElTree } from 'element-plus';
 import type { TabsPaneContext } from 'element-plus';
 
 const treeRef = ref<InstanceType<typeof ElTree>>();
+const checkedPropertyKeys = ref();
 const route = useRoute();
 const userId = route.params.id || null;
+
 const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event);
-  console.log('asd', treeRef.value);
+  if (tab.paneName === 'company') {
+    treeRef.value = checkedPropertyKeys.value;
+  }
 };
 
+const handleCheckChange = () => {
+  checkedPropertyKeys.value =  treeRef.value!.getCheckedKeys(false);
+}
+
 const defaultProps = {
-  label: 'name'
+  children: 'children',
+  label: 'name',
+  id: 'id'
 };
 
 const postForm = ref({
@@ -143,7 +153,7 @@ const postForm = ref({
   roles: [],
   firm: [],
   is_attorney: false,
-  properties_id_list: ''
+  property_id_list: ''
 });
 
 const isSuperAdmin = ref<boolean>(false);
@@ -151,17 +161,13 @@ const roles = store.user().roles;
 
 onMounted(async () => {
   try {
-    console.log('current user roles', roles);
     isSuperAdmin.value = roles.some(role => role.name === 'super-admin');
   } catch (error) {
-    console.error('Failed to check user role:', error);
   }
   try {
     const { data } = await fetchTree();
     companies.value = data;
-    console.log('companies', companies.value);
   } catch (error) {
-    console.error('Failed to load companies:', error);
   }
 });
 
@@ -171,12 +177,11 @@ const fetchUserData = async () => {
   if (isEdit.value) {
     try {
       const { data } = await getUser(userId);
+
       postForm.value = data;
-      console.log('user data', postForm.value);
+
       if (postForm.value.property_id_list) {
         checkedPropertyKeys.value = postForm.value.property_id_list.split(',').map(Number);
-        treeRef.value = postForm.value.property_id_list.split(',').map(Number);
-        console.log("user's property", checkedPropertyKeys.value);
       }
     } catch (error) {
       console.error('Failed to fetch user data:', error);
@@ -187,24 +192,20 @@ const fetchUserData = async () => {
 const setFirmOptions = async () => {
   const response = await fetchFirms();
   firmOptions.value = response.firms;
-  console.log('Firms:', firmOptions.value);
 };
 
 const setRoleOptions = async () => {
   const response = await fetchRoles();
   roleOptions.value = response.data;
-  console.log('allowed roles', roleOptions.value);
   if (!isSuperAdmin.value) {
-    console.log('You are not super-admin');
     roleOptions.value = roleOptions.value.filter(role => role.name !== 'super-admin');
   }
 };
 
 const properties = ref([]);
-const checkedPropertyKeys = ref<Array<number>>([]);
 const companies = ref([]);
-const roleOptions = ref<Array>([]);
-const firmOptions = ref<Array>([]);
+const roleOptions = ref([]);
+const firmOptions = ref([]);
 const loading = ref<boolean>(false);
 const activeName = ref<string>('info');
 
@@ -215,10 +216,6 @@ onMounted(() => {
     fetchUserData();
   }
 });
-
-const handleCheckChange = (data, checked, indeterminate) => {
-  checkedPropertyKeys.value = postForm;
-};
 
 const submitForm = async () => {
   loading.value = true;
