@@ -101,7 +101,7 @@
               :data="companies"
               :props="defaultProps"
               show-checkbox
-              :default-checked-keys="checkedPropertyKeys"
+              :default-checked-keys="postForm.property_id_list.split(',').map(Number)"
               @check-change="handleCheckChange"
               node-key="id"
             />
@@ -125,19 +125,18 @@ import store from '@/store';
 import { ElTree } from 'element-plus';
 import type { TabsPaneContext } from 'element-plus';
 
-const treeRef = ref<InstanceType<typeof ElTree>>();
-const checkedPropertyKeys = ref();
+const treeRef = ref();
 const route = useRoute();
 const userId = route.params.id || null;
 
-const handleClick = (tab: TabsPaneContext, event: Event) => {
+const handleClick = (tab: TabsPaneContext) => {
   if (tab.paneName === 'company') {
-    treeRef.value = checkedPropertyKeys.value;
+    treeRef.value = postForm.value.property_id_list.split(',').map(Number);
   }
 };
 
 const handleCheckChange = () => {
-  checkedPropertyKeys.value =  treeRef.value!.getCheckedKeys(false);
+  postForm.value.property_id_list =  treeRef.value!.getCheckedKeys(false).join(',');
 }
 
 const defaultProps = {
@@ -179,10 +178,6 @@ const fetchUserData = async () => {
       const { data } = await getUser(userId);
 
       postForm.value = data;
-
-      if (postForm.value.property_id_list) {
-        checkedPropertyKeys.value = postForm.value.property_id_list.split(',').map(Number);
-      }
     } catch (error) {
       console.error('Failed to fetch user data:', error);
     }
