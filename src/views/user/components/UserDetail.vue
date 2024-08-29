@@ -4,7 +4,7 @@
       <el-tab-pane label="Info" name="info">
         <keep-alive>
           <div v-if="activeName === 'info'">
-            <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
+            <sticky :z-index="10" :class-name="'sub-navbar ' + postForm.status">
               <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click.prevent="submitForm">
                 {{ isEdit ? 'Save' : 'Create' }}
               </el-button>
@@ -13,7 +13,12 @@
               </el-button>
             </sticky>
             <div class="createPost-container">
-              <el-form class="form-container" label-position="top">
+              <el-form
+                  class="form-container"
+                  :rules="rules"
+                  ref="postFormRef"
+                  :model="postForm"
+                  label-position="top">
                 <div class="createPost-main-container">
                   <el-row :gutter="20" align="middle">
                     <el-col :span="4">
@@ -21,7 +26,7 @@
                     </el-col>
                     <el-col :span="11">
                       <el-checkbox
-                          border=border
+                          border
                           size="small"
                           v-model="postForm.is_attorney"
                       >
@@ -31,14 +36,14 @@
                   </el-row>
                   <el-row>
                     <el-col :span="26">
-                      <el-form-item label="First Name" prop="firstName">
+                      <el-form-item label="First Name" prop="first_name">
                         <el-input
                             v-model="postForm.first_name"
                             placeholder="First Name"
                             required
                         />
                       </el-form-item>
-                      <el-form-item label="Last Name" prop="lastName">
+                      <el-form-item label="Last Name" prop="last_name">
                         <el-input
                             v-model="postForm.last_name"
                             placeholder="Last Name"
@@ -48,7 +53,7 @@
                       <el-form-item label="Roles">
                         <el-checkbox-group v-model="postForm.roles">
                           <el-checkbox
-                              border=border
+                              border
                               size="large"
                               v-for="(role, index) in roleOptions"
                               :key="index"
@@ -97,13 +102,13 @@
         <keep-alive>
           <div v-if="activeName === 'company'">
             <el-tree
-              ref="treeRef"
-              :data="companies"
-              :props="defaultProps"
-              show-checkbox
-              :default-checked-keys="postForm.property_id_list.split(',').map(Number)"
-              @check-change="handleCheckChange"
-              node-key="id"
+                ref="treeRef"
+                :data="companies"
+                :props="defaultProps"
+                show-checkbox
+                :default-checked-keys="postForm.property_id_list.split(',').map(Number)"
+                @check-change="handleCheckChange"
+                node-key="id"
             />
           </div>
         </keep-alive>
@@ -113,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import Sticky from '@/components/Sticky';
 import { ElNotification } from 'element-plus';
 import { fetchFirms } from '@/api/firm.js';
@@ -122,7 +127,7 @@ import { fetchTree } from '@/api/company';
 import { getUser, updateUser, createUser } from '@/api/user.js';
 import { useRoute } from 'vue-router';
 import store from '@/store';
-import type { TabsPaneContext } from 'element-plus';
+import type { TabsPaneContext, FormRules, FormInstance } from 'element-plus';
 
 const treeRef = ref();
 const route = useRoute();
@@ -135,6 +140,32 @@ const roleOptions = ref([]);
 const firmOptions = ref([]);
 const loading = ref<boolean>(false);
 const activeName = ref<string>('info');
+const postFormRef = ref<FormInstance | null>(null);
+
+interface RuleForm {
+  first_name: string;
+  last_name: string;
+  email: string;
+  roles?: string[];
+  firm_id?: string;
+  is_attorney?: boolean;
+  property_id_list?: string;
+}
+
+const rules = reactive<FormRules<RuleForm>>({
+  first_name: [
+    { required: true, message: 'First Name is required', trigger: 'blur' },
+    { min: 3, max: 30, message: 'First Name must be between 3 and 30 characters', trigger: 'blur' }
+  ],
+  last_name: [
+    { required: true, message: 'Last Name is required', trigger: 'blur' },
+    { min: 3, max: 30, message: 'Last Name must be between 3 and 30 characters', trigger: 'blur' }
+  ],
+  email: [
+    { required: true, message: 'Email is required', trigger: 'blur' },
+    { type: 'email', message: 'Email is not valid', trigger: ['blur', 'change'] }
+  ]
+});
 
 const defaultProps = {
   children: 'children',
@@ -142,7 +173,7 @@ const defaultProps = {
   id: 'id'
 };
 
-const postForm = ref({
+const postForm = reactive<RuleForm>({
   first_name: '',
   last_name: '',
   email: '',
@@ -154,26 +185,29 @@ const postForm = ref({
 
 const handleClick = (tab: TabsPaneContext) => {
   if (tab.paneName === 'company') {
-    treeRef.value = postForm.value.property_id_list.split(',').map(Number);
+    treeRef.value.setCheckedKeys(postForm.property_id_list.split(',').map(Number));
   }
 };
 
 const handleCheckChange = () => {
-  postForm.value.property_id_list = treeRef.value!
-    .getCheckedKeys(false)
-    .filter(key => key !== '' && key !== undefined && key !== null)
-    .join(',');
+  if (treeRef.value) {
+    postForm.property_id_list = treeRef.value.getCheckedKeys(false)
+      .filter(key => key !== '' && key !== undefined && key !== null)
+      .join(',');
+  }
 };
 
 onMounted(async () => {
   try {
     isSuperAdmin.value = roles.some(role => role.name === 'super-admin');
   } catch (error) {
+    console.error('Failed to determine user role:', error);
   }
   try {
     const { data } = await fetchTree();
     companies.value = data;
   } catch (error) {
+    console.error('Failed to fetch company data:', error);
   }
 });
 
@@ -191,8 +225,7 @@ const fetchUserData = async () => {
   if (isEdit.value) {
     try {
       const { data } = await getUser(userId);
-
-      postForm.value = data;
+      Object.assign(postForm, data);
     } catch (error) {
       console.error('Failed to fetch user data:', error);
     }
@@ -200,37 +233,43 @@ const fetchUserData = async () => {
 };
 
 const setFirmOptions = async () => {
-  const response = await fetchFirms();
-  firmOptions.value = response.firms;
+  try {
+    const response = await fetchFirms();
+    firmOptions.value = response.firms;
+  } catch (error) {
+    console.error('Failed to fetch firm options:', error);
+  }
 };
 
 const setRoleOptions = async () => {
-  const response = await fetchRoles();
-  roleOptions.value = response.data;
-  if (!isSuperAdmin.value) {
-    roleOptions.value = roleOptions.value.filter(role => role.name !== 'super-admin');
+  try {
+    const response = await fetchRoles();
+    roleOptions.value = response.data;
+    if (!isSuperAdmin.value) {
+      roleOptions.value = roleOptions.value.filter(role => role.name !== 'super-admin');
+    }
+  } catch (error) {
+    console.error('Failed to fetch role options:', error);
   }
 };
 
 const submitForm = async () => {
-  console.log(postForm.value);
-  // return;
-  loading.value = true;
   try {
+    await postFormRef.value.validate();
+    loading.value = true;
     if (isEdit.value) {
-      await updateUser(userId, postForm.value);
+      await updateUser(userId, postForm);
       ElNotification({
         title: 'Success',
-        message: `User ${postForm.value.first_name} updated successfully`,
+        message: `User ${postForm.first_name} updated successfully`,
         type: 'success',
         duration: 2000
       });
     } else {
-      await createUser(postForm.value);
-      console.log(postForm.value);
+      await createUser(postForm);
       ElNotification({
         title: 'Success',
-        message: `User ${postForm.value.first_name} created successfully`,
+        message: `User ${postForm.first_name} created successfully`,
         type: 'success',
         duration: 2000
       });
@@ -252,17 +291,15 @@ const resetForm = () => {
   if (isEdit.value) {
     fetchUserData();
   } else {
-    postForm.value = {
-      first_name: '',
-      last_name: '',
-      email: '',
-      roles: [],
-      is_attorney: '',
-      firm_id: '',
-      properties_id_list: ''
-    };
-    checkedPropertyKeys.value = [];
+    postForm.first_name = '';
+    postForm.last_name = '';
+    postForm.email = '';
+    postForm.roles = [];
+    postForm.is_attorney = false;
+    postForm.firm_id = '';
+    postForm.property_id_list = '';
   }
+  checkedPropertyKeys.value = [];
 };
 </script>
 
