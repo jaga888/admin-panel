@@ -122,22 +122,19 @@ import { fetchTree } from '@/api/company';
 import { getUser, updateUser, createUser } from '@/api/user.js';
 import { useRoute } from 'vue-router';
 import store from '@/store';
-import { ElTree } from 'element-plus';
 import type { TabsPaneContext } from 'element-plus';
 
 const treeRef = ref();
 const route = useRoute();
 const userId = route.params.id || null;
-
-const handleClick = (tab: TabsPaneContext) => {
-  if (tab.paneName === 'company') {
-    treeRef.value = postForm.value.property_id_list.split(',').map(Number);
-  }
-};
-
-const handleCheckChange = () => {
-  postForm.value.property_id_list =  treeRef.value!.getCheckedKeys(false).join(',');
-}
+const isSuperAdmin = ref<boolean>(false);
+const roles = store.user().roles;
+const checkedPropertyKeys = ref();
+const companies = ref([]);
+const roleOptions = ref([]);
+const firmOptions = ref([]);
+const loading = ref<boolean>(false);
+const activeName = ref<string>('info');
 
 const defaultProps = {
   children: 'children',
@@ -150,13 +147,23 @@ const postForm = ref({
   last_name: '',
   email: '',
   roles: [],
-  firm: [],
+  firm_id: '',
   is_attorney: false,
   property_id_list: ''
 });
 
-const isSuperAdmin = ref<boolean>(false);
-const roles = store.user().roles;
+const handleClick = (tab: TabsPaneContext) => {
+  if (tab.paneName === 'company') {
+    treeRef.value = postForm.value.property_id_list.split(',').map(Number);
+  }
+};
+
+const handleCheckChange = () => {
+  postForm.value.property_id_list = treeRef.value!
+    .getCheckedKeys(false)
+    .filter(key => key !== '' && key !== undefined && key !== null)
+    .join(',');
+};
 
 onMounted(async () => {
   try {
@@ -167,6 +174,14 @@ onMounted(async () => {
     const { data } = await fetchTree();
     companies.value = data;
   } catch (error) {
+  }
+});
+
+onMounted(() => {
+  setRoleOptions();
+  setFirmOptions();
+  if (isEdit.value) {
+    fetchUserData();
   }
 });
 
@@ -197,26 +212,10 @@ const setRoleOptions = async () => {
   }
 };
 
-const properties = ref([]);
-const companies = ref([]);
-const roleOptions = ref([]);
-const firmOptions = ref([]);
-const loading = ref<boolean>(false);
-const activeName = ref<string>('info');
-
-onMounted(() => {
-  setRoleOptions();
-  setFirmOptions();
-  if (isEdit.value) {
-    fetchUserData();
-  }
-});
-
 const submitForm = async () => {
+  console.log(postForm.value);
+  // return;
   loading.value = true;
-  postForm.value.property_id_list = checkedPropertyKeys.value.length > 0
-    ? checkedPropertyKeys.value.join(',')
-    : '';
   try {
     if (isEdit.value) {
       await updateUser(userId, postForm.value);
@@ -228,9 +227,10 @@ const submitForm = async () => {
       });
     } else {
       await createUser(postForm.value);
+      console.log(postForm.value);
       ElNotification({
         title: 'Success',
-        message: `User  created successfully`,
+        message: `User ${postForm.value.first_name} created successfully`,
         type: 'success',
         duration: 2000
       });
@@ -258,10 +258,10 @@ const resetForm = () => {
       email: '',
       roles: [],
       is_attorney: '',
-      firm: [],
+      firm_id: '',
       properties_id_list: ''
     };
-    checkedKeys.value = [];
+    checkedPropertyKeys.value = [];
   }
 };
 </script>
