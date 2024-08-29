@@ -118,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive, nextTick } from 'vue';
 import Sticky from '@/components/Sticky';
 import { ElNotification } from 'element-plus';
 import { fetchFirms } from '@/api/firm.js';
@@ -183,9 +183,12 @@ const postForm = reactive<RuleForm>({
   property_id_list: ''
 });
 
-const handleClick = (tab: TabsPaneContext) => {
+const handleClick = async (tab: TabsPaneContext) => {
   if (tab.paneName === 'company') {
-    treeRef.value.setCheckedKeys(postForm.property_id_list.split(',').map(Number));
+    await nextTick();
+    if (treeRef.value) {
+      treeRef.value.setCheckedKeys(postForm.property_id_list.split(',').map(Number));
+    }
   }
 };
 
