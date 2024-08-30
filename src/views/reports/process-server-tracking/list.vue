@@ -44,8 +44,8 @@
 
       <el-table-column width="200px" align="center" label="Agencies">
         <template v-slot="scope">
-          <el-tag :type="getStatusColor(role.name)" class="tag-item" v-for="role in scope.row.roles">
-            {{ role.name }}
+          <el-tag v-for="agency in scope.row.agencies" :key="agency.id" class="tag-item">
+            {{ agency.name }}
           </el-tag>
         </template>
       </el-table-column>
@@ -130,9 +130,6 @@ const getReports = async () => {
   });
 
   loading.value = false;
-};
-const getStatusColor = (status: string) => {
-  return status === 'firm-manager' ? 'success' : 'info';
 };
 
 getReports();
