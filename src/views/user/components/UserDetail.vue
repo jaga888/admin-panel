@@ -118,16 +118,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive, nextTick } from 'vue';
+import {ref, onMounted, reactive, nextTick, watch} from 'vue';
 import Sticky from '@/components/Sticky';
-import { ElNotification } from 'element-plus';
-import { fetchFirms } from '@/api/firm.js';
-import { fetchRoles } from '@/api/role.js';
-import { fetchTree } from '@/api/company';
-import { getUser, updateUser, createUser } from '@/api/user.js';
-import { useRoute } from 'vue-router';
+import {ElNotification} from 'element-plus';
+import {fetchFirms} from '@/api/firm.js';
+import {fetchRoles} from '@/api/role.js';
+import {fetchTree} from '@/api/company';
+import {getUser, updateUser, createUser} from '@/api/user.js';
+import {useRoute} from 'vue-router';
 import store from '@/store';
-import type { TabsPaneContext, FormRules, FormInstance } from 'element-plus';
+import type {TabsPaneContext, FormRules, FormInstance} from 'element-plus';
 
 const treeRef = ref();
 const route = useRoute();
@@ -147,25 +147,34 @@ interface RuleForm {
   last_name: string;
   email: string;
   roles?: string[];
-  firm_id?: string;
+  firm_id?: number;
   is_attorney?: boolean;
   property_id_list?: string;
 }
 
 const rules = reactive<FormRules<RuleForm>>({
   first_name: [
-    { required: true, message: 'First Name is required', trigger: 'blur' },
-    { min: 3, max: 30, message: 'First Name must be between 3 and 30 characters', trigger: 'blur' }
+    {required: true, message: 'First Name is required', trigger: 'blur'},
+    {min: 3, max: 30, message: 'First Name must be between 3 and 30 characters', trigger: 'blur'}
   ],
   last_name: [
-    { required: true, message: 'Last Name is required', trigger: 'blur' },
-    { min: 3, max: 30, message: 'Last Name must be between 3 and 30 characters', trigger: 'blur' }
+    {required: true, message: 'Last Name is required', trigger: 'blur'},
+    {min: 3, max: 30, message: 'Last Name must be between 3 and 30 characters', trigger: 'blur'}
   ],
   email: [
-    { required: true, message: 'Email is required', trigger: 'blur' },
-    { type: 'email', message: 'Email is not valid', trigger: ['blur', 'change'] }
+    {required: true, message: 'Email is required', trigger: 'blur'},
+    {type: 'email', message: 'Email is not valid', trigger: ['blur', 'change']}
   ]
 });
+
+const treeQuery = ref({
+  filter: {
+    active: 1
+  },
+  firm_id: 1,
+  sort: 'name'
+});
+
 
 const defaultProps = {
   children: 'children',
@@ -178,16 +187,23 @@ const postForm = reactive<RuleForm>({
   last_name: '',
   email: '',
   roles: [],
-  firm_id: '',
+  firm_id: 1,
   is_attorney: false,
   property_id_list: ''
+});
+
+watch(postForm, async () => {
+  if (postForm.firm_id) {
+    treeQuery.value.firm_id = postForm.firm_id;
+    await fetchThreeData();
+  }
 });
 
 const handleClick = async (tab: TabsPaneContext) => {
   if (tab.paneName === 'company') {
     await nextTick();
     if (treeRef.value) {
-      treeRef.value.setCheckedKeys(postForm.property_id_list.split(',').map(Number));
+      treeRef.value.setCheckedKeys(postForm.property_id_list?.split(',').map(Number));
     }
   }
 };
@@ -195,8 +211,8 @@ const handleClick = async (tab: TabsPaneContext) => {
 const handleCheckChange = () => {
   if (treeRef.value) {
     postForm.property_id_list = treeRef.value.getCheckedKeys(false)
-      .filter(key => key !== '' && key !== undefined && key !== null)
-      .join(',');
+        .filter(key => key !== '' && key !== undefined && key !== null)
+        .join(',');
   }
 };
 
@@ -205,12 +221,6 @@ onMounted(async () => {
     isSuperAdmin.value = roles.some(role => role.name === 'super-admin');
   } catch (error) {
     console.error('Failed to determine user role:', error);
-  }
-  try {
-    const { data } = await fetchTree();
-    companies.value = data;
-  } catch (error) {
-    console.error('Failed to fetch company data:', error);
   }
 });
 
@@ -222,13 +232,29 @@ onMounted(() => {
   }
 });
 
+const fetchThreeData = async () => {
+  try {
+    console.log(11);
+    const {data} = await fetchTree(treeQuery.value);
+    companies.value = data;
+  } catch (error) {
+    console.error('Failed to fetch company data:', error);
+  }
+}
+
 const isEdit = ref<boolean>(!!userId);
 
 const fetchUserData = async () => {
   if (isEdit.value) {
     try {
-      const { data } = await getUser(userId);
+      console.log(22);
+      const {data} = await getUser(userId);
       Object.assign(postForm, data);
+      console.log(data.firm_id)
+      if (postForm.firm_id) {
+        treeQuery.value.firm_id = postForm.firm_id;
+      }
+      await fetchThreeData();
     } catch (error) {
       console.error('Failed to fetch user data:', error);
     }
@@ -299,7 +325,7 @@ const resetForm = () => {
     postForm.email = '';
     postForm.roles = [];
     postForm.is_attorney = false;
-    postForm.firm_id = '';
+    postForm.firm_id = 1;
     postForm.property_id_list = '';
   }
   checkedPropertyKeys.value = [];

@@ -46,7 +46,7 @@
           <span>{{ scope.row.first_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="420px" align="center" label="Second Name">
+      <el-table-column width="420px" align="center" label="Last Name">
         <template v-slot="scope">
           <span>{{ scope.row.last_name }}</span>
         </template>

@@ -15,10 +15,11 @@ export function getCompany(id) {
   });
 }
 
-export function fetchTree() {
+export function fetchTree(query) {
   return request({
     url: `/admin/companies/tree`,
-    method: 'get'
+    method: 'get',
+    params: query
   });
 }
 
