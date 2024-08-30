@@ -45,10 +45,23 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="120px" align="center" label="Active">
+        <template v-slot="scope">
+          <el-switch
+              inline-prompt
+              :active-icon="Check"
+              :inactive-icon="Close"
+              v-model="scope.row.active"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              @change="toggleCompanyActive(scope.row)"
+          />
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="Actions" width="160">
         <template v-slot="scope">
           <router-link :to="'/company/edit/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">
+            <el-button type="primary" size="small">
               Edit
             </el-button>
           </router-link>
@@ -68,11 +81,12 @@
 import { markRaw, ref } from 'vue';
 import { Edit } from '@element-plus/icons-vue';
 import Pagination from '@/components/Pagination';
-import { fetchList } from '@/api/company.js';
+import { companiesUpdateActive, fetchList } from '@/api/company.js';
+import { Check, Close } from '@element-plus/icons-vue';
 
 const listQuery = ref({
   filter: {
-    full_name: '',
+    full_name: ''
   },
   sort: 'name',
   page: 1,
@@ -83,14 +97,36 @@ const companies = ref([
   {
     name: '',
     short_name: '',
-    legal_name: ''
+    legal_name: '',
+    active: false
   }
 ]);
+
+const toggleCompanyActive = async (companies) => {
+  try {
+    await companiesUpdateActive(companies.id, companies.active);
+    console.log(companies.active);
+    ElNotification({
+      title: 'Success',
+      message: `Company ${companies.short_name} is now ${companies.active ? 'active' : 'inactive'}.`,
+      type: 'success',
+      duration: 2000
+    });
+  } catch (error) {
+    console.error('Failed to update company active status:', error);
+    ElNotification({
+      title: 'Error',
+      message: 'Failed to update company active status',
+      type: 'error',
+      duration: 2000
+    });
+  }
+};
 
 const companiesLoading = ref<boolean>(true);
 const total = ref<number>(0);
 
-const sortOptions = ref< Array >([
+const sortOptions = ref<Array>([
   {
     label: 'Company Name Ascending',
     key: 'name'
@@ -108,8 +144,7 @@ const getCompanies = async () => {
   fetchList(listQuery.value).then(response => {
     total.value = response.meta.total;
     companies.value = response.data;
-
-    // Just to simulate the time of the request
+    console.log(companies.value);
     setTimeout(() => {
       companiesLoading.value = false;
     }, 1.5 * 1000);
