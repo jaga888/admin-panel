@@ -1,7 +1,16 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-
+      <el-select
+          v-model="listQuery.filter.agency"
+          placeholder="Select Agency"
+          style="width: 140px; margin-right: 15px"
+          class="filter-item"
+          clearable
+          @change="handleFilter"
+      >
+        <el-option v-for="(item, key) in agencyOptions" :key="key" :label="item.name" :value="item.id"/>
+      </el-select>
       <router-link :to="'/company/create/'">
         <el-button class="filter-item" style="margin-left: 15px;" type="primary" :icon="iconGenerate">
           Generate
@@ -17,7 +26,7 @@
 
       <el-table-column width="465px" align="center" label="File Name">
         <template v-slot="scope">
-          <span>{{ scope.row.file.name }}</span>
+          <span>{{ scope.row.file?.name }}</span>
         </template>
       </el-table-column>
 
@@ -33,10 +42,18 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="200px" align="center" label="Agencies">
+        <template v-slot="scope">
+          <el-tag :type="getStatusColor(role.name)" class="tag-item" v-for="role in scope.row.roles">
+            {{ role.name }}
+          </el-tag>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="Actions" width="160">
         <template v-slot="scope">
           <router-link :to="'/report/download/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-download">
+            <el-button type="primary" size="small" :icon="iconDownload">
               Download
             </el-button>
           </router-link>
@@ -54,33 +71,49 @@ import { markRaw, ref } from 'vue';
 import { Download, Edit } from '@element-plus/icons-vue';
 import Pagination from '@/components/Pagination';
 import { fetchList } from '@/api/report.js';
-
-const listQuery = ref({
-  filter: {
-    name: 'process_server_tracking',
-    // created_at: ''
-  },
-  sort: '-created_at',
-  page: 1,
-  perPage: 10,
-});
-
-const reports = ref([
-  {
-    id: 0,
-    file: {
-      name: '',
-    },
-    name: '',
-    total: 0,
-  }
-]);
+import { fetchAgencies } from '@/api/agency';
 
 const loading = ref<boolean>(true);
 const total = ref<number>(0);
 
 const iconDownload = markRaw(Download);
 const iconGenerate = markRaw(Edit);
+const agencyOptions = ref< Array >([{
+  name: ''
+}]);
+
+const listQuery = ref({
+  filter: {
+    agency: ''
+  },
+  sort: '-created_at',
+  page: 1,
+  perPage: 10
+});
+
+const reports = ref([
+  {
+    id: 0,
+    file: {
+      name: ''
+    },
+    name: '',
+    total: 0,
+    agency_id: ''
+  }
+]);
+
+const handleFilter = () => {
+  listQuery.value.page = 1;
+  getReports();
+};
+
+const setAgencyOptions = () => {
+  fetchAgencies().then(response => {
+    agencyOptions.value = response.data;
+    console.log(agencyOptions.value);
+  });
+};
 
 const getReports = async () => {
   loading.value = true;
@@ -88,6 +121,7 @@ const getReports = async () => {
   fetchList(listQuery.value).then(response => {
     total.value = response.meta.total;
     reports.value = response.data;
+    console.log('response', reports.value);
 
     // Just to simulate the time of the request
     setTimeout(() => {
@@ -97,9 +131,12 @@ const getReports = async () => {
 
   loading.value = false;
 };
-
+const getStatusColor = (status: string) => {
+  return status === 'firm-manager' ? 'success' : 'info';
+};
 
 getReports();
+setAgencyOptions();
 </script>
 
 <style scoped>

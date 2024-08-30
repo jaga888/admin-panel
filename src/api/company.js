@@ -22,6 +22,16 @@ export function fetchTree() {
   });
 }
 
+export function companiesUpdateActive(companyId, isActive) {
+  return request({
+    url: `/admin/companies/${companyId}/active`,
+    method: 'patch',
+    data: {
+      active: isActive
+    }
+  });
+}
+
 export function updateCompany(id, data) {
   return request({
     url: `/admin/companies/${id}`,
