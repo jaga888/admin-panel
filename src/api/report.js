@@ -7,3 +7,11 @@ export function fetchList(query) {
     params: query
   });
 }
+
+export function createReport(data) {
+  return request({
+    url: '/admin/reports',
+    method: 'post',
+    data
+  });
+}

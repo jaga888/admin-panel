@@ -1,21 +1,46 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <el-select
-          v-model="listQuery.filter.agency"
-          placeholder="Select Agency"
-          style="width: 140px; margin-right: 15px"
-          class="filter-item"
-          clearable
-          @change="handleFilter"
-      >
-        <el-option v-for="(item, key) in agencyOptions" :key="key" :label="item.name" :value="item.id"/>
-      </el-select>
-      <router-link :to="'/company/create/'">
-        <el-button class="filter-item" style="margin-left: 15px;" type="primary" :icon="iconGenerate">
+    <div class="filter-container" style="display: flex; justify-content: space-between">
+      <div>
+        <el-select
+            v-model="listQuery.filter.agency"
+            placeholder="Select Agency"
+            style="width: 140px; margin-right: 15px"
+            class="filter-item"
+            clearable
+            @change="handleFilter"
+        >
+          <el-option v-for="(item, key) in agencyOptions" :key="key" :label="item.name" :value="item.id"/>
+        </el-select>
+      </div>
+      <div>
+        <el-date-picker
+            v-model="generateQuery.date"
+            style="width: 140px; margin-bottom: 10px; margin-right: 15px"
+            type="date"
+            placeholder="Pick a day"
+            format="MM-DD-YYYY"
+            value-format="YYYY-MM-DD H:mm:ss"
+        />
+        <el-tree-select
+            v-model="generateQuery.agency_ids"
+            style="width: 240px; margin-bottom: 10px"
+            :data="agencyOptions"
+            :props="defaultProps"
+            node-key="id"
+            multiple
+            :render-after-expand="false"
+            show-checkbox
+        />
+        <el-button class="filter-item"
+                   style="margin-left: 15px"
+                   type="primary"
+                   :icon="iconGenerate"
+                   @click="generateReport"
+        >
           Generate
         </el-button>
-      </router-link>
+      </div>
     </div>
     <el-table v-loading="loading" :data="reports" border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label="ID" width="60px">
@@ -67,18 +92,25 @@
 </template>
 
 <script setup lang="ts">
-import { markRaw, ref } from 'vue';
-import { Download, Edit } from '@element-plus/icons-vue';
+import {markRaw, ref} from 'vue';
+import {Download, Edit} from '@element-plus/icons-vue';
 import Pagination from '@/components/Pagination';
-import { fetchList } from '@/api/report.js';
-import { fetchAgencies } from '@/api/agency';
+import {createReport, fetchList} from '@/api/report.js';
+import {fetchAgencies} from '@/api/agency';
+import {ElNotification} from "element-plus";
+import moment from "moment"
 
 const loading = ref<boolean>(true);
 const total = ref<number>(0);
 
+const defaultProps = {
+  label: 'name',
+  id: 'id'
+};
+
 const iconDownload = markRaw(Download);
 const iconGenerate = markRaw(Edit);
-const agencyOptions = ref< Array >([{
+const agencyOptions = ref([{
   name: ''
 }]);
 
@@ -90,6 +122,11 @@ const listQuery = ref({
   page: 1,
   perPage: 10
 });
+
+const generateQuery = ref({
+  date: moment().format('yyyy-MM-DD H:mm:ss'),
+  agency_ids: [],
+})
 
 const reports = ref([
   {
@@ -132,18 +169,27 @@ const getReports = async () => {
   loading.value = false;
 };
 
+const generateReport = async () => {
+  await createReport(generateQuery.value);
+
+  listQuery.value.page = 1;
+
+  await getReports();
+
+  ElNotification({
+    title: 'Success',
+    message: `Report created successfully`,
+    type: 'success',
+    duration: 2000
+  });
+}
+
 getReports();
 setAgencyOptions();
 </script>
 
-<style scoped>
-.edit-input {
-  padding-right: 100px;
-}
-
-.cancel-btn {
-  position: absolute;
-  right: 15px;
-  top: 10px;
+<style>
+.el-icon.el-tree-node__expand-icon.is-leaf {
+  width: 0;
 }
 </style>
