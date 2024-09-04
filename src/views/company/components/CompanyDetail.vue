@@ -196,18 +196,6 @@
                         </el-col>
                       </el-row>
                     </div>
-                    <div class="form-group">
-                      <el-row>
-                        <el-col :span="24">
-                          <h3>Status</h3>
-                          <p>This Client is Active.<br> To remove it from use, while retaining all historical data, you
-                            may
-                            deactivate
-                            it</p>
-                          <el-button type="danger">Deactivate</el-button>
-                        </el-col>
-                      </el-row>
-                    </div>
                   </div>
                 </div>
               </el-form>
@@ -253,12 +241,12 @@ const postForm = ref({
   id: undefined,
   name: '',
   legal_name: '',
-  active: false,
   address: '',
   city: '',
   contact_email: '',
   contact_name: '',
   contact_phone: '',
+  identifier: '',
   invoice_address: '',
   invoice_address2: '',
   invoice_city: '',
@@ -318,6 +306,7 @@ const submitForm = async () => {
   loading.value = true;
   try {
     if (isEdit.value) {
+      console.log(postForm.value);
       await updateCompany(companyId, postForm.value);
       ElNotification({
         title: 'Success',
@@ -393,7 +382,7 @@ const resetForm = () => {
 
 .form-container {
   width: 100%;
-  max-width: 800px; /* Добавьте максимальную ширину для формы */
+  max-width: 800px;
 }
 
 .form-group {

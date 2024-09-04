@@ -14,8 +14,17 @@
                  @change="handleFilter" :value="listQuery.sort">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key"/>
       </el-select>
+      <el-select v-model="listQuery.filter.active"
+                 style="width: 160px; margin-right: 15px"
+                 class="filter-item"
+                 clearable
+                 @change="handleFilter">
+        <el-option value=" " label="Show All" selected/>
+        <el-option value="1" label="Active Only" />
+        <el-option value="0" label="Inactive Only" />
+      </el-select>
       <router-link :to="'/company/create/'">
-        <el-button class="filter-item" style="margin-left: 15px;" type="primary" :icon="iconEdit">
+        <el-button class="filter-item" style="margin-left: 15px;" type="primary" :icon="Edit">
           Create
         </el-button>
       </router-link>
@@ -58,14 +67,14 @@
           />
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Actions" width="160">
+      <el-table-column align="center" label="Actions" width="180">
         <template v-slot="scope">
           <router-link :to="'/company/edit/'+scope.row.id">
-            <el-button type="primary" size="small">
+            <el-button type="primary" size="small" :icon="Edit">
               Edit
             </el-button>
           </router-link>
-          <el-button style="margin-left: 15px" size="small" type="danger">
+          <el-button style="margin-left: 15px" size="small" type="danger" :icon="Delete">
             Delete
           </el-button>
         </template>
@@ -78,15 +87,16 @@
 </template>
 
 <script setup lang="ts">
-import { markRaw, ref } from 'vue';
-import { Edit } from '@element-plus/icons-vue';
+import { ref } from 'vue';
+import { Delete, Edit } from '@element-plus/icons-vue';
 import Pagination from '@/components/Pagination';
 import { companiesUpdateActive, fetchList } from '@/api/company.js';
 import { Check, Close } from '@element-plus/icons-vue';
 
 const listQuery = ref({
   filter: {
-    full_name: ''
+    full_name: '',
+    active: ' '
   },
   sort: 'name',
   page: 1,
@@ -136,7 +146,6 @@ const sortOptions = ref<Array>([
     key: '-name'
   }
 ]);
-const iconEdit = markRaw(Edit);
 
 const getCompanies = async () => {
   companiesLoading.value = true;

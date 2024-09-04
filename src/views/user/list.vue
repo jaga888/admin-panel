@@ -29,11 +29,6 @@
       >
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key"/>
       </el-select>
-      <router-link :to="'/user/create/'">
-        <el-button class="filter-item" style="margin-left: 15px;" type="primary" :icon="iconEdit">
-          Create
-        </el-button>
-      </router-link>
     </div>
     <el-table v-loading="usersLoading" :data="users" border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label="ID" width="60px">
@@ -63,14 +58,14 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column width="160" align="center" label="Actions">
+      <el-table-column width="180" align="center" label="Actions">
         <template v-slot="scope">
           <router-link :to="'/user/edit/'+scope.row.id">
-            <el-button type="primary" size="small">
+            <el-button type="primary" size="small" :icon="Edit">
               Edit
             </el-button>
           </router-link>
-          <el-button style="margin-left: 15px" size="small" type="danger">
+          <el-button style="margin-left: 15px" size="small" type="danger" :icon="Delete">
             Delete
           </el-button>
         </template>
@@ -82,8 +77,8 @@
 </template>
 
 <script setup lang="ts">
-import { markRaw, ref } from 'vue';
-import { Edit } from '@element-plus/icons-vue';
+import { ref } from 'vue';
+import { Delete, Edit } from '@element-plus/icons-vue';
 import Pagination from '@/components/Pagination';
 import { fetchList } from '@/api/user.js';
 import { fetchRoles } from '@/api/role.js';
@@ -121,7 +116,6 @@ const sortOptions = ref< Array >([
     key: '-first_name'
   }
 ]);
-const iconEdit = markRaw(Edit);
 
 const getUsers = async () => {
   usersLoading.value = true;

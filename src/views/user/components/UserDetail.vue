@@ -36,14 +36,14 @@
                   </el-row>
                   <el-row>
                     <el-col :span="26">
-                      <el-form-item label="First Name" prop="first_name">
+                      <el-form-item label="First Name" prop="first_name" :inline-message="true">
                         <el-input
                             v-model="postForm.first_name"
                             placeholder="First Name"
                             required
                         />
                       </el-form-item>
-                      <el-form-item label="Last Name" prop="last_name">
+                      <el-form-item label="Last Name" prop="last_name" :inline-message="true">
                         <el-input
                             v-model="postForm.last_name"
                             placeholder="Last Name"
@@ -86,7 +86,7 @@
                               type="text"
                               v-model="postForm.email"
                               placeholder="Enter Email..."
-                              required
+                              disabled
                           />
                         </el-form-item>
                       </div>
@@ -118,16 +118,16 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, reactive, nextTick, watch} from 'vue';
+import { ref, onMounted, reactive, nextTick, watch } from 'vue';
 import Sticky from '@/components/Sticky';
-import {ElNotification} from 'element-plus';
-import {fetchFirms} from '@/api/firm.js';
-import {fetchRoles} from '@/api/role.js';
-import {fetchTree} from '@/api/company';
-import {getUser, updateUser, createUser} from '@/api/user.js';
-import {useRoute} from 'vue-router';
+import { ElNotification } from 'element-plus';
+import { fetchFirms } from '@/api/firm.js';
+import { fetchRoles } from '@/api/role.js';
+import { fetchTree } from '@/api/company';
+import { getUser, updateUser, createUser } from '@/api/user.js';
+import { useRoute } from 'vue-router';
 import store from '@/store';
-import type {TabsPaneContext, FormRules, FormInstance} from 'element-plus';
+import type { TabsPaneContext, FormRules, FormInstance } from 'element-plus';
 
 const treeRef = ref();
 const route = useRoute();
@@ -154,16 +154,12 @@ interface RuleForm {
 
 const rules = reactive<FormRules<RuleForm>>({
   first_name: [
-    {required: true, message: 'First Name is required', trigger: 'blur'},
-    {min: 3, max: 30, message: 'First Name must be between 3 and 30 characters', trigger: 'blur'}
+    { required: true, message: 'First Name is required', trigger: 'blur' },
+    { min: 3, max: 30, message: 'First Name must be between 3 and 30 characters', trigger: 'blur' }
   ],
   last_name: [
-    {required: true, message: 'Last Name is required', trigger: 'blur'},
-    {min: 3, max: 30, message: 'Last Name must be between 3 and 30 characters', trigger: 'blur'}
-  ],
-  email: [
-    {required: true, message: 'Email is required', trigger: 'blur'},
-    {type: 'email', message: 'Email is not valid', trigger: ['blur', 'change']}
+    { required: true, message: 'Last Name is required', trigger: 'blur' },
+    { min: 3, max: 30, message: 'Last Name must be between 3 and 30 characters', trigger: 'blur' }
   ]
 });
 
@@ -174,7 +170,6 @@ const treeQuery = ref({
   firm_id: 1,
   sort: 'name'
 });
-
 
 const defaultProps = {
   children: 'children',
@@ -211,8 +206,8 @@ const handleClick = async (tab: TabsPaneContext) => {
 const handleCheckChange = () => {
   if (treeRef.value) {
     postForm.property_id_list = treeRef.value.getCheckedKeys(false)
-        .filter(key => key !== '' && key !== undefined && key !== null)
-        .join(',');
+      .filter(key => key !== '' && key !== undefined && key !== null)
+      .join(',');
   }
 };
 
@@ -235,12 +230,12 @@ onMounted(() => {
 const fetchThreeData = async () => {
   try {
     console.log(11);
-    const {data} = await fetchTree(treeQuery.value);
+    const { data } = await fetchTree(treeQuery.value);
     companies.value = data;
   } catch (error) {
     console.error('Failed to fetch company data:', error);
   }
-}
+};
 
 const isEdit = ref<boolean>(!!userId);
 
@@ -248,9 +243,9 @@ const fetchUserData = async () => {
   if (isEdit.value) {
     try {
       console.log(22);
-      const {data} = await getUser(userId);
+      const { data } = await getUser(userId);
       Object.assign(postForm, data);
-      console.log(data.firm_id)
+      console.log(data.firm_id);
       if (postForm.firm_id) {
         treeQuery.value.firm_id = postForm.firm_id;
       }

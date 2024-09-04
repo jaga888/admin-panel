@@ -12,6 +12,15 @@
         >
           <el-option v-for="(item, key) in agencyOptions" :key="key" :label="item.name" :value="item.id"/>
         </el-select>
+        <el-date-picker
+            v-model="listQuery.filter.created_at"
+            style="width: 140px; margin-bottom: 10px; margin-right: 15px"
+            type="date"
+            placeholder="Pick a day"
+            format="MM-DD-YYYY"
+            value-format="YYYY-MM-DD H:mm:ss"
+            @change="handleFilter"
+        />
       </div>
       <div>
         <el-date-picker
@@ -92,13 +101,13 @@
 </template>
 
 <script setup lang="ts">
-import {markRaw, ref} from 'vue';
-import {Download, Edit} from '@element-plus/icons-vue';
+import { markRaw, ref } from 'vue';
+import { Download, Edit } from '@element-plus/icons-vue';
 import Pagination from '@/components/Pagination';
-import {createReport, fetchList} from '@/api/report.js';
-import {fetchAgencies} from '@/api/agency';
-import {ElNotification} from "element-plus";
-import moment from "moment"
+import { createReport, fetchList } from '@/api/report.js';
+import { fetchAgencies } from '@/api/agency';
+import { ElNotification } from 'element-plus';
+import moment from 'moment';
 
 const loading = ref<boolean>(true);
 const total = ref<number>(0);
@@ -116,7 +125,8 @@ const agencyOptions = ref([{
 
 const listQuery = ref({
   filter: {
-    agency: ''
+    agency: '',
+    created_at: ''
   },
   sort: '-created_at',
   page: 1,
@@ -125,8 +135,8 @@ const listQuery = ref({
 
 const generateQuery = ref({
   date: moment().format('yyyy-MM-DD H:mm:ss'),
-  agency_ids: [],
-})
+  agency_ids: []
+});
 
 const reports = ref([
   {
@@ -182,7 +192,7 @@ const generateReport = async () => {
     type: 'success',
     duration: 2000
   });
-}
+};
 
 getReports();
 setAgencyOptions();
