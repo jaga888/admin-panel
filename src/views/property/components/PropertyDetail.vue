@@ -4,23 +4,23 @@
       <el-tab-pane label="Info" name="info">
         <keep-alive>
           <div v-if="activeName == 'info'">
-            <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
+            <sticky :z-index="10" :class-name="'sub-navbar '">
               <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
                 Save
               </el-button>
-              <el-button v-loading="loading" type="warning" @click="draftForm">
+              <el-button v-loading="loading" type="warning" @click="resetForm">
                 Reset
               </el-button>
             </sticky>
             <div class="createPost-container">
-              <el-form :rules="rules" class="form-container" label-position="top">
+              <el-form class="form-container" label-position="top">
                 <div class="createPost-main-container">
                   <el-row>
                     <el-col :span="22">
                       <h3>Property name</h3>
                       <el-form-item label="Legal Name" prop="legalName">
                         <el-input
-                            v-model="postForm.legalName"
+                            v-model="postForm.legal_name"
                             placeholder="The Legal Name is used on most documents."
                         />
                       </el-form-item>
@@ -33,7 +33,6 @@
                       <el-form-item label="Nickname" prop="nickname">
                         <el-input v-model="postForm.nickname"
                                   placeholder="The nickname is displayed in the software, and can be shortened for brevity."
-                                  value=""
                         />
                       </el-form-item>
                     </el-col>
@@ -80,66 +79,66 @@
                           <el-select
                               v-model="postForm.propertyManagementSoftware"
                               placeholder="Select Jurisdiction"
-                            >
-                              <el-option label="" value=""/>
-                              <el-option label="Albemarle" value="Albemarle"/>
-                              <el-option label="Amelia" value="mri"/>
-                              <el-option label="Bedford" value="realpage"/>
-                              <el-option label="Botetourt" value="yardi"/>
-                              <el-option label="Caroline" value="Caroline"/>
-                              <el-option label="Charles City" value="Charles City"/>
-                              <el-option label="Chesapeake" value="Chesapeake"/>
-                              <el-option label="Chesterfield" value="Chesterfield"/>
-                              <el-option label="Coloniai Heights" value="Coloniai Heights"/>
-                              <el-option label="Culpeper" value="Culpeper"/>
-                              <el-option label="Cumberland" value="Cumberland"/>
-                              <el-option label="Dinwiddie" value="Dinwiddie"/>
-                              <el-option label="Essex" value="Essex"/>
-                              <el-option label="Fairfax County" value="Fairfax"/>
-                              <el-option label="Fauquier" value="Fauquier"/>
-                              <el-option label="Franklin" value="Franklin"/>
-                              <el-option label="Franklin City" value="Franklin City"/>
-                              <el-option label="Frederickburg" value="Frederickburg"/>
-                              <el-option label="Gloucester" value="Gloucester"/>
-                              <el-option label="Goochland" value="Goochland"/>
-                              <el-option label="Hampton" value="Hampton"/>
-                              <el-option label="Hanover" value="Hanover"/>
-                              <el-option label="Henrico" value="Henrico"/>
-                              <el-option label="Hopewell" value="Hopewell"/>
-                              <el-option label="Isle of Wight" value="unknown"/>
-                              <el-option label="King and Queen" value="King and Queen"/>
-                              <el-option label="King George" value="King George"/>
-                              <el-option label="King William" value="King William"/>
-                              <el-option label="Louisa" value="Louisa"/>
-                              <el-option label="Lynchburg" value="Lynchburg"/>
-                              <el-option label="Mathews" value="Mathews"/>
-                              <el-option label="Middlesex" value="Middlesex"/>
-                              <el-option label="New Kent" value="New Kent"/>
-                              <el-option label="Newport News" value="Newport News"/>
-                              <el-option label="Norfolk" value="Norfolk"/>
-                              <el-option label="Petersburg" value="Petersburg"/>
-                              <el-option label="Portsmouth" value="Portsmouth"/>
-                              <el-option label="Powhatan" value="Powhatan"/>
-                              <el-option label="Prince Edward" value="Prince Edward"/>
-                              <el-option label="Prince George" value="Prince George"/>
-                              <el-option label="Prince William" value="Prince William"/>
-                              <el-option label="Richmond" value="Richmond"/>
-                              <el-option label="Roanoke City" value="Roanoke"/>
-                              <el-option label="Rockingham" value="Rockingham"/>
-                              <el-option label="Salem" value="Salem"/>
-                              <el-option label="Southampton" value="Southampton"/>
-                              <el-option label="Spotsylvania" value="Spotsylvania"/>
-                              <el-option label="Stafford" value="Stafford"/>
-                              <el-option label="Suffolk" value="Suffolk"/>
-                              <el-option label="Surry" value="Surry"/>
-                              <el-option label="Sussex" value="Sussex"/>
-                              <el-option label="Virginia Beach" value="Virginia"/>
-                              <el-option label="Warren" value="Warren"/>
-                              <el-option label="Waynesboro" value="Waynesboro"/>
-                              <el-option label="Westmoreland" value="Westmoreland"/>
-                              <el-option label="Williamsburg" value="Williamsburg"/>
-                              <el-option label="York" value="York"/>
-                            </el-select>
+                          >
+                            <el-option label="" value=""/>
+                            <el-option label="Albemarle" value="Albemarle"/>
+                            <el-option label="Amelia" value="mri"/>
+                            <el-option label="Bedford" value="realpage"/>
+                            <el-option label="Botetourt" value="yardi"/>
+                            <el-option label="Caroline" value="Caroline"/>
+                            <el-option label="Charles City" value="Charles City"/>
+                            <el-option label="Chesapeake" value="Chesapeake"/>
+                            <el-option label="Chesterfield" value="Chesterfield"/>
+                            <el-option label="Coloniai Heights" value="Coloniai Heights"/>
+                            <el-option label="Culpeper" value="Culpeper"/>
+                            <el-option label="Cumberland" value="Cumberland"/>
+                            <el-option label="Dinwiddie" value="Dinwiddie"/>
+                            <el-option label="Essex" value="Essex"/>
+                            <el-option label="Fairfax County" value="Fairfax"/>
+                            <el-option label="Fauquier" value="Fauquier"/>
+                            <el-option label="Franklin" value="Franklin"/>
+                            <el-option label="Franklin City" value="Franklin City"/>
+                            <el-option label="Frederickburg" value="Frederickburg"/>
+                            <el-option label="Gloucester" value="Gloucester"/>
+                            <el-option label="Goochland" value="Goochland"/>
+                            <el-option label="Hampton" value="Hampton"/>
+                            <el-option label="Hanover" value="Hanover"/>
+                            <el-option label="Henrico" value="Henrico"/>
+                            <el-option label="Hopewell" value="Hopewell"/>
+                            <el-option label="Isle of Wight" value="unknown"/>
+                            <el-option label="King and Queen" value="King and Queen"/>
+                            <el-option label="King George" value="King George"/>
+                            <el-option label="King William" value="King William"/>
+                            <el-option label="Louisa" value="Louisa"/>
+                            <el-option label="Lynchburg" value="Lynchburg"/>
+                            <el-option label="Mathews" value="Mathews"/>
+                            <el-option label="Middlesex" value="Middlesex"/>
+                            <el-option label="New Kent" value="New Kent"/>
+                            <el-option label="Newport News" value="Newport News"/>
+                            <el-option label="Norfolk" value="Norfolk"/>
+                            <el-option label="Petersburg" value="Petersburg"/>
+                            <el-option label="Portsmouth" value="Portsmouth"/>
+                            <el-option label="Powhatan" value="Powhatan"/>
+                            <el-option label="Prince Edward" value="Prince Edward"/>
+                            <el-option label="Prince George" value="Prince George"/>
+                            <el-option label="Prince William" value="Prince William"/>
+                            <el-option label="Richmond" value="Richmond"/>
+                            <el-option label="Roanoke City" value="Roanoke"/>
+                            <el-option label="Rockingham" value="Rockingham"/>
+                            <el-option label="Salem" value="Salem"/>
+                            <el-option label="Southampton" value="Southampton"/>
+                            <el-option label="Spotsylvania" value="Spotsylvania"/>
+                            <el-option label="Stafford" value="Stafford"/>
+                            <el-option label="Suffolk" value="Suffolk"/>
+                            <el-option label="Surry" value="Surry"/>
+                            <el-option label="Sussex" value="Sussex"/>
+                            <el-option label="Virginia Beach" value="Virginia"/>
+                            <el-option label="Warren" value="Warren"/>
+                            <el-option label="Waynesboro" value="Waynesboro"/>
+                            <el-option label="Westmoreland" value="Westmoreland"/>
+                            <el-option label="Williamsburg" value="Williamsburg"/>
+                            <el-option label="York" value="York"/>
+                          </el-select>
                         </el-col>
                       </div>
                     </el-col>
@@ -153,31 +152,31 @@
                           </el-checkbox>
                         </el-form-item>
                         <el-form-item label="Address Line 1" prop="invoiceAddress1">
-                          <el-input v-model="postForm.invoiceAddress1" placeholder="Enter Address Line 1..."/>
+                          <el-input v-model="postForm.invoice_address1" placeholder="Enter Address Line 1..."/>
                         </el-form-item>
                         <el-form-item label="Address Line 2" prop="invoiceAddress2">
-                          <el-input v-model="postForm.invoiceAddress2" placeholder="Enter Address Line 2..."/>
+                          <el-input v-model="postForm.invoice_address2" placeholder="Enter Address Line 2..."/>
                         </el-form-item>
                         <el-row>
                           <el-col :span="12">
                             <el-form-item label="City" prop="invoiceCity">
-                              <el-input v-model="postForm.invoiceCity" placeholder="Enter City..."/>
+                              <el-input v-model="postForm.invoice_city" placeholder="Enter City..."/>
                             </el-form-item>
                           </el-col>
                           <el-col :span="6">
                             <el-form-item label="State" prop="invoiceState">
-                              <el-input v-model="postForm.invoiceState" maxlength="2"
+                              <el-input v-model="postForm.invoice_state" maxlength="2"
                                         placeholder="Enter State (2 letters)"/>
                             </el-form-item>
                           </el-col>
                           <el-col :span="6">
                             <el-form-item label="Zip" prop="invoiceZip">
-                              <el-input v-model="postForm.invoiceZip" placeholder="Enter Zip..."/>
+                              <el-input v-model="postForm.invoice_zip" placeholder="Enter Zip..."/>
                             </el-form-item>
                           </el-col>
                         </el-row>
                         <el-form-item label="Email" prop="invoiceEmail">
-                          <el-input v-model="postForm.invoiceEmail" placeholder="Enter Email"/>
+                          <el-input v-model="postForm.invoice_email" placeholder="Enter Email"/>
                         </el-form-item>
                       </div>
                     </el-col>
@@ -188,17 +187,17 @@
                         <h3>Property Manager</h3>
                         <el-form-item label="Name" prop="contactName">
                           <el-input
-                              v-model="postForm.contactName"
+                              v-model="postForm.contact_name"
                               placeholder="Enter Name..."
                           />
                         </el-form-item>
                         <el-form-item label="Phone" prop="contactPhone">
-                          <el-input v-model="postForm.contactPhone" placeholder="Enter Phone..."/>
+                          <el-input v-model="postForm.contact_phone" placeholder="Enter Phone..."/>
                         </el-form-item>
                         <el-form-item label="Email" prop="contactEmail">
                           <el-input
                               type="text"
-                              v-model="postForm.contactEmail"
+                              v-model="postForm.contact_email"
                               placeholder="Enter Email..."
                           />
                         </el-form-item>
@@ -208,129 +207,32 @@
                   <div class="form-group">
                     <h3 style="margin-left: 40px">Policies</h3>
                     <el-row :gutter="10">
-                      <el-col :span="11">
+                      <el-col :span="12">
                         <el-form-item>
-                          <el-checkbox v-model="postForm.nfprDelivery">NFPR – Delivery Checkbox</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.noaDelivery">NOA – Delivery Checkbox</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.uploadCourtDocket">Upload Court Docket Import Files
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.zeroDollarAttyFee">Zero Dollar Atty Fee For Summons
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.preApproveCourtDocket">Pre-approve Court Docket</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.caresActApproval">CARES Act Approval</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.splitCaresActCharge">Split Cares Act Charge</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.caresAct">CARES Act</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.singleFamilyProperty">Single Family Property</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.clientCreatesNfprs">Client Creates NFPRs & Senex Processes
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.clientCreatesUds">Client Creates UDs & Senex Processes
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.allowUdChecklist">Allow UD Checklist</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.apiRecordTransfer">API Record Transfer (Entrata Sync)
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.postsNotices">Posts Notices</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.attorneyFeePercentageLimit">Attorney Fee Percentage Limit
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.diyClientCreatesClaims">DIY: Client Creates Claims & Client
-                            Processes
-                            NFPRs
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.diyClientAmendsClaims">DIY: Client Amends Claims & Senex
-                            Processes
-                            NOAs
-                          </el-checkbox>
+                          <el-checkbox-group v-model="postForm.policies">
+                            <el-checkbox
+                                v-for="(policy, index) in policyOptions.slice(0, Math.ceil(policyOptions.length / 2))"
+                                :key="index"
+                                :checked="policyOptions.includes(postForm.policies)"
+                                :value="postForm.policies"
+                            >
+                              {{ formatPolicyName(policy) }}
+                            </el-checkbox>
+                          </el-checkbox-group>
                         </el-form-item>
                       </el-col>
-                      <el-col :span="11">
+                      <el-col :span="12">
                         <el-form-item>
-                          <el-checkbox v-model="postForm.forceUnitAddressSelection">Force Unit Address Selection
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.newArtcraftImportLogic">New Artcraft import logic used
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.uploadSeImportFiles">Upload SE Import Files</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.automaticallyReadyWrits">Automatically Ready Writs with
-                            Possession
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.clientAmendsClaims">Client Amends Claims</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.doNotRequireUdMilitaryStatus">Do Not Require UD Military Status
-                            Verification
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.preApproveNoticesOfNoncompliance">Pre-approve Notices of
-                            Noncompliance
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.uploadImportFiles">Upload Import Files</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.eSignNotices">eSign Notices</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.preApproveSummons">Pre-approve Summons</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.preApproveNotices">Pre-approve Notices</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.clientCreatesClaims">Client Creates Claims
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.allowMilitaryAllotment">Allow Military Allotment</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.preApproveMilitaryAffidavit">Pre-approve Military Affidavit
-                          </el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.allAddressesInZip">All Addresses in Zip</el-checkbox>
-                        </el-form-item>
-                        <el-form-item>
-                          <el-checkbox v-model="postForm.uploadFiles">Upload Files</el-checkbox>
+                          <el-checkbox-group v-model="postForm.policies">
+                            <el-checkbox
+                                v-for="(policy, index) in policyOptions.slice(Math.ceil(policyOptions.length / 2))"
+                                :key="index"
+                                :checked="policyOptions.includes(postForm.policies)"
+                                :value="postForm.policies"
+                            >
+                              {{ formatPolicyName(policy) }}
+                            </el-checkbox>
+                          </el-checkbox-group>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -341,7 +243,7 @@
                               label="Rent is considered late, and new claims may be created after this day:"
                               :prop="udFilingThreshold">
                             <el-input
-                                v-model="postForm.dayLimit"
+                                v-model="postForm.day_limit"
                                 placeholder="Enter UD Filing Threshold"
                             />
                           </el-form-item>
@@ -350,8 +252,7 @@
                       <el-col :span="22">
                         <div class="form-group">
                           <el-form-item
-                              label="New claims may be created if balance outstanding is greater than or equal to this amount:"
-                              :prop="udFilingThreshold">
+                              label="New claims may be created if balance outstanding is greater than or equal to this amount:">
                             <el-input
                                 v-model="postForm.amount"
                                 placeholder="Enter UD Filing Threshold"
@@ -390,7 +291,7 @@
                           </el-form-item>
                           <el-form-item label="Client Website" prop="clientWebsite">
                             <el-input
-                                v-model="postForm.clientWebsite"
+                                v-model="postForm.client_website"
                                 placeholder="Enter Client Website"
                                 value="www."
                             />
@@ -402,7 +303,8 @@
                       <el-row>
                         <el-col :span="22">
                           <h3>Status</h3>
-                          <p>This Property is Active.<br> To remove it from use, while retaining all historical data, you
+                          <p>This Property is Active.<br> To remove it from use, while retaining all historical data,
+                            you
                             may
                             deactivate
                             it</p>
@@ -417,7 +319,7 @@
           </div>
         </keep-alive>
       </el-tab-pane>
-      <el-tab-pane  label="Files" name="files">
+      <el-tab-pane label="Files" name="files">
         <keep-alive>
           <div v-if="activeName === 'files'">
             <h3 style="display:flex; justify-content: center;">File Upload</h3>
@@ -435,7 +337,7 @@
           </div>
         </keep-alive>
       </el-tab-pane>
-      <el-tab-pane  label="Notes" name="notes">
+      <el-tab-pane label="Notes" name="notes">
         <keep-alive>
           <div v-if="activeName === 'notes'">
             <h3 style="display:flex; justify-content: center;">Notes</h3>
@@ -447,259 +349,155 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
 import Tinymce from '@/components/Tinymce';
 import Upload from '@/components/Upload/SingleImage3';
 import MDinput from '@/components/MDinput';
 import Sticky from '@/components/Sticky';
 import TabPanel from '@/views/tab/components/TabPanel.vue';
-import { validURL } from '@/utils/validate';
-import { fetchArticle } from '@/api/article';
-import { searchUser } from '@/api/remote-search';
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown';
 import SingleImageUpload from '@/components/Upload/SingleImage.vue';
 import NoteEdit from '@/views/property/components/Note/Create.vue';
 import { ElNotification } from 'element-plus';
+import { fetchList } from '@/api/policy.js';
+import { getProperty } from '@/api/property.js';
+import { useRoute } from 'vue-router';
 
-const props = defineProps({
-  isEdit: {
-    type: Boolean,
-    required: true
-  },
-  existingData: {
-    type: Object,
-    default: () => ({})
+const route = useRoute();
+const propertyId = route.params.id || null;
+
+const isEdit = ref<boolean>(!!propertyId);
+const loading = ref<boolean>(false);
+const activeName = ref<string>('info');
+const dialogVisible = ref<boolean>(false);
+const dialogImageUrl = ref('');
+
+const postForm = ref({
+  id: undefined,
+  legal_name: '',
+  name: '',
+  short_name: '',
+  identifier: '',
+  address: '',
+  city: '',
+  state: '',
+  zip: '',
+  sameAsPropertyAddress: false,
+  invoice_address1: '',
+  invoice_address2: '',
+  invoice_city: '',
+  invoice_state: '',
+  invoice_zip: '',
+  invoice_email: '',
+  contact_name: '',
+  contact_phone: '',
+  contact_email: '',
+  policies: [],
+  property_management_software: '',
+  client_website: '',
+  ud_filing_threshold: ''
+});
+
+const fetchPropertyData = async () => {
+  if (isEdit.value) {
+    const { data } = await getProperty(propertyId);
+
+    postForm.value = data;
+    console.log(postForm.value);
+  }
+};
+
+const setPolicyOptions = async () => {
+  const response = await fetchList();
+
+  policyOptions.value = response.data;
+  console.log('allowed policies', policyOptions.value);
+};
+
+onMounted(() => {
+  setPolicyOptions();
+
+  if (isEdit.value) {
+    fetchPropertyData();
   }
 });
 
-const postForm = ref(props.existingData);
-
-const submitForm = () => {
-  console.log('Form submitted', postForm.value);
-  ElNotification({
-    title: 'Success',
-    message: 'Property successfully saved',
-    type: 'success',
-    duration: 2000
-  });
+const formatPolicyName = (policy) => {
+  return policy.name
+    ? policy.name
+    : policy.identifier
+      .replaceAll('_', ' ')
+      .toLowerCase()
+      .replace(/(?<= )\S|^./g, a => a.toUpperCase());
 };
 
-const loading = ref(false);
-const activeName = ref('info');
-const dialogVisible = ref(false);
-const dialogImageUrl = ref('');
-// const defaultForm = {
-//   status: 'draft',
-//   id: undefined,
-//   platforms: ['a-platform'],
-//   comment_disabled: false,
-//   importance: 0,
-//   // Additional fields
-//   legalName: 'The Community of Donje, LLC',
-//   name: '',
-//   identifier: '',
-//   address: '',
-//   city: '',
-//   state: '',
-//   zip: '',
-//   sameAsPropertyAddress: false,
-//   invoiceAddress1: '',
-//   invoiceAddress2: '',
-//   invoiceCity: '',
-//   invoiceState: '',
-//   invoiceZip: '',
-//   invoiceEmail: '',
-//   contactName: '',
-//   contactPhone: '',
-//   contactEmail: '',
-//   nfprDelivery: false,
-//   noaDelivery: false,
-//   uploadCourtDocket: false,
-//   zeroDollarAttyFee: false,
-//   preApproveCourtDocket: false,
-//   caresActApproval: false,
-//   splitCaresActCharge: false,
-//   caresAct: false,
-//   singleFamilyProperty: false,
-//   clientCreatesNfprs: false,
-//   clientCreatesUds: false,
-//   allowUdChecklist: false,
-//   apiRecordTransfer: false,
-//   postsNotices: false,
-//   attorneyFeePercentageLimit: false,
-//   diyClientCreatesClaims: false,
-//   diyClientAmendsClaims: false,
-//   forceUnitAddressSelection: false,
-//   newArtcraftImportLogic: false,
-//   uploadSeImportFiles: false,
-//   automaticallyReadyWrits: false,
-//   clientAmendsClaims: false,
-//   doNotRequireUdMilitaryStatus: false,
-//   preApproveNoticesOfNoncompliance: false,
-//   uploadImportFiles: false,
-//   eSignNotices: false,
-//   preApproveSummons: false,
-//   uploadUdImportFiles: false,
-//   reduceAttorneyFee: false,
-//   uploadNonImportFiles: false,
-//   generateUnswornDeclaration: false,
-//   alwaysSendAmendedNotice: false,
-//   nonNotGeneratedInSenex: false,
-//   ignoreUdWaitingPeriod: false,
-//   allowMulti: false,
-//   automaticallyReadyWritsAbove500: false,
-//   addPossessionToPrintedDocket: false,
-//   propertyManagementSoftware: '',
-//   clientWebsite: '',
-//   udFilingThreshold: ''
-// };
-//
-// export default defineComponent({
-//   name: 'PropertyDetail',
-//   // eslint-disable-next-line vue/no-unused-components
-//   components: { NoteEdit, SingleImageUpload, Tinymce, MDinput, Upload, Sticky, CommentDropdown, PlatformDropdown, SourceUrlDropdown, TabPanel },
-//   props: {
-//     isEdit: {
-//       type: Boolean,
-//       default: false
-//     }
-//   },
-//   data() {
-//     const validateRequire = (rule, value, callback) => {
-//       if (value === '') {
-//         ElMessage({
-//           message: rule.field + 'required',
-//           type: 'error'
-//         });
-//         callback(new Error(rule.field + 'required'));
-//       } else {
-//         callback();
-//       }
-//     };
-//     const validateSourceUri = (rule, value, callback) => {
-//       if (value) {
-//         if (validURL(value)) {
-//           callback();
-//         } else {
-//           ElMessage({
-//             message: 'invalid URL',
-//             type: 'error'
-//           });
-//           callback(new Error('invalid URL'));
-//         }
-//       } else {
-//         callback();
-//       }
-//     };
-//     return {
-//       postForm: Object.assign({}, defaultForm),
-//       loading: false,
-//       userListOptions: [],
-//       rules: {
-//         image_uri: [{ validator: validateRequire }],
-//         title: [{ validator: validateRequire }],
-//         content: [{ validator: validateRequire }],
-//         source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
-//       },
-//       tempRoute: {},
-//       tabMapOptions: [
-//         { label: 'Info', key: 'info' },
-//         { label: 'Files', key: 'files' },
-//         { label: 'Notes', key: 'notes' }
-//       ],
-//       activeName: 'info',
-//       createdTimes: 0
-//     };
-//   },
-//   computed: {
-//     contentShortLength() {
-//       return this.postForm.content_short.length;
-//     },
-//     displayTime: {
-//       get() {
-//         return (+new Date(this.postForm.display_time));
-//       },
-//       set(val) {
-//         this.postForm.display_time = new Date(val);
-//       }
-//     }
-//   },
-//   created() {
-//     if (this.isEdit) {
-//       const id = this.$route.params && this.$route.params.id;
-//       this.fetchData(id);
-//     }
-//
-//     this.tempRoute = Object.assign({}, this.$route);
-//
-//     if (window._XMLHttpRequest) {
-//       var xhr = new window._XMLHttpRequest();
-//       window.XMLHttpRequest.prototype.upload = xhr.upload;
-//     }
-//   },
-//   methods: {
-//     fetchData(id) {
-//       fetchArticle(id).then(response => {
-//         this.postForm = response.data;
-//
-//         this.setTagsViewTitle();
-//         this.setPageTitle();
-//       }).catch(err => {
-//         console.log(err);
-//       });
-//     },
-//     setTagsViewTitle() {
-//       const title = 'Edit Article';
-//       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` });
-//       this.$store.dispatch('tagsView/updateVisitedView', route);
-//     },
-//     setPageTitle() {
-//       const title = 'Edit Article';
-//       document.title = `${title} - ${this.postForm.id}`;
-//     },
-//     submitForm() {
-//       this.$refs.postForm.validate(valid => {
-//         if (valid) {
-//           this.loading = true;
-//           ElNotification({
-//             title: 'Success',
-//             message: 'Property successfully saved',
-//             type: 'success',
-//             duration: 2000
-//           });
-//           this.postForm.status = 'published';
-//           this.loading = false;
-//         } else {
-//           console.log('error submit!');
-//           return false;
-//         }
-//       });
-//     },
-//     draftForm() {
-//       if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-//         ElMessage({
-//           message: 'Fill required fields',
-//           type: 'warning'
-//         });
-//         return;
-//       }
-//       ElMessage({
-//         message: 'Saved successfully',
-//         type: 'success',
-//         showClose: true,
-//         duration: 1000
-//       });
-//       this.postForm.status = 'draft';
-//     },
-//     getRemoteUserList(query) {
-//       searchUser(query).then(response => {
-//         if (!response.data.items) return;
-//         this.userListOptions = response.data.items.map(v => v.name);
-//       });
-//     }
-//   }
-// });
+const submitForm = async () => {
+  loading.value = true;
+  try {
+    if (isEdit.value) {
+      console.log(postForm.value);
+      await updateProperty(propertyId, postForm.value);
+      ElNotification({
+        title: 'Success',
+        message: `Property ${postForm.value.name} updated successfully`,
+        type: 'success',
+        duration: 2000
+      });
+    } else {
+      await createProperty(postForm.value);
+      ElNotification({
+        title: 'Success',
+        message: `Property created successfully`,
+        type: 'success',
+        duration: 2000
+      });
+    }
+  } catch (error) {
+    console.error('Failed to submit property:', error);
+    ElNotification({
+      title: 'Error',
+      message: 'Failed to submit property',
+      type: 'error',
+      duration: 2000
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+const policyOptions = ref<Array>([]);
+
+const resetForm = () => {
+  if (isEdit.value) {
+    fetchPropertyData();
+  } else {
+    postForm.value = {
+      id: undefined,
+      legalName: '',
+      name: '',
+      identifier: '',
+      address: '',
+      city: '',
+      state: '',
+      zip: '',
+      sameAsPropertyAddress: false,
+      invoiceAddress1: '',
+      invoiceAddress2: '',
+      invoiceCity: '',
+      invoiceState: '',
+      invoiceZip: '',
+      invoiceEmail: '',
+      contactName: '',
+      contactPhone: '',
+      contactEmail: '',
+      policy_ids: [],
+      propertyManagementSoftware: '',
+      clientWebsite: '',
+      udFilingThreshold: ''
+    };
+  }
+};
 </script>
 
 <style lang="scss" scoped>
