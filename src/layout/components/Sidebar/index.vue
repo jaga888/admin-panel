@@ -2,11 +2,11 @@
   <div :class="{ 'has-logo': showLogo }">
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu class="left-menu" :default-active="activeMenu" :collapse="isCollapse"
-        :background-color="variables.menuBg" :text-color="variables.menuText" :unique-opened="false"
+      <el-menu class="left-menu" :default-active="activeMenu" :collapse="isCollapse" menu-trigger="click"
+        :background-color="variables.menuBg" :text-color="variables.menuText" :unique-opened="true"
         :active-text-color="variables.menuActiveText" :collapse-transition="false" mode="horizontal">
         <a href="/">
-          <img src="/src/assets/logo.png" class="logo" alt="logo" height="45" width="45">
+          <LogoSvg class="logo" height="28" width="28"></LogoSvg>>
         </a>
         <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" :is-top-route="true" />
         <el-dropdown class="avatar-dropdown" trigger="click" placement="bottom-end">
@@ -37,20 +37,22 @@ import SidebarItem from './SidebarItem';
 // import variables from '@/styles/variables.modules.scss';
 import store from '@/store';
 import { CaretBottom } from '@element-plus/icons-vue';
+import LogoSvg from '/src/assets/senex.svg';
 
 export default defineComponent({
   name: 'Sidebar',
   components: {
     CaretBottom,
     SidebarItem,
-    Logo
+    Logo,
+    LogoSvg
   },
   data() {
     return {
       variables: {
-        menuBg: '#3498db',
-        menuText: '#fff',
-        menuActiveText: 'rgba(255,255,255,0.49)'
+        menuBg: '#1088CB',
+        menuText: 'rgba(255,255,255,0.50)',
+        menuActiveText: 'rgba(255, 255, 255, 0.75)'
       }
     };
   },
@@ -96,13 +98,17 @@ export default defineComponent({
 </script>
 <style>
 .logo {
-  margin: 5px 10px 5px 5px;
+  margin: 14px 10px 10px 16px;
 }
 .avatar-dropdown {
   position: absolute;
   top: 10px;
   right: 0;
+  color:rgba(255,255,255,0.5) !important;
   margin-right: 20px;
+}
+.avatar-dropdown :hover{
+  color: rgba(255,255,255,0.75);
 }
 .avatar-wrapper {
   display: flex;
@@ -111,8 +117,16 @@ export default defineComponent({
 }
 .user-name {
   font-size: 16px;
-  color: #fff;
   margin-right: 8px;
   margin-top: 10px;
+}
+.el-sub-menu__title {
+  padding: 0 15px 0 6px!important;
+  margin: 0 !important;
+  font-size: 15px !important;
+  font-weight: 550;
+}
+.el-sub-menu__icon-arrow{
+  right: 0px !important;
 }
 </style>

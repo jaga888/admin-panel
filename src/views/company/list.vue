@@ -20,8 +20,8 @@
                  clearable
                  @change="handleFilter">
         <el-option value=" " label="Show All" selected/>
-        <el-option value="1" label="Active Only" />
-        <el-option value="0" label="Inactive Only" />
+        <el-option value="1" label="Active Only"/>
+        <el-option value="0" label="Inactive Only"/>
       </el-select>
       <router-link :to="'/company/create/'">
         <el-button class="filter-item" style="margin-left: 15px;" type="primary" :icon="Edit">
@@ -171,6 +171,14 @@ getCompanies();
 </script>
 
 <style scoped>
+.el-table-column {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.app-container {
+  background-color: #e9ecef;
+}
+
 .edit-input {
   padding-right: 100px;
 }

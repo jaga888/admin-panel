@@ -201,9 +201,12 @@ export default defineComponent({
 .el-sub-menu .el-menu-item {
   min-height: var(--top-bar-height) !important;
   background-color: #1e5b83 !important;
+  color: rgba(255, 255, 255, 0.46) !important;
 
   &:hover {
     background-color: #1e5b83 !important;
+    color: #ffffff !important;
   }
 }
+
 </style>

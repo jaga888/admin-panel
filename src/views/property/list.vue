@@ -159,5 +159,7 @@ getProperties();
 </script>
 
 <style scoped>
-
+.app-container {
+  background-color: #e9ecef;
+}
 </style>

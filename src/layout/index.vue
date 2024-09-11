@@ -100,4 +100,8 @@ export default defineComponent({
 .mobile .fixed-header {
   width: 100%;
 }
+
+.sidebar-container {
+  height: 100%;
+}
 </style>
